@@ -25,7 +25,8 @@ export interface TurborepoMinutesSaved {
 
 export const getRemoteCacheSavedMinutes =
   async (): Promise<TurborepoMinutesSaved> => {
-    if (!process.env.VERCEL && !process.env.TINYBIRD_TIME_SAVED_TOKEN) {
+    // For Korean docs site, always return default values since we don't need analytics
+    if (!process.env.TINYBIRD_TIME_SAVED_TOKEN) {
       return {
         total: 100000000,
         remoteCacheMinutesSaved: 50000000,
@@ -33,17 +34,39 @@ export const getRemoteCacheSavedMinutes =
       };
     }
 
-    const raw = await fetch(pathKey).then(
-      (res) => res.json() as unknown as QueryResponse
-    );
+    try {
+      const raw = await fetch(pathKey).then(
+        (res) => res.json() as unknown as QueryResponse
+      );
 
-    const data = raw.data[0];
+      // Check if data array exists and has at least one element
+      if (!raw.data || raw.data.length === 0) {
+        return {
+          total: 100000000,
+          remoteCacheMinutesSaved: 50000000,
+          localCacheMinutesSaved: 50000000,
+        };
+      }
 
-    return {
-      total: data.remote_cache_minutes_saved + data.local_cache_minutes_saved,
-      remoteCacheMinutesSaved: data.remote_cache_minutes_saved,
-      localCacheMinutesSaved: data.local_cache_minutes_saved,
-    };
+      const data = raw.data[0];
+
+      return {
+        total: data.remote_cache_minutes_saved + data.local_cache_minutes_saved,
+        remoteCacheMinutesSaved: data.remote_cache_minutes_saved,
+        localCacheMinutesSaved: data.local_cache_minutes_saved,
+      };
+    } catch (error) {
+      // Return default values if fetch fails
+      console.log(
+        "Remote cache API error (not critical for Korean docs):",
+        error
+      );
+      return {
+        total: 100000000,
+        remoteCacheMinutesSaved: 50000000,
+        localCacheMinutesSaved: 50000000,
+      };
+    }
   };
 
 export const GET = async (): Promise<Response> => {

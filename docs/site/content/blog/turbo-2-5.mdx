@@ -1,7 +1,7 @@
 ---
 title: Turborepo 2.5
 date: 2025/4/3
-description: 'Sidecar tasks, `--continue` flexibility, turbo.jsonc, Bun pruning, `$TURBO_ROOT$`, OpenAPI viewer, and more.'
+description: 'Sidecar 작업, `--continue` 유연성, turbo.jsonc, Bun pruning, `$TURBO_ROOT$`, OpenAPI 뷰어 등.'
 tag: 'web development'
 ---
 
@@ -15,24 +15,24 @@ import { Accordion, Accordions } from '#components/accordion';
 
 <Authors authors={['nicholasyang', 'anthonyshew', 'chrisolszewski']} />
 
-Turborepo 2.5 includes a number of improvements to enhance your repository:
+Turborepo 2.5는 저장소를 향상시키는 여러 개선 사항을 포함합니다:
 
-- [**Sidecar tasks**](#sidecar-tasks): Use `with` to ensure persistent tasks always run together
-- [**Flexibility for `--continue`**](#improved-control-for---continue-behavior): Only continue running tasks when dependencies are successful
-- [**`turbo.jsonc`**](#add-comments-to-your-turborepo-configuration-files): Write comments directly in your configuration file
-- [**`prune` for Bun**](#pruned-monorepos-for-bun-repositories): You can now use `turbo prune` in Bun repositories
-- [**`$TURBO_ROOT$`**](#reference-your-workspace-root-with-the-turbo_root-microsyntax): Reference the Workspace root in `turbo.json`
-- [**OpenAPI viewer**](#openapi-specification-viewer-for-self-hosting): Human-readable OpenAPI spec for self-hosted Remote Caches
+- [**Sidecar 작업**](#sidecar-tasks): `with`를 사용하여 지속적인 작업이 항상 함께 실행되도록 보장
+- [**`--continue`에 대한 유연성**](#improved-control-for---continue-behavior): 의존성이 성공한 경우에만 작업 계속 실행
+- [**`turbo.jsonc`**](#add-comments-to-your-turborepo-configuration-files): 구성 파일에 직접 주석 작성
+- [**Bun용 `prune`**](#pruned-monorepos-for-bun-repositories): 이제 Bun 저장소에서 `turbo prune` 사용 가능
+- [**`$TURBO_ROOT$`**](#reference-your-workspace-root-with-the-turbo_root-microsyntax): `turbo.json`에서 Workspace 루트 참조
+- [**OpenAPI 뷰어**](#openapi-specification-viewer-for-self-hosting): 자체 호스팅 Remote Cache를 위한 사람이 읽을 수 있는 OpenAPI 사양
 
-Upgrade today by running `npx @turbo/codemod migrate` or get started with `npx create-turbo@latest`.
+`npx @turbo/codemod migrate`를 실행하여 지금 업그레이드하거나 `npx create-turbo@latest`로 시작하세요.
 
-## Sidecar tasks
+## Sidecar 작업
 
-In some cases, you want to ensure two long-running tasks are always running at the same time. For example, you may have a web application that makes requests to another application in your monorepo. Running the web application by itself may not be useful, since the backend API application won’t be available to serve its requests.
+경우에 따라 두 개의 장기 실행 작업이 항상 동시에 실행되도록 보장하려고 합니다. 예를 들어, monorepo의 다른 애플리케이션에 요청하는 웹 애플리케이션이 있을 수 있습니다. 백엔드 API 애플리케이션이 요청을 처리할 수 없으므로 웹 애플리케이션만 실행하는 것은 유용하지 않을 수 있습니다.
 
-You may have tried to use `dependsOn` to create this relationship - but quickly discovered that depending on a long-running task isn’t allowed. A long-running task never exits, so the dependent task would never run. This meant you’d have to carefully craft a [`--filter`](/docs/reference/run#--filter-string) to ensure those resources are available—and make sure everyone in the repo knows to use it.
+`dependsOn`을 사용하여 이 관계를 만들려고 시도했을 수 있지만 장기 실행 작업에 의존하는 것이 허용되지 않는다는 것을 빠르게 발견했습니다. 장기 실행 작업은 절대 종료되지 않으므로 의존 작업이 절대 실행되지 않습니다. 이는 해당 리소스를 사용할 수 있도록 [`--filter`](/docs/reference/run#--filter-string)를 신중하게 작성해야 하며 저장소의 모든 사람이 이를 사용하도록 해야 한다는 것을 의미했습니다.
 
-Instead, we’re introducing the `with` key so you can guarantee that a dependent long-running task always runs _with_ the long-running tasks that it depends on at runtime.
+대신 `with` 키를 도입하여 의존 장기 실행 작업이 런타임에 의존하는 장기 실행 작업과 항상 함께 실행되도록 보장할 수 있습니다.
 
 ```json title="apps/web/turbo.json"
 {
@@ -46,60 +46,60 @@ Instead, we’re introducing the `with` key so you can guarantee that a dependen
 }
 ```
 
-Using this [Package Configuration](/docs/reference/package-configurations), anytime that the `web` application’s `dev` task is started, the `api`'s `start` task will also run using [the `package#task` microsyntax](/docs/crafting-your-repository/configuring-tasks#depending-on-a-specific-task-in-a-specific-package).
+이 [패키지 구성](/docs/reference/package-configurations)을 사용하면 `web` 애플리케이션의 `dev` 작업이 시작될 때마다 [`package#task` 마이크로신택스](/docs/crafting-your-repository/configuring-tasks#depending-on-a-specific-task-in-a-specific-package)를 사용하여 `api`의 `start` 작업도 실행됩니다.
 
-[Visit the documentation](/docs/reference/configuration#with) to learn more.
+[자세한 내용은 문서를 방문하세요](/docs/reference/configuration#with).
 
-## Improved control for `--continue` behavior
+## `--continue` 동작에 대한 개선된 제어
 
-By default, Turborepo stops running tasks when it encounters a task that has failed. You can alter this behavior using the `--continue` flag, instructing Turborepo to continue running tasks, even when one or more tasks have failed.
+기본적으로 Turborepo는 실패한 작업을 만나면 작업 실행을 중지합니다. `--continue` 플래그를 사용하여 이 동작을 변경할 수 있으며, 하나 이상의 작업이 실패한 경우에도 Turborepo가 작업을 계속 실행하도록 지시합니다.
 
-While the `--continue` flag is useful, there are times when running tasks whose dependencies have failed will only result in more failures. For these situations, we’ve added a new value to the `--continue` flag in this release: `--continue=dependencies-successful`.
+`--continue` 플래그가 유용하지만 의존성이 실패한 작업을 실행하면 더 많은 실패로 이어질 때가 있습니다. 이러한 상황을 위해 이번 릴리스에서 `--continue` 플래그에 새로운 값을 추가했습니다: `--continue=dependencies-successful`.
 
 ```bash title="Terminal"
 turbo run test --continue=dependencies-successful
 ```
 
-When using this value, all dependencies for a task must be successful for the dependent task to run.
+이 값을 사용하면 작업의 모든 의존성이 성공해야 의존 작업이 실행됩니다.
 
-[Learn more in the documentation](/docs/reference/run#--continueoption).
+[문서에서 자세히 알아보세요](/docs/reference/run#--continueoption).
 
-The Turborepo core team would like to thank @jenseng for contributing this feature.
+Turborepo 핵심 팀은 이 기능을 기여해 준 @jenseng에게 감사드립니다.
 
-## Add comments to your Turborepo configuration files
+## Turborepo 구성 파일에 주석 추가
 
-You can now use JSONC (`turbo.jsonc`) for your configuration files, allowing you to add useful comments to your configuration.
+이제 구성 파일에 JSONC (`turbo.jsonc`)를 사용하여 유용한 주석을 추가할 수 있습니다.
 
 ```json title="./turbo.jsonc"
 {
   "tasks": {
     "test": {
-      // Our tests need their dependencies to be built first
+      // 테스트는 의존성이 먼저 빌드되어야 합니다
       "dependsOn": ["^build"]
     }
   }
 }
 ```
 
-## Pruned monorepos for Bun repositories
+## Bun 저장소용 pruned monorepo
 
-`turbo prune` creates a partial monorepo for a target package, and is especially useful for [creating lightweight Docker images from monorepos](/docs/guides/tools/docker). This command has been available for pnpm, npm, and Yarn repositories in previous versions of Turborepo.
+`turbo prune`은 대상 패키지에 대한 부분 monorepo를 생성하며 특히 [monorepo에서 경량 Docker 이미지 생성](/docs/guides/tools/docker)에 유용합니다. 이 명령은 이전 버전의 Turborepo에서 pnpm, npm 및 Yarn 저장소에 사용할 수 있었습니다.
 
-In this release, `turbo prune` is now available for Bun v1.2+, which has introduced a text-based lockfile that we can now read and analyze.
+이번 릴리스에서 `turbo prune`은 이제 읽고 분석할 수 있는 텍스트 기반 lockfile을 도입한 Bun v1.2+에서 사용할 수 있습니다.
 
 ```bash title="Terminal"
 turbo prune web
 ```
 
-To learn more about `turbo prune`, [visit the documentation](/docs/reference/prune).
+`turbo prune`에 대해 자세히 알아보려면 [문서를 방문하세요](/docs/reference/prune).
 
-The Turborepo core team would like to thank @camero2734 for contributing this feature.
+Turborepo 핵심 팀은 이 기능을 기여해 준 @camero2734에게 감사드립니다.
 
-## Reference your workspace root with the `$TURBO_ROOT$` microsyntax
+## `$TURBO_ROOT$` 마이크로신택스로 workspace 루트 참조
 
-In some situations, you’re forced to break out of package boundaries in a monorepo. This could be due to a number of constraints, like tooling that doesn’t conform to modern package manager workspaces or incremental migration workflows that take you out of ideal conditions.
+경우에 따라 monorepo에서 패키지 경계를 벗어나야 할 수 있습니다. 이는 최신 패키지 관리자 workspace에 맞지 않는 도구 또는 이상적인 조건에서 벗어나는 점진적 마이그레이션 워크플로우와 같은 여러 제약으로 인한 것일 수 있습니다.
 
-In the past, you’d need to write paths in `turbo.json` that traverse to the workspace root, since globs are anchored to the root of packages:
+과거에는 글로브가 패키지의 루트에 고정되어 있기 때문에 workspace 루트로 이동하는 경로를 `turbo.json`에 작성해야 했습니다:
 
 ```json title="./turbo.json"
 {
@@ -111,12 +111,12 @@ In the past, you’d need to write paths in `turbo.json` that traverse to the wo
 }
 ```
 
-While this pattern does work, it can lead to inconsistencies in some cases:
+이 패턴은 작동하지만 경우에 따라 불일치로 이어질 수 있습니다:
 
-- Some packages may need `../` while others need `../../`
-- A developer could potentially move a package to a different location so that the path isn’t correct
+- 일부 패키지는 `../`가 필요하고 다른 패키지는 `../../`가 필요할 수 있습니다
+- 개발자가 패키지를 다른 위치로 이동하여 경로가 올바르지 않을 수 있습니다
 
-Instead, you can now use the `$TURBO_ROOT$` microsyntax:
+대신 이제 `$TURBO_ROOT$` 마이크로신택스를 사용할 수 있습니다:
 
 ```json title="./turbo.json"
 {
@@ -128,19 +128,19 @@ Instead, you can now use the `$TURBO_ROOT$` microsyntax:
 }
 ```
 
-Now, this file glob is guaranteed to always start at the root of your workspace.
+이제 이 파일 글로브는 항상 workspace의 루트에서 시작하도록 보장됩니다.
 
-[Visit the documentation](/docs/reference/configuration#turbo_root) to learn more.
+[자세한 내용은 문서를 방문하세요](/docs/reference/configuration#turbo_root).
 
-## OpenAPI specification viewer for self-hosting
+## 자체 호스팅용 OpenAPI 사양 뷰어
 
-Turborepo is proudly open-source with a public specification for its Remote Caching protocol. While [Vercel Remote Cache is a free-to-use managed option](https://vercel.com/docs/monorepos/remote-caching), the OpenAPI spec allows the community to create implementations for Remote Caching of their own.
+Turborepo는 Remote Caching 프로토콜에 대한 공개 사양을 갖춘 오픈 소스를 자랑스럽게 생각합니다. [Vercel Remote Cache는 무료로 사용할 수 있는 관리형 옵션](https://vercel.com/docs/monorepos/remote-caching)이지만, OpenAPI 사양을 통해 커뮤니티가 자체 Remote Caching 구현을 만들 수 있습니다.
 
-We’ve published [the Remote Cache spec as JSON to the web](/api/remote-cache-spec) for some time, and have recently added a human-friendly version of the spec at [https://turborepo.com/docs/openapi](https://turborepo.com/docs/openapi).
+우리는 한동안 [Remote Cache 사양을 JSON으로 웹에 게시](/api/remote-cache-spec)해 왔으며 최근 [https://turborepo.com/docs/openapi](https://turborepo.com/docs/openapi)에 사람 친화적인 버전의 사양을 추가했습니다.
 
-[Visit the Remote Caching documentation](/docs/core-concepts/remote-caching#remote-cache-api) to learn more.
+[자세한 내용은 Remote Caching 문서를 방문하세요](/docs/core-concepts/remote-caching#remote-cache-api).
 
-## Other changes
+## 기타 변경 사항
 
 <Accordions>
 
@@ -232,10 +232,10 @@ We’ve published [the Remote Cache spec as JSON to the web](/api/remote-cache-s
 
 </Accordions>
 
-## Acknowledgments and community
+## 감사의 말 및 커뮤니티
 
-Turborepo is the result of the combined work of all of its contributors, including our core team: [Anthony](https://github.com/anthonyshew), [Chris](https://github.com/chris-olszewski), [Dimitri](https://github.com/dimitropoulos), [Nicholas](https://github.com/NicholasLYang), and [Tom](https://github.com/tknickman).
+Turborepo는 핵심 팀을 포함한 모든 기여자들의 결합된 작업의 결과입니다: [Anthony](https://github.com/anthonyshew), [Chris](https://github.com/chris-olszewski), [Dimitri](https://github.com/dimitropoulos), [Nicholas](https://github.com/NicholasLYang), 그리고 [Tom](https://github.com/tknickman).
 
-Thank you for your continued support, feedback, and collaboration to make Turborepo your build tool of choice. To learn how to get involved, [visit the Community page](/docs/community).
+Turborepo를 여러분의 빌드 도구로 만들어 주시는 지속적인 지원, 피드백 및 협력에 감사드립니다. 참여 방법을 알아보려면 [커뮤니티 페이지를 방문하세요](/docs/community).
 
-We also thank everyone who contributed to this release of Turborepo: @beaussan, @bohongu, @camero2734, @cprussin, @dinglindong, @jenseng, @jimmycathy, @kevincatty, @mm-webx, @ognevny, @pi0, @pudongair, @rootdiae, @shinjith-dev, @sicarius97, @ssshashank, @Tigatok, @todaymoon, @Tyoneb, @victorlagerfors, @vinayaksodar, @wmjae, @x-N0, and @xiaobei0715.
+또한 이번 Turborepo 릴리스에 기여해 주신 모든 분들께 감사드립니다: @beaussan, @bohongu, @camero2734, @cprussin, @dinglindong, @jenseng, @jimmycathy, @kevincatty, @mm-webx, @ognevny, @pi0, @pudongair, @rootdiae, @shinjith-dev, @sicarius97, @ssshashank, @Tigatok, @todaymoon, @Tyoneb, @victorlagerfors, @vinayaksodar, @wmjae, @x-N0, 그리고 @xiaobei0715.

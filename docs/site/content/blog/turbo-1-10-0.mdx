@@ -1,6 +1,6 @@
 ---
 title: Turborepo 1.10
-description: Turborepo 1.10 introduces new features to improve your local development experience.
+description: Turborepo 1.10은 로컬 개발 경험을 개선하는 새로운 기능을 도입합니다.
 date: '2023/06/01'
 tag: 'web development'
 ---
@@ -18,19 +18,19 @@ import { Date } from '#components/blog/date';
   authors={['nathanhammond', 'tomknickman', 'anthonyshew', 'mehulkar']}
 />
 
-Turborepo 1.10 introduces new features to improve your local development experience:
+Turborepo 1.10은 로컬 개발 경험을 개선하는 새로운 기능을 도입합니다:
 
-- [**Code Generators**](#code-generators): Use `turbo gen` to generate source code, including creating new workspaces and copying existing ones.
-- [**Improved Environment Variable Inputs**](#improved-environment-variable-inputs): It's now easier to depend on environment variables with wildcards and `.env` support.
-- [**New Environment Modes**](#environment-modes): You can now specify `--env-mode=strict` to control environment variables that are included in your task hashes.
+- [**코드 제너레이터**](#code-generators): `turbo gen`을 사용하여 새 작업 공간 생성 및 기존 작업 공간 복사를 포함한 소스 코드를 생성할 수 있습니다.
+- [**개선된 환경 변수 입력**](#improved-environment-variable-inputs): 와일드카드 및 `.env` 지원으로 환경 변수에 더 쉽게 의존할 수 있습니다.
+- [**새로운 환경 모드**](#environment-modes): 이제 `--env-mode=strict`를 지정하여 작업 해시에 포함되는 환경 변수를 제어할 수 있습니다.
 
-Update today with
+다음 명령으로 오늘 업데이트하세요
 
 ```bash title="Terminal"
 npx @turbo/codemod migrate
 ```
 
-## Code Generators
+## 코드 제너레이터
 
 <ThemeAwareImage
   className="my-4 rounded-xl border-2 border-[#f3f7fd] p-4 dark:border-[#1c2428]"
@@ -52,37 +52,35 @@ npx @turbo/codemod migrate
   }}
 />
 
-Turborepo Generators allow you to add new code to your repository in a predictable, structured way.
-Previously, you would need to copy code yourself and manually add dependencies to your new workspace. With Generators,
-we've automated the process of creating new workspaces and integrating them into your repository.
+Turborepo 제너레이터를 사용하면 예측 가능하고 구조화된 방식으로 저장소에 새 코드를 추가할 수 있습니다.
+이전에는 코드를 직접 복사하고 새 작업 공간에 종속성을 수동으로 추가해야 했습니다. 제너레이터를 사용하면
+새 작업 공간을 생성하고 저장소에 통합하는 프로세스가 자동화됩니다.
 
-You can [create a blank workspace from scratch](/docs/guides/generating-code#add-an-empty-package), [copy an existing workspace](/docs/guides/generating-code#copy-an-existing-package), or even create custom generators
-for more control. Custom generators leverage [Plop](https://plopjs.com/) configurations, a common template definition strategy used in the JavaScript ecosystem.
+[처음부터 빈 작업 공간을 생성](/docs/guides/generating-code#add-an-empty-package)하거나, [기존 작업 공간을 복사](/docs/guides/generating-code#copy-an-existing-package)하거나, 더 많은 제어를 위해 커스텀 제너레이터를 생성할 수도 있습니다. 커스텀 제너레이터는 JavaScript 생태계에서 사용되는 일반적인 템플릿 정의 전략인 [Plop](https://plopjs.com/) 구성을 활용합니다.
 
-[Custom generators](/docs/guides/generating-code#custom-generators) can also be used to scaffold more granular sets of code than workspaces. You can significantly speed up tasks like:
+[커스텀 제너레이터](/docs/guides/generating-code#custom-generators)는 작업 공간보다 더 세분화된 코드 세트를 스캐폴딩하는 데에도 사용할 수 있습니다. 다음과 같은 작업을 크게 가속화할 수 있습니다:
 
-- [Adding new components to your UI library](https://github.com/vercel/turbo/blob/main/examples/basic/packages/ui/turbo/generators/config.ts)
-- Creating new unit tests
-- Generating a new MDX blog post
+- [UI 라이브러리에 새 컴포넌트 추가](https://github.com/vercel/turbo/blob/main/examples/basic/packages/ui/turbo/generators/config.ts)
+- 새 단위 테스트 생성
+- 새 MDX 블로그 포스트 생성
 
-Get started with your first generator by running:
+다음을 실행하여 첫 번째 제너레이터를 시작하세요:
 
 ```bash title="Terminal"
 turbo gen
 ```
 
-For more, check out the [documentation](/docs/guides/generating-code).
+자세한 내용은 [문서](/docs/guides/generating-code)를 확인하세요.
 
-## Improved Environment Variable Inputs
+## 개선된 환경 변수 입력
 
-### Support for `.env` files
+### `.env` 파일 지원
 
-[`.env` files](https://www.dotenv.org/docs/) are commonly used to load environment variables. This can cause problems when running with `turbo`, because these variables can be [invisible](/docs/crafting-your-repository/using-environment-variables#avoid-creating-or-mutating-environment-variables-at-runtime), and are not easily
-included in the hash for your task. This problem could cause unintended cache hits while working locally.
+[`.env` 파일](https://www.dotenv.org/docs/)은 환경 변수를 로드하는 데 일반적으로 사용됩니다. 이는 `turbo`로 실행할 때 문제를 일으킬 수 있습니다. 이러한 변수는 [보이지 않을 수](/docs/crafting-your-repository/using-environment-variables#avoid-creating-or-mutating-environment-variables-at-runtime) 있으며 작업의 해시에 쉽게 포함되지 않기 때문입니다. 이 문제는 로컬에서 작업할 때 의도하지 않은 캐시 히트를 유발할 수 있습니다.
 
-Turborepo now makes this much easier with automatic support for `.env` files.
+Turborepo는 이제 `.env` 파일에 대한 자동 지원으로 이를 훨씬 쉽게 만듭니다.
 
-To ensure that Turborepo includes these variables in your hash, use the `dotEnv` key. For example, here is a configuration for a Next.js application:
+Turborepo가 해시에 이러한 변수를 포함하도록 하려면 `dotEnv` 키를 사용하세요. 예를 들어, 다음은 Next.js 애플리케이션의 구성입니다:
 
 ```json title="./turbo.json"
 {
@@ -113,21 +111,20 @@ To ensure that Turborepo includes these variables in your hash, use the `dotEnv`
 ```
 
 <Callout>
-  This feature does **not** handle system environment variables. If you are not
-  using `.env` files outside of development, make sure your environment
-  variables are still enumerated in either
-  [env](/docs/reference/configuration#env), or
-  [globalEnv](/docs/reference/configuration#globalenv) to ensure they are
-  included in your hash.
+  이 기능은 시스템 환경 변수를 처리하지 **않습니다**. 개발 외부에서 `.env`
+  파일을 사용하지 않는 경우 환경 변수가 해시에 포함되도록
+  [env](/docs/reference/configuration#env) 또는
+  [globalEnv](/docs/reference/configuration#globalenv)에 여전히 열거되어 있는지
+  확인하세요.
 </Callout>
 
-For more, check out the documentation.
+자세한 내용은 문서를 확인하세요.
 
-### Environment Variable Wildcards
+### 환경 변수 와일드카드
 
-Large applications can end up with many environment variables in their `turbo.json`. This can make your configuration difficult to manage and maintain.
+대규모 애플리케이션의 `turbo.json`에는 많은 환경 변수가 포함될 수 있습니다. 이로 인해 구성을 관리하고 유지하기 어려울 수 있습니다.
 
-With wildcards, you can now specify patterns of variables to include in your hash.
+와일드카드를 사용하면 이제 해시에 포함할 변수의 패턴을 지정할 수 있습니다.
 
 ```json title="./turbo.json"
 {
@@ -140,29 +137,29 @@ With wildcards, you can now specify patterns of variables to include in your has
 }
 ```
 
-For more, check out the [documentation](/docs/reference/configuration#wildcards).
+자세한 내용은 [문서](/docs/reference/configuration#wildcards)를 확인하세요.
 
-### Environment modes
+### 환경 모드
 
-Turborepo environment modes are now out of experimental mode and are available for general use.
+Turborepo 환경 모드가 실험 모드에서 벗어나 일반 사용이 가능해졌습니다.
 
-By default, and when `turbo run` is invoked with `--env-mode=loose`, all environment variables from the machine are made available to every single Turborepo task.
-This ensures the greatest compatibility while accepting some risk that a task will implicitly have access to a environment variable that is not specified in your `turbo.json`.
+기본적으로 그리고 `turbo run`이 `--env-mode=loose`로 호출될 때, 머신의 모든 환경 변수가 모든 Turborepo 작업에 제공됩니다.
+이는 최대 호환성을 보장하지만 작업이 `turbo.json`에 지정되지 않은 환경 변수에 암시적으로 액세스할 수 있는 일부 위험을 감수합니다.
 
-In the new strict mode, when `turbo` is invoked with `--env-mode=strict`, only [important system environment variables](/docs/reference/system-environment-variables) and environment variables enumerated inside of `turbo.json` will be made available to a task.
+새로운 엄격 모드에서는 `turbo`가 `--env-mode=strict`로 호출될 때 [중요한 시스템 환경 변수](/docs/reference/system-environment-variables)와 `turbo.json` 내부에 열거된 환경 변수만 작업에 제공됩니다.
 
-For more, check out the [documentation](/docs/crafting-your-repository/using-environment-variables#environment-modes).
+자세한 내용은 [문서](/docs/crafting-your-repository/using-environment-variables#environment-modes)를 확인하세요.
 
-## Community
+## 커뮤니티
 
-Since releasing [Turborepo v1.9](/blog/turbo-1-9-0) we've seen incredible adoption and community growth:
+[Turborepo v1.9](/blog/turbo-1-9-0) 출시 이후 놀라운 채택률과 커뮤니티 성장을 보았습니다:
 
 - [21.5k+ GitHub Stars](https://github.com/vercel/turbo)
-- [1.2M+ weekly NPM downloads](https://www.npmjs.com/package/turbo)
-- 85 years of compute time saved through [Remote Caching on Vercel](https://vercel.com/docs/concepts/monorepos/remote-caching)
+- [주간 NPM 다운로드 1.2M+회](https://www.npmjs.com/package/turbo)
+- [Vercel의 Remote Caching](https://vercel.com/docs/concepts/monorepos/remote-caching)을 통해 85년의 컴퓨팅 시간 절약
 
-Turborepo is the result of the combined work of all of its contributors, including our core team:
+Turborepo는 핵심 팀을 포함한 모든 기여자들의 노력이 결합된 결과입니다:
 
-- [Jared](https://github.com/jaredpalmer), [Greg](https://github.com/gsoltis), [Nathan](https://github.com/nathanhammond), [Thomas](https://github.com/tknickman), [Mehul](https://github.com/mehulkar), [Chris](https://github.com/chris-olszewski), [Nicholas](https://github.com/NicholasLYang), and [Alexander](https://github.com/arlyon)
+- [Jared](https://github.com/jaredpalmer), [Greg](https://github.com/gsoltis), [Nathan](https://github.com/nathanhammond), [Thomas](https://github.com/tknickman), [Mehul](https://github.com/mehulkar), [Chris](https://github.com/chris-olszewski), [Nicholas](https://github.com/NicholasLYang), [Alexander](https://github.com/arlyon)
 
-Thank you for your continued support, feedback, and collaboration to make Turborepo your build tool of choice.
+Turborepo를 여러분의 빌드 도구로 선택하기 위해 지속적인 지원, 피드백, 협업에 감사드립니다.

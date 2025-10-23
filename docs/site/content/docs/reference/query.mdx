@@ -1,31 +1,31 @@
 ---
 title: query
-description: API reference for the `turbo query` command
+description: '`turbo query` 명령어에 대한 API 레퍼런스'
 ---
 
 import { ExperimentalBadge } from '#components/experimental-badge';
 
 <ExperimentalBadge />
 
-Run GraphQL queries against your monorepo.
+모노레포에 대해 GraphQL 쿼리를 실행합니다.
 
 ```bash title="Terminal"
 turbo query [query] [flags]
 ```
 
-When no arguments are passed, the command will open a GraphiQL playground to run queries.
+인수가 전달되지 않으면 명령어는 쿼리를 실행할 수 있는 GraphiQL playground를 엽니다.
 
 ```bash title="Terminal"
 turbo query
 ```
 
-When passed a query string, the command will run the query and output the results.
+쿼리 문자열이 전달되면 명령어는 쿼리를 실행하고 결과를 출력합니다.
 
 ```bash title="Terminal"
 turbo query "query { packages { items { name } } }"
 ```
 
-When passed a file path, the command will read the file and run the query.
+파일 경로가 전달되면 명령어는 파일을 읽고 쿼리를 실행합니다.
 
 ```bash title="Terminal"
 turbo query query.gql

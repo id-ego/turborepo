@@ -1,33 +1,33 @@
 ---
-title: File glob specification
-description: Learn about the file glob specification used by `turbo`.
+title: 파일 glob 사양
+description: `turbo`에서 사용하는 파일 glob 사양에 대해 알아봅니다.
 ---
 
-File globs are used throughout Turborepo for configuring which files to include or exclude in various contexts, allowing you to specifically define the files you want `turbo` to use.
+파일 glob은 Turborepo 전반에 걸쳐 다양한 컨텍스트에서 포함하거나 제외할 파일을 구성하는 데 사용되며, `turbo`가 사용할 파일을 구체적으로 정의할 수 있습니다.
 
-## Glob patterns
+## Glob 패턴
 
-| Pattern     | Description                                                                                          |
-| ----------- | ---------------------------------------------------------------------------------------------------- |
-| `*`         | Match all files in the directory                                                                     |
-| `**`        | Recursively match all files and sub-directories                                                      |
-| `some-dir/` | Match the `some-dir` directory and its contents                                                      |
-| `some-dir`  | Match a file named `some-dir` or a `some-dir` directory and its contents                             |
-| `some-dir*` | Match files and directories that start with `some-dir`, including contents when matching a directory |
-| `*.js`      | Match all `.js` files in the directory                                                               |
-| `!`         | Negate the whole glob (automatically applies `/**` to the end of the defined glob)                   |
+| 패턴        | 설명                                                                                   |
+| ----------- | -------------------------------------------------------------------------------------- |
+| `*`         | 디렉토리의 모든 파일과 일치합니다                                                      |
+| `**`        | 모든 파일과 하위 디렉토리를 재귀적으로 일치시킵니다                                    |
+| `some-dir/` | `some-dir` 디렉토리와 그 내용을 일치시킵니다                                           |
+| `some-dir`  | `some-dir`이라는 이름의 파일 또는 `some-dir` 디렉토리와 그 내용을 일치시킵니다         |
+| `some-dir*` | `some-dir`로 시작하는 파일 및 디렉토리를 일치시키며, 디렉토리인 경우 내용도 포함합니다 |
+| `*.js`      | 디렉토리의 모든 `.js` 파일과 일치합니다                                                |
+| `!`         | 전체 glob을 부정합니다 (정의된 glob의 끝에 자동으로 `/**`를 적용합니다)                |
 
-## Examples
+## 예제
 
-| Pattern            | Description                                                                                       |
-| ------------------ | ------------------------------------------------------------------------------------------------- |
-| `dist/**`          | Match all files in the `dist` directory, its contents, and all sub-directories                    |
-| `dist/`            | Match the `dist` directory and its contents                                                       |
-| `dist`             | Match a file named `dist` or a `dist` directory, its contents, and all sub-directories            |
-| `dist/some-dir/**` | Match all files in the `dist/some-dir` directory and all sub-directories in the current directory |
-| `!dist`            | Ignore the `dist` directory and all of its contents                                               |
-| `dist*`            | Match files and directories that start with `dist`                                                |
-| `dist/*.js`        | Match all `.js` files in the `dist` directory                                                     |
-| `!dist/*.js`       | Ignore all `.js` files in the `dist` directory                                                    |
-| `dist/**/*.js`     | Recursively match all `.js` files in the `dist` directory and its sub-directories                 |
-| `../scripts/**`    | Up one directory, match all files and sub-directories in the `scripts` directory                  |
+| 패턴               | 설명                                                                                      |
+| ------------------ | ----------------------------------------------------------------------------------------- |
+| `dist/**`          | `dist` 디렉토리, 그 내용 및 모든 하위 디렉토리의 모든 파일과 일치합니다                   |
+| `dist/`            | `dist` 디렉토리와 그 내용을 일치시킵니다                                                  |
+| `dist`             | `dist`라는 이름의 파일 또는 `dist` 디렉토리, 그 내용 및 모든 하위 디렉토리를 일치시킵니다 |
+| `dist/some-dir/**` | 현재 디렉토리의 `dist/some-dir` 디렉토리 및 모든 하위 디렉토리의 모든 파일과 일치합니다   |
+| `!dist`            | `dist` 디렉토리와 모든 내용을 무시합니다                                                  |
+| `dist*`            | `dist`로 시작하는 파일 및 디렉토리와 일치합니다                                           |
+| `dist/*.js`        | `dist` 디렉토리의 모든 `.js` 파일과 일치합니다                                            |
+| `!dist/*.js`       | `dist` 디렉토리의 모든 `.js` 파일을 무시합니다                                            |
+| `dist/**/*.js`     | `dist` 디렉토리와 그 하위 디렉토리의 모든 `.js` 파일을 재귀적으로 일치시킵니다            |
+| `../scripts/**`    | 한 디렉토리 위로, `scripts` 디렉토리의 모든 파일과 하위 디렉토리를 일치시킵니다           |

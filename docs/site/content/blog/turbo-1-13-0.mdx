@@ -1,7 +1,7 @@
 ---
 title: Turborepo 1.13
 date: 2024/03/21
-description: Turborepo 1.13 brings a new and improved local development experience along with other enhancements.
+description: Turborepo 1.13은 새롭고 개선된 로컬 개발 경험과 함께 기타 개선 사항을 제공합니다.
 tag: 'web development'
 ---
 
@@ -17,24 +17,24 @@ import { ExperimentalBadge } from '#components/experimental-badge';
 
 <Authors authors={['gregsoltis', 'chrisolszewski']} />
 
-Turborepo 1.13 brings a new and improved local development experience along with other enhancements, including:
+Turborepo 1.13은 새롭고 개선된 로컬 개발 경험과 함께 기타 개선 사항을 제공합니다:
 
-- [**New terminal UI**](#new-terminal-ui) <ExperimentalBadge />: Interact with your tasks locally in an enhanced terminal experience
-- [**Enable the fastest defaults**](#enable-the-fastest-defaults): Make your local development environment faster with `turbo scan`
-- [**CI logging improvements**](#ci-logging-improvements): Support for four major providers and automatic unfurling of errored tasks
-- [**Enhanced `prune` support**](#enhanced-package-manager-support-for-prune): Bug fixes and improved stability for `turbo prune`
+- [**새로운 터미널 UI**](#new-terminal-ui) <ExperimentalBadge />: 향상된 터미널 경험에서 로컬로 작업과 상호 작용
+- [**가장 빠른 기본값 활성화**](#enable-the-fastest-defaults): `turbo scan`으로 로컬 개발 환경을 더 빠르게 만들기
+- [**CI 로깅 개선**](#ci-logging-improvements): 4개 주요 제공업체 지원 및 오류 작업 자동 펼치기
+- [**향상된 `prune` 지원**](#enhanced-package-manager-support-for-prune): `turbo prune`에 대한 버그 수정 및 향상된 안정성
 
-Update today by running `npx @turbo/codemod migrate` or get started with `npx create-turbo@latest`.
+`npx @turbo/codemod migrate`를 실행하여 오늘 업데이트하거나 `npx create-turbo@latest`로 시작하세요.
 
-## New terminal UI
+## 새로운 터미널 UI
 
-Until today, `turbo` would output logs as a stream while you were working on your libraries and applications. This could be overwhelming at times since the interleaved logs made it difficult to understand what was going on with a specific task.
+오늘까지 `turbo`는 라이브러리와 애플리케이션에서 작업하는 동안 로그를 스트림으로 출력했습니다. 이는 때때로 압도적일 수 있었는데, 인터리브된 로그로 인해 특정 작업에서 무슨 일이 일어나고 있는지 이해하기 어려웠기 때문입니다.
 
-With this release, we’re shipping a new, experimental terminal UI, which allows you to:
+이번 릴리스를 통해 다음을 수행할 수 있는 새로운 실험적 터미널 UI를 제공합니다:
 
-- **Toggle through the logs of each of your tasks**, making them easier to follow and read
-- **Interact with your persistent tasks** by entering and exiting the task’s shell, giving you the ability to re-run unit tests, for example
-- **See the duration for each of your tasks** in a bar graph
+- **각 작업의 로그를 전환**하여 더 쉽게 따라가고 읽을 수 있습니다
+- **지속적인 작업과 상호 작용**하여 작업의 셸에 들어가고 나가 예를 들어 단위 테스트를 다시 실행할 수 있습니다
+- **각 작업의 지속 시간을** 막대 그래프로 확인할 수 있습니다
 
 <ThemeAwareImage
   className="my-4 flex justify-center"
@@ -58,7 +58,7 @@ With this release, we’re shipping a new, experimental terminal UI, which allow
   }}
 />
 
-To enable the new UI, either use the `--experimental-ui` flag or add the `experimentalUI` flag to your `turbo.json`:
+새 UI를 활성화하려면 `--experimental-ui` 플래그를 사용하거나 `turbo.json`에 `experimentalUI` 플래그를 추가하세요:
 
 ```json title="./turbo.json"
 {
@@ -66,13 +66,13 @@ To enable the new UI, either use the `--experimental-ui` flag or add the `experi
 }
 ```
 
-**We are looking forward to hearing your feedback on this new feature.** Please [visit the RFC on GitHub Discussions](https://github.com/vercel/turbo/discussions/7802) to share your thoughts.
+**이 새 기능에 대한 피드백을 듣고 싶습니다.** 의견을 공유하려면 [GitHub Discussions의 RFC를 방문](https://github.com/vercel/turbo/discussions/7802)하세요.
 
-## Enable the fastest defaults
+## 가장 빠른 기본값 활성화
 
-We want your local development experience to be as fast as possible - through even more than the parallelization and caching of `turbo`.
+우리는 `turbo`의 병렬화 및 캐싱을 넘어서 로컬 개발 경험을 가능한 한 빠르게 만들고 싶습니다.
 
-Running `turbo scan` will inspect your machine for optimizations that make your experience faster.
+`turbo scan`을 실행하면 머신을 검사하여 경험을 더 빠르게 만드는 최적화를 찾습니다.
 
 <ThemeAwareImage
   className="my-4 flex justify-center"
@@ -97,24 +97,23 @@ Running `turbo scan` will inspect your machine for optimizations that make your 
   }}
 />
 
-For more information, [visit the documentation](/docs/reference/scan).
+자세한 내용은 [문서](/docs/reference/scan)를 참조하세요.
 
 <Callout type="info">
-  This command is for your local development environment. It will not optimize
-  your CI.
+  이 명령은 로컬 개발 환경용입니다. CI를 최적화하지 않습니다.
 </Callout>
 
-## CI logging improvements
+## CI 로깅 개선
 
-This release adds support for automatically grouping successful logs in:
+이번 릴리스는 다음에서 성공적인 로그를 자동으로 그룹화하는 지원을 추가합니다:
 
 - Azure Pipelines
 - TeamCity
 - Travis CI
 
-These providers join GitHub Actions, which was already supported.
+이러한 제공업체는 이미 지원되었던 GitHub Actions에 합류합니다.
 
-Additionally, Turborepo now ungroups any tasks that did not complete successfully so you can find errorful tasks faster.
+또한 Turborepo는 이제 성공적으로 완료되지 않은 작업의 그룹을 해제하여 오류가 있는 작업을 더 빨리 찾을 수 있습니다.
 
 <ThemeAwareImage
   className="my-4 flex justify-center"
@@ -138,22 +137,22 @@ Additionally, Turborepo now ungroups any tasks that did not complete successfull
   }}
 />
 
-## Enhanced package manager support for `prune`
+## `prune`에 대한 향상된 패키지 매니저 지원
 
-Turborepo’s `prune` command is an important optimization for Docker users, helping them to create lightweight images from monorepos.
+Turborepo의 `prune` 명령은 Docker 사용자에게 중요한 최적화로, 모노레포에서 경량 이미지를 생성하는 데 도움이 됩니다.
 
-pnpm lockfile support has been upgraded by adding support for [Workspace relative path references](https://pnpm.io/workspaces#referencing-workspace-packages-through-their-relative-path) and respecting the [`link-workspace-packages` property in `.npmrc`](https://pnpm.io/npmrc#link-workspace-packages).
+pnpm lockfile 지원은 [작업 공간 상대 경로 참조](https://pnpm.io/workspaces#referencing-workspace-packages-through-their-relative-path) 지원을 추가하고 [`.npmrc`의 `link-workspace-packages` 속성](https://pnpm.io/npmrc#link-workspace-packages)을 준수하여 업그레이드되었습니다.
 
-Yarn4 support has been improved by supporting [`resolutions` in `package.json`](https://yarnpkg.com/configuration/manifest#resolutions) at the root of your Workspace.
+Yarn4 지원은 작업 공간의 루트에서 [`package.json`의 `resolutions`](https://yarnpkg.com/configuration/manifest#resolutions)를 지원하여 개선되었습니다.
 
-## Community
+## 커뮤니티
 
-Since releasing [Turborepo 1.12](/blog/turbo-1-12-0) we've seen incredible adoption and community growth:
+[Turborepo 1.12](/blog/turbo-1-12-0) 출시 이후 놀라운 채택률과 커뮤니티 성장을 보았습니다:
 
 - [24.6k+ GitHub Stars](https://github.com/vercel/turbo)
-- [2.3M+ weekly NPM downloads](https://www.npmjs.com/package/turbo)
-- 283 years of compute time saved using [Vercel Remote Cache](https://vercel.com/docs/concepts/monorepos/remote-caching)
+- [주간 NPM 다운로드 2.3M+회](https://www.npmjs.com/package/turbo)
+- [Vercel Remote Cache](https://vercel.com/docs/concepts/monorepos/remote-caching)를 사용하여 283년의 컴퓨팅 시간 절약
 
-Turborepo is the result of the combined work of all of its contributors, including our core team.
+Turborepo는 핵심 팀을 포함한 모든 기여자들의 노력이 결합된 결과입니다.
 
-Thank you for your continued support, feedback, and collaboration to make Turborepo your build tool of choice.
+Turborepo를 여러분의 빌드 도구로 선택하기 위해 지속적인 지원, 피드백, 협업에 감사드립니다.

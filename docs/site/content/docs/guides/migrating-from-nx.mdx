@@ -1,34 +1,34 @@
 ---
-title: Migrating from Nx
-description: Learn how to migrate to Turborepo from Nx.
+title: Nx에서 마이그레이션
+description: Nx에서 Turborepo로 마이그레이션하는 방법을 알아봅니다.
 ---
 
 import { PackageManagerTabs, Tabs, Tab } from '#components/tabs';
 
-This guide will help you migrate an existing Nx repository to Turborepo.
+이 가이드는 기존 Nx 리포지토리를 Turborepo로 마이그레이션하는 데 도움이 됩니다.
 
-- Explore key concepts by [migrating from an Nx starter to Turborepo](#migration-steps)
-- Considerations for [more complex migration scenarios](#advanced-migration-considerations)
+- [Nx 스타터에서 Turborepo로 마이그레이션](#migration-steps)하여 핵심 개념 탐색
+- [더 복잡한 마이그레이션 시나리오](#advanced-migration-considerations)에 대한 고려 사항
 
-## Why switch?
+## 왜 전환하나요?
 
-There are many reasons why you may be choosing to migrate from Nx to Turborepo. Below, we've listed the most common motivations that developers have referenced for their migrations.
+Nx에서 Turborepo로 마이그레이션하려는 이유는 여러 가지가 있습니다. 아래에 개발자들이 마이그레이션을 위해 참조한 가장 일반적인 동기를 나열했습니다.
 
-### Using ecosystem standards
+### 생태계 표준 사용
 
-Turborepo's goal is to be lightweight, leaning on your repository as the source of truth. An example of this is Turborepo being [built on top of JavaScript package manager workspaces](/docs/crafting-your-repository/structuring-a-repository) for it's JavaScript/TypeScript support.
+Turborepo의 목표는 리포지토리를 진실의 원천으로 삼아 경량화하는 것입니다. 이에 대한 예로 Turborepo가 JavaScript/TypeScript 지원을 위해 [JavaScript 패키지 매니저 워크스페이스 위에 구축](/docs/crafting-your-repository/structuring-a-repository)된 것이 있습니다.
 
-By contrast, Nx uses layers of plugins, dependencies, and other Nx-specific code to infer information about your repository. While these plugins can provide a layer of functionality and are optional, Nx users looking to migrate often cite removing Nx-specific code from their codebase as a key motivation for their change.
+반면 Nx는 플러그인, 종속성 및 기타 Nx 전용 코드 계층을 사용하여 리포지토리에 대한 정보를 추론합니다. 이러한 플러그인은 기능 계층을 제공할 수 있으며 선택 사항이지만, 마이그레이션을 원하는 Nx 사용자는 코드베이스에서 Nx 전용 코드를 제거하는 것을 변경의 주요 동기로 자주 언급합니다.
 
-### Greater control of source code
+### 소스 코드에 대한 더 큰 제어
 
-Nx’s philosophy involves wrapping your code with layers of plugins, dependencies, and Nx-specific code. While these layers of code are optional, they provide a great deal of Nx's value and are recommended by Nx, so most Nx repos have them. When migrating to Turborepo, many developers explain that these layers tend to create a layer of obfuscation that abstracts their repository away from their control, causing issues.
+Nx의 철학은 플러그인, 종속성 및 Nx 전용 코드 계층으로 코드를 래핑하는 것입니다. 이러한 코드 계층은 선택 사항이지만 Nx의 많은 가치를 제공하며 Nx에서 권장하므로 대부분의 Nx 리포지토리에 있습니다. Turborepo로 마이그레이션할 때 많은 개발자는 이러한 계층이 리포지토리를 제어에서 추상화하는 난독화 계층을 만들어 문제를 일으키는 경향이 있다고 설명합니다.
 
-Turborepo chooses to let you handle your tooling on your own terms, configuring (or not configuring) any of your tooling as you please.
+Turborepo는 원하는 대로 도구를 설정(또는 설정하지 않음)하여 자신의 조건에 따라 도구를 처리할 수 있도록 선택합니다.
 
-### Less configuration for your repository manager
+### 리포지토리 매니저를 위한 더 적은 설정
 
-Migrating to Turborepo will likely require deleting previous configuration that you had for Nx and replacing it with less configuration for Turborepo, since Turborepo will automatically infer your repository's needs. For example, here are the tool-specific configurations you'll find in the equivalent starters for Turborepo and Nx [used below](#migration-steps).
+Turborepo는 리포지토리의 요구 사항을 자동으로 추론하므로 Turborepo로 마이그레이션하려면 Nx에 대해 가지고 있던 이전 설정을 삭제하고 Turborepo에 대한 더 적은 설정으로 대체해야 할 가능성이 높습니다. 예를 들어, 다음은 [아래에서 사용된](#migration-steps) Turborepo 및 Nx의 동등한 스타터에서 찾을 수 있는 도구별 설정입니다.
 
 <Tabs items={["Turborepo", "Nx"]}>
 
@@ -141,25 +141,25 @@ Migrating to Turborepo will likely require deleting previous configuration that 
 
 </Tabs>
 
-## Migration steps
+## 마이그레이션 단계
 
-Our goal for this migration is to get a working Turborepo task as quickly as possible, so that you can adopt Turborepo features incrementally. We’ll start by using the Nx scaffolder to create a repository with a Next.js app.
+이 마이그레이션의 목표는 가능한 한 빨리 작동하는 Turborepo 작업을 얻어 Turborepo 기능을 점진적으로 채택할 수 있도록 하는 것입니다. Nx 스캐폴더를 사용하여 Next.js 앱이 있는 리포지토리를 만드는 것부터 시작하겠습니다.
 
 ```bash title="Terminal"
 npx create-nx-workspace --preset=next --ci=skip --e2eTestRunner=none --style=tailwind --nextAppDir=true --nextSrcDir=false --packageManager=pnpm --appName=starter
 ```
 
-### Step 1: Update .gitignore
+### 1단계: .gitignore 업데이트
 
-Turborepo uses the .turbo directory to hold local caches and other information about your repository. For this reason, it should be added to your `.gitignore`.
+Turborepo는 .turbo 디렉토리를 사용하여 리포지토리에 대한 로컬 캐시 및 기타 정보를 보관합니다. 이러한 이유로 `.gitignore`에 추가해야 합니다.
 
 ```txt title=".gitignore"
 .turbo
 ```
 
-### Step 2: Add a workspace definition
+### 2단계: 워크스페이스 정의 추가
 
-Turborepo is built on top of package manager workspaces, a JavaScript ecosystem standard. Add the directory paths to the workspace that will contain packages.
+Turborepo는 JavaScript 생태계 표준인 패키지 매니저 워크스페이스 위에 구축되었습니다. 패키지를 포함할 워크스페이스에 디렉토리 경로를 추가합니다.
 
 <PackageManagerTabs>
 
@@ -204,11 +204,11 @@ packages:
 
 </PackageManagerTabs>
 
-### Step 3: Add a package.json to the application
+### 3단계: 애플리케이션에 package.json 추가
 
-Rather than adding additional configuration files like `project.json`, Turborepo uses the standard `package.json` file.
+`project.json`과 같은 추가 설정 파일을 추가하는 대신 Turborepo는 표준 `package.json` 파일을 사용합니다.
 
-Add a `package.json` to the `starter` application. Create a `package.json` at `./apps/starter/package.json` that contains a `dev` and `build` script.
+`starter` 애플리케이션에 `package.json`을 추가합니다. `dev` 및 `build` 스크립트가 포함된 `package.json`을 `./apps/starter/package.json`에 만듭니다.
 
 ```json title="./apps/starter/package.json"
 {
@@ -220,9 +220,9 @@ Add a `package.json` to the `starter` application. Create a `package.json` at `.
 }
 ```
 
-### Step 4: Remove Nx plugin
+### 4단계: Nx 플러그인 제거
 
-Remove the Nx plugin from ./apps/starter/next.config.js. The example file below doesn’t have configuration, though your existing Next.js application may need some.
+./apps/starter/next.config.js에서 Nx 플러그인을 제거합니다. 아래 예제 파일에는 설정이 없지만 기존 Next.js 애플리케이션에는 일부가 필요할 수 있습니다.
 
 ```js title="./apps/starter/next.config.js"
 /** @type {import('next').NextConfig} */
@@ -231,9 +231,9 @@ const nextConfig = {};
 module.exports = nextConfig;
 ```
 
-### Step 5: Add the `packageManager` field
+### 5단계: `packageManager` 필드 추가
 
-The root package.json needs to have the `packageManager` field. This ensures developers in the repository use the correct package manager, and that Turborepo can optimize your package graph based on your lockfile.
+루트 package.json에 `packageManager` 필드가 있어야 합니다. 이를 통해 리포지토리의 개발자가 올바른 패키지 매니저를 사용하고 Turborepo가 lockfile을 기반으로 패키지 그래프를 최적화할 수 있습니다.
 
 <PackageManagerTabs>
 
@@ -279,9 +279,9 @@ The root package.json needs to have the `packageManager` field. This ensures dev
 
 </PackageManagerTabs>
 
-### Step 6: Run you package manager's install command
+### 6단계: 패키지 매니저의 설치 명령 실행
 
-Update your lockfile by running your installation command.
+설치 명령을 실행하여 lockfile을 업데이트합니다.
 
 <PackageManagerTabs>
 
@@ -319,11 +319,11 @@ bun install
 
 </PackageManagerTabs>
 
-Once you've done this, you should see a lockfile diff, indicating that the package has been added to the package manager's workspace.
+이 작업을 완료하면 패키지가 패키지 매니저의 워크스페이스에 추가되었음을 나타내는 lockfile diff가 표시되어야 합니다.
 
-### Step 7: Install Turborepo
+### 7단계: Turborepo 설치
 
-Add Turborepo to the root `package.json` of the workspace.
+워크스페이스의 루트 `package.json`에 Turborepo를 추가합니다.
 
 <PackageManagerTabs>
 
@@ -361,7 +361,7 @@ bun install turbo --dev
 
 </PackageManagerTabs>
 
-You can also optionally install `turbo` globally for added convenience when working with Turborepo.
+Turborepo 작업 시 편의성을 높이기 위해 `turbo`를 전역으로 설치할 수도 있습니다.
 
 <PackageManagerTabs>
 
@@ -399,9 +399,9 @@ bun install turbo --global
 
 </PackageManagerTabs>
 
-### Step 8: Add a `turbo.json`
+### 8단계: `turbo.json` 추가
 
-Create a `turbo.json` at the root to register your tasks and describe their task dependencies.
+루트에 `turbo.json`을 생성하여 작업을 등록하고 작업 종속성을 설명합니다.
 
 ```json title="./turbo.json"
 {
@@ -418,9 +418,9 @@ Create a `turbo.json` at the root to register your tasks and describe their task
 }
 ```
 
-### Step 9: Run `turbo build`
+### 9단계: `turbo build` 실행
 
-Build the application with Turborepo. Using global `turbo`, this would be `turbo build`. You can also run the command through your package manager:
+Turborepo로 애플리케이션을 빌드합니다. 전역 `turbo`를 사용하면 `turbo build`입니다. 패키지 매니저를 통해 명령을 실행할 수도 있습니다:
 
 <PackageManagerTabs>
 
@@ -458,58 +458,57 @@ bunx turbo run build
 
 </PackageManagerTabs>
 
-### Step 10: Enable Remote Caching (optional)
+### 10단계: Remote Caching 활성화 (선택 사항)
 
-By default, Turborepo will connect to the free-to-use Vercel Remote Cache when you run:
+기본적으로 Turborepo는 다음을 실행할 때 무료로 사용 가능한 Vercel Remote Cache에 연결됩니다:
 
 ```bash title="Terminal"
 turbo login
 turbo link
 ```
 
-You may also configure a self-hosted Remote Cache.
+자체 호스팅 Remote Cache를 구성할 수도 있습니다.
 
-## Advanced migration considerations
+## 고급 마이그레이션 고려 사항
 
-While the migration guide above is a good starting point, the breadth of possibilities and capabilities of monorepos means that its difficult to create generalized instructions for all cases. Below, we’ve listed some common next steps that you may be thinking about.
+위의 마이그레이션 가이드는 좋은 시작점이지만 모노레포의 가능성과 기능의 폭이 넓기 때문에 모든 경우에 대한 일반화된 지침을 만들기 어렵습니다. 아래에 고려할 수 있는 몇 가지 일반적인 다음 단계를 나열했습니다.
 
-### Migrate complex monorepos incrementally
+### 복잡한 모노레포를 점진적으로 마이그레이션
 
-We encourage incremental migration, meaning you will have both of Nx and Turborepo in your repository at the same time. Make sure to spend time understanding how your Nx task graph is constructed. Splitting up the task graph may include strategies like:
+점진적 마이그레이션을 권장합니다. 즉, 리포지토리에 Nx와 Turborepo가 동시에 있게 됩니다. Nx 작업 그래프가 어떻게 구성되는지 이해하는 데 시간을 투자하세요. 작업 그래프를 분할하는 전략에는 다음이 포함될 수 있습니다:
 
-- **Migrating one task at a time**: Changing `nx run lint` to `turbo run lint`
-- **Migrating one package/project at a time**: Changing `nx run-many lint test --projects=web` to `turbo run lint test --filter=web`
-- **Double-running some of your tasks**: To ensure stability, you may choose to run `turbo run lint` **and** `nx run lint` while you're still getting comfortable and building certainty in the early phases of your migration.
+- **한 번에 하나의 작업 마이그레이션**: `nx run lint`를 `turbo run lint`로 변경
+- **한 번에 하나의 패키지/프로젝트 마이그레이션**: `nx run-many lint test --projects=web`을 `turbo run lint test --filter=web`로 변경
+- **일부 작업을 이중 실행**: 안정성을 보장하기 위해 마이그레이션 초기 단계에서 익숙해지고 확신을 구축하는 동안 `turbo run lint` **및** `nx run lint`를 실행하도록 선택할 수 있습니다.
 
-### Installing dependencies where they're used
+### 사용되는 곳에 종속성 설치
 
-Turborepo recommends [installing packages where they're used](/docs/crafting-your-repository/managing-dependencies#best-practices-for-dependency-installation) to improve cache hit ratios, help dependency pruning capability, and clarify for developers which dependencies are meant for which packages. This is different from the Nx strategy, where all dependencies are installed at the root of the repository, making all dependencies available to all packages in the workspace.
+Turborepo는 캐시 적중률을 개선하고 종속성 정리 기능을 지원하며 개발자에게 어떤 패키지에 어떤 종속성이 사용되는지 명확히 하기 위해 [사용되는 곳에 패키지를 설치](/docs/crafting-your-repository/managing-dependencies#best-practices-for-dependency-installation)할 것을 권장합니다. 이는 모든 종속성이 리포지토리의 루트에 설치되어 워크스페이스의 모든 패키지에서 모든 종속성을 사용할 수 있는 Nx 전략과 다릅니다.
 
-Historically, Nx has recommended installing all dependencies in the root of the repository, making all dependencies available to all packages in the Workspace. If you followed this guidance, we highly recommend that you move dependencies to the `package.json`'s for packages and applications that need them. [Visit our documentation on managing dependencies](/docs/crafting-your-repository/managing-dependencies) to learn more.
+역사적으로 Nx는 모든 종속성을 리포지토리의 루트에 설치하여 워크스페이스의 모든 패키지에서 모든 종속성을 사용할 수 있도록 권장했습니다. 이 지침을 따랐다면 필요한 패키지 및 애플리케이션의 `package.json`으로 종속성을 이동하는 것을 강력히 권장합니다. 자세한 내용은 [종속성 관리에 대한 문서](/docs/crafting-your-repository/managing-dependencies)를 참조하세요.
 
-### Creating shared packages
+### 공유 패키지 생성
 
-You’ll follow roughly the same set of steps as above to add a package to your package manager’s workspace.
+패키지 매니저의 워크스페이스에 패키지를 추가하려면 위와 거의 동일한 단계를 따릅니다.
 
-1. Ensure the package’s directory is included in the workspace definition (like `./packages/*` ).
-2. Add a `package.json` to the package with the scripts it needs to run.
-3. Check task dependencies in `turbo.json` to make sure your dependency graph meets your requirements.
+1. 패키지의 디렉토리가 워크스페이스 정의(예: `./packages/*`)에 포함되어 있는지 확인합니다.
+2. 실행해야 하는 스크립트가 있는 `package.json`을 패키지에 추가합니다.
+3. `turbo.json`에서 작업 종속성을 확인하여 종속성 그래프가 요구 사항을 충족하는지 확인합니다.
 
-### Multi-language monorepos
+### 다중 언어 모노레포
 
-Turborepo natively supports JavaScript and TypeScript, with secondary support for any other languages you’d like to use. [Visit the Multi-Language support documentation](/docs/guides/multi-language) to learn more.
+Turborepo는 JavaScript 및 TypeScript를 기본적으로 지원하며 사용하려는 다른 언어에 대한 보조 지원을 제공합니다. 자세한 내용은 [다중 언어 지원 문서](/docs/guides/multi-language)를 참조하세요.
 
-## Configuration equivalents
+## 설정 동등성
 
-Configuration found in `nx.json` can be mapped to `turbo.json` using the tables below.
+`nx.json`에서 발견되는 설정은 아래 표를 사용하여 `turbo.json`에 매핑할 수 있습니다.
 
 <Callout type="info">
-  The majorify of globs for capturing files are the same between Nx and
-  Turborepo. See [our file glob specification](/docs/reference/globs) for
-  details and edge cases.
+  파일 캡처를 위한 대부분의 glob은 Nx와 Turborepo 간에 동일합니다. 자세한 내용과
+  엣지 케이스는 [파일 glob 사양](/docs/reference/globs)을 참조하세요.
 </Callout>
 
-### Global configuration
+### 전역 설정
 
 | Nx                         | Turborepo                                                                |
 | -------------------------- | ------------------------------------------------------------------------ |
@@ -518,7 +517,7 @@ Configuration found in `nx.json` can be mapped to `turbo.json` using the tables 
 | `sharedGlobals.namedInput` | [`globalDependencies`](/docs/reference/configuration#globaldependencies) |
 | `cacheDirectory`           | [`cacheDir`](/docs/reference/configuration#cachedir)                     |
 
-### Task configuration
+### 작업 설정
 
 | Nx              | Turborepo                                                      |
 | --------------- | -------------------------------------------------------------- |
@@ -527,7 +526,7 @@ Configuration found in `nx.json` can be mapped to `turbo.json` using the tables 
 | `outputs` files | [`tasks[task].outputs`](/docs/reference/configuration#outputs) |
 | `cache`         | [`tasks[task].cache`](/docs/reference/configuration#cache)     |
 
-### CLI equivalents
+### CLI 동등성
 
 | Nx               | Turborepo                                                               |
 | ---------------- | ----------------------------------------------------------------------- |

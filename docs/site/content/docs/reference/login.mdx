@@ -1,21 +1,21 @@
 ---
 title: login
-description: API reference for the `turbo login` command
+description: `turbo login` 명령어에 대한 API 레퍼런스
 ---
 
-Log in to your Remote Cache provider.
+Remote Cache 제공자에 로그인합니다.
 
 ```bash title="Terminal"
 turbo login
 ```
 
-The default provider is [Vercel](https://vercel.com/). To specify a different provider, use the `--api` option.
+기본 제공자는 [Vercel](https://vercel.com/)입니다. 다른 제공자를 지정하려면 `--api` 옵션을 사용하세요.
 
-## Flag options
+## 플래그 옵션
 
 ### --api \<url>
 
-Set the API URL of the Remote Cache provider.
+Remote Cache 제공자의 API URL을 설정합니다.
 
 ```bash title="Terminal"
 turbo login --api=https://acme.com/api
@@ -23,7 +23,7 @@ turbo login --api=https://acme.com/api
 
 ### --login \<url>
 
-Set the URL for login requests that should dynamically generate tokens.
+토큰을 동적으로 생성해야 하는 로그인 요청의 URL을 설정합니다.
 
 ```bash title="Terminal"
 turbo login --login=https://acme.com
@@ -31,7 +31,7 @@ turbo login --login=https://acme.com
 
 ### --sso-team \<team>
 
-Connect to an SSO-enabled team by providing your team slug.
+팀 슬러그를 제공하여 SSO가 활성화된 팀에 연결합니다.
 
 ```bash title="Terminal"
 turbo login --sso-team=slug-for-team
@@ -39,4 +39,4 @@ turbo login --sso-team=slug-for-team
 
 ### --manual
 
-Manually enter token instead of requesting one from a login service.
+로그인 서비스에서 토큰을 요청하는 대신 수동으로 토큰을 입력합니다.

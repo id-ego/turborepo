@@ -1,6 +1,6 @@
 ---
 title: Jest
-description: Learn how to use Jest in a Turborepo.
+description: Turborepo에서 Jest를 사용하는 방법을 알아보세요.
 ---
 
 import { Callout } from '#components/callout';
@@ -8,13 +8,13 @@ import { File, Folder, Files } from '#components/files';
 import { PackageManagerTabs, Tabs, Tab } from '#components/tabs';
 import { CreateTurboCallout } from './create-turbo-callout.tsx';
 
-[Jest](https://jestjs.io/) is a common test runner with a vast ecosystem. Integrating with Turborepo will lead to enormous speed-ups.
+[Jest](https://jestjs.io/)는 방대한 생태계를 가진 일반적인 테스트 러너입니다. Turborepo와 통합하면 엄청난 속도 향상을 얻을 수 있습니다.
 
 <CreateTurboCallout />
 
-## Setting up
+## 설정
 
-Let's say we have a monorepo that looks like this:
+다음과 같은 monorepo가 있다고 가정해 봅시다:
 
 <Files>
   <Folder name="apps" defaultOpen>
@@ -29,7 +29,7 @@ Let's say we have a monorepo that looks like this:
   </Folder>
 </Files>
 
-Install `jest` into the packages where you plan on having test suites. For this example, we will have tests in `web` and `@repo/ui`:
+테스트 스위트를 계획하는 패키지에 `jest`를 설치합니다. 이 예제에서는 `web`과 `@repo/ui`에 테스트가 있습니다:
 
 <PackageManagerTabs>
 
@@ -67,7 +67,7 @@ bun install jest --dev --filter=@repo/ui --filter=web
 </Tab>
 </PackageManagerTabs>
 
-Both the `apps/web` and `packages/ui` have their own test suites, so we'll add a `test` script to their `package.json`:
+`apps/web`과 `packages/ui` 모두 자체 테스트 스위트가 있으므로 `package.json`에 `test` 스크립트를 추가합니다:
 
 <Tabs items={["web", "@repo/ui"]}>
 <Tab value="web">
@@ -98,7 +98,7 @@ Both the `apps/web` and `packages/ui` have their own test suites, so we'll add a
 </Tab>
 </Tabs>
 
-Inside the root `turbo.json`, create a `test` task:
+루트 `turbo.json` 내부에 `test` 작업을 만듭니다:
 
 ```json title="./turbo.json"
 {
@@ -108,15 +108,15 @@ Inside the root `turbo.json`, create a `test` task:
 }
 ```
 
-Now, `turbo test` can parallelize and cache all of the test suites from each package, only testing code that has changed.
+이제 `turbo test`는 각 패키지의 모든 테스트 스위트를 병렬화하고 캐시하여 변경된 코드만 테스트합니다.
 
-## Running tests in watch mode
+## watch 모드에서 테스트 실행
 
-When you run your test suite normally, it completes and outputs to `stdout`. This means you can [cache it](/docs/crafting-your-repository/caching) with Turborepo.
+테스트 스위트를 정상적으로 실행하면 완료되고 `stdout`에 출력됩니다. 즉, Turborepo로 [캐시할 수 있습니다](/docs/crafting-your-repository/caching).
 
-But when you run your tests in a watched mode, the process never exits. This makes a watch task more like a [development task](/docs/crafting-your-repository/developing-applications).
+하지만 watch 모드에서 테스트를 실행하면 프로세스가 종료되지 않습니다. 이로 인해 watch 작업은 [개발 작업](/docs/crafting-your-repository/developing-applications)과 더 비슷합니다.
 
-Because of this difference, we recommend specifying **two separate Turborepo tasks**: one for running your tests, and one for running them in Jest's watch mode. Inside your each `package.json` file for each workspace:
+이러한 차이로 인해 **두 개의 별도 Turborepo 작업**을 지정하는 것을 권장합니다: 하나는 테스트를 실행하는 것이고, 다른 하나는 Jest의 watch 모드에서 실행하는 것입니다. 각 워크스페이스의 각 `package.json` 파일 내부에:
 
 <Tabs items={["web", "@repo/ui"]}>
 <Tab value="web">
@@ -149,7 +149,7 @@ Because of this difference, we recommend specifying **two separate Turborepo tas
 </Tab>
 </Tabs>
 
-Inside the root `turbo.json`:
+루트 `turbo.json` 내부에:
 
 ```json title="./turbo.json"
 {
@@ -163,7 +163,7 @@ Inside the root `turbo.json`:
 }
 ```
 
-You can now either run this task using [global `turbo`](/docs/getting-started/installation#global-installation) as `turbo test:watch` or from a script in your root `package.json`:
+[전역 `turbo`](/docs/getting-started/installation#global-installation)를 `turbo test:watch`로 사용하거나 루트 `package.json`의 스크립트에서 이 작업을 실행할 수 있습니다:
 
 <Tabs items={["Global turbo", "./package.json"]}>
 <Tab value="Global turbo">

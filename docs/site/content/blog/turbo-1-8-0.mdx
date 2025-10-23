@@ -1,6 +1,6 @@
 ---
 title: Turborepo 1.8
-description: Turborepo 1.8 brings better flexibility and more control to your codebase by improving turbo's understanding of your workspaces.
+description: Turborepo 1.8은 워크스페이스에 대한 turbo의 이해를 개선하여 코드베이스에 더 나은 유연성과 더 많은 제어를 제공합니다.
 date: '2023/02/22'
 tag: 'web development'
 ---
@@ -29,31 +29,31 @@ import { Date } from '#components/blog/date';
   ]}
 />
 
-Turborepo 1.8 brings better flexibility and more control to your codebase by improving `turbo`'s understanding of your workspaces.
+Turborepo 1.8은 `turbo`의 워크스페이스 이해를 개선하여 코드베이스에 더 나은 유연성과 더 많은 제어를 제공합니다.
 
-- [**Workspace Configurations**](#workspace-configurations): You can now add a `turbo.json` configuration file in a workspace to override the root configuration in your repository.
-- [**Automatic Workspace Scoping**](#automatic-workspace-scoping): Global `turbo` now automatically infers your current workspace so that it only runs that workspace’s tasks.
-- [**Easier Migrations**](#easier-migrations): Automatically migrate to new versions of `turbo` with `npx @turbo/codemod migrate`.
+- [**워크스페이스 구성**](#workspace-configurations): 이제 워크스페이스에 `turbo.json` 구성 파일을 추가하여 저장소의 루트 구성을 재정의할 수 있습니다.
+- [**자동 워크스페이스 범위 지정**](#automatic-workspace-scoping): 이제 전역 `turbo`가 현재 워크스페이스를 자동으로 추론하여 해당 워크스페이스의 작업만 실행합니다.
+- [**더 쉬운 마이그레이션**](#easier-migrations): `npx @turbo/codemod migrate`를 사용하여 `turbo`의 새 버전으로 자동 마이그레이션합니다.
 
-Update today by running `npx @turbo/codemod migrate`.
+`npx @turbo/codemod migrate`를 실행하여 오늘 업데이트하세요.
 
-## Workspace Configurations
+## 워크스페이스 구성
 
-In workspace directories, you can now add a `turbo.json` to:
+워크스페이스 디렉토리에서 이제 `turbo.json`을 추가하여 다음을 수행할 수 있습니다:
 
-- add tasks specific to that workspace
-- override configuration for tasks
+- 해당 워크스페이스에 특정한 작업 추가
+- 작업에 대한 구성 재정의
 
-This will enable teams to scale ownership of the projects in their monorepos by moving away from global configuration to fine-grain control over tasks in workspaces.
+이를 통해 팀은 전역 구성에서 벗어나 워크스페이스의 작업에 대한 세밀한 제어로 이동하여 모노레포의 프로젝트 소유권을 확장할 수 있습니다.
 
-For example, imagine your monorepo has a Next.js app and a SvelteKit app, and you want to use Turborepo to cache outputs of the `build` task. The Next.js `build` script creates a `.next` directory, whereas SvelteKit creates a `.svelte-kit` directory. Instead of adding both build directories in your root `outputs`, you can define the `outputs` key in the workspace instead:
+예를 들어, 모노레포에 Next.js 앱과 SvelteKit 앱이 있고 Turborepo를 사용하여 `build` 작업의 출력을 캐시하려고 한다고 상상해보세요. Next.js `build` 스크립트는 `.next` 디렉토리를 생성하는 반면 SvelteKit은 `.svelte-kit` 디렉토리를 생성합니다. 루트 `outputs`에 두 빌드 디렉토리를 모두 추가하는 대신 워크스페이스에서 `outputs` 키를 정의할 수 있습니다:
 
 ```jsonc title="turbo.json"
 {
   "pipeline": {
     "build": {
       "dependsOn": ["^codegen"]
-      // no need to define outputs here!
+      // 여기에서 outputs를 정의할 필요가 없습니다!
     }
   }
 }
@@ -64,7 +64,7 @@ For example, imagine your monorepo has a Next.js app and a SvelteKit app, and yo
   "extends": ["//"],
   "pipeline": {
     "build": {
-      // dependsOn is inherited from root
+      // dependsOn은 루트에서 상속됩니다
       "outputs": [".next/**", "!.next/cache/**"]
     }
   }
@@ -76,43 +76,43 @@ For example, imagine your monorepo has a Next.js app and a SvelteKit app, and yo
   "extends": ["//"],
   "pipeline": {
     "build": {
-      // dependsOn is inherited from root
+      // dependsOn은 루트에서 상속됩니다
       "outputs": [".svelte-kit/**"]
     }
   }
 }
 ```
 
-The `extends` key in the Workspace Configurations enables workspace owners to use the best of the root `turbo.json` and customize the parts that makes their app different (The `"//"` sigil will look familiar if you’re used to [defining tasks to run from your root](/docs/crafting-your-repository/configuring-tasks#registering-root-tasks)).
+워크스페이스 구성의 `extends` 키를 사용하면 워크스페이스 소유자가 루트 `turbo.json`의 장점을 사용하고 앱을 다르게 만드는 부분을 사용자 정의할 수 있습니다(`"//"` 기호는 [루트에서 실행할 작업 정의](/docs/crafting-your-repository/configuring-tasks#registering-root-tasks)에 익숙한 경우 익숙할 것입니다).
 
-Keys that **are** declared will replace the key from the root if those keys exist, overriding what is defined in your root configuration. Keys that **are not** declared are inherited from the root config.
+**선언된** 키는 해당 키가 존재하는 경우 루트의 키를 대체하여 루트 구성에 정의된 내용을 재정의합니다. **선언되지 않은** 키는 루트 구성에서 상속됩니다.
 
-In the example above, `outputs` is customized for both apps, while `dependsOn` is configured by the root `turbo.json` and remains `"^codegen"`.
+위의 예에서 `outputs`는 두 앱 모두에 대해 사용자 정의되는 반면 `dependsOn`은 루트 `turbo.json`에 의해 구성되고 `"^codegen"`으로 유지됩니다.
 
-[Learn more in the docs](/docs/crafting-your-repository/structuring-a-repository#specifying-packages-in-a-monorepo).
+[문서에서 자세히 알아보기](/docs/crafting-your-repository/structuring-a-repository#specifying-packages-in-a-monorepo).
 
-## Automatic Workspace Scoping
+## 자동 워크스페이스 범위 지정
 
-In [Turborepo v1.7](/blog/turbo-1-7-0), `turbo` became globally installable, giving you the power to run your tasks from anywhere in your codebase. However, `turbo` would still run tasks from the root, running tasks in other workspaces that you may not have intended to run.
+[Turborepo v1.7](/blog/turbo-1-7-0)에서 `turbo`는 전역으로 설치할 수 있게 되어 코드베이스의 어디에서나 작업을 실행할 수 있는 권한을 제공했습니다. 그러나 `turbo`는 여전히 루트에서 작업을 실행하여 실행하려고 의도하지 않았을 수 있는 다른 워크스페이스의 작업을 실행했습니다.
 
-With 1.8, `turbo` will automatically detect the workspace you are in and generate [the `--filter` syntax](/docs/reference/run#--filter-string) to scope your task to that workspace.
+1.8에서 `turbo`는 현재 작업 중인 워크스페이스를 자동으로 감지하고 [`--filter` 구문](/docs/reference/run#--filter-string)을 생성하여 해당 워크스페이스로 작업 범위를 지정합니다.
 
-As an example, if your current directory is `apps/admin` and you use the `turbo build` command, `turbo` will run `turbo build --filter=admin` under the hood, focusing on the workspace that you are working on.
+예를 들어, 현재 디렉토리가 `apps/admin`이고 `turbo build` 명령을 사용하는 경우 `turbo`는 후드 아래에서 `turbo build --filter=admin`을 실행하여 작업 중인 워크스페이스에 집중합니다.
 
-## Easier Migrations
+## 더 쉬운 마이그레이션
 
-Manually running individual codemods in the correct order is no longer required when upgrading Turborepo versions. `@turbo/codemod` now provides a simple `migrate` command which both upgrades your repo to the specified version (`latest` by default) of `turbo`, _and_ runs any codemods required.
+Turborepo 버전을 업그레이드할 때 올바른 순서로 개별 codemod를 수동으로 실행할 필요가 없습니다. `@turbo/codemod`는 이제 저장소를 지정된 버전(기본적으로 `latest`)의 `turbo`로 업그레이드하고 *필요한 모든 codemod를 실행*하는 간단한 `migrate` 명령을 제공합니다.
 
-Try it out now with `npx @turbo/codemod migrate`.
+지금 `npx @turbo/codemod migrate`로 사용해 보세요.
 
-## Community
+## 커뮤니티
 
-Since releasing [Turborepo v1.7](/blog/turbo-1-7-0) we've seen incredible adoption and community growth:
+[Turborepo v1.7](/blog/turbo-1-7-0)을 출시한 이후 놀라운 채택률과 커뮤니티 성장을 보았습니다:
 
 - [19.6k+ GitHub Stars](https://github.com/vercel/turbo)
-- [987k weekly NPM downloads](https://www.npmjs.com/package/turbo)
-- 42 years of compute time saved through [Remote Caching on Vercel](https://vercel.com/docs/concepts/monorepos/remote-caching)
+- [주간 NPM 다운로드 987k](https://www.npmjs.com/package/turbo)
+- [Vercel의 Remote Caching](https://vercel.com/docs/concepts/monorepos/remote-caching)을 통해 42년의 컴퓨팅 시간 절약
 
-Turborepo is the result of the combined work of all of its contributors, including our core team.
+Turborepo는 핵심 팀을 포함한 모든 기여자들의 결합된 작업의 결과입니다.
 
-Thank you for your continued support, feedback, and collaboration to make Turborepo your build tool of choice.
+Turborepo를 여러분의 선택한 빌드 도구로 만들기 위한 지속적인 지원, 피드백 및 협력에 감사드립니다.

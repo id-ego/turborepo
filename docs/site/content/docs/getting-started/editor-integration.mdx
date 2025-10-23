@@ -1,21 +1,19 @@
 ---
-title: Editor integration
-description: Making the most of Turborepo
+title: 에디터 통합
+description: Turborepo를 최대한 활용하기
 ---
 
 import { Callout } from '#components/callout';
 
-To get the best experience with `turbo`, Turborepo provides a few utilities for integrating with your editor.
+`turbo`로 최상의 경험을 얻으려면 Turborepo는 에디터와 통합하기 위한 몇 가지 유틸리티를 제공합니다.
 
-## JSON Schema for `turbo.json`
+## `turbo.json`을 위한 JSON Schema
 
-Turborepo uses [JSON Schema](https://json-schema.org/) to give you auto-complete in your
-`turbo.json` file. By including the `$schema` key in your `turbo.json`, your editor is able to
-provide full documentation and linting in case you have invalid shapes or missing keys.
+Turborepo는 [JSON Schema](https://json-schema.org/)를 사용하여 `turbo.json` 파일에서 자동 완성을 제공합니다. `turbo.json`에 `$schema` 키를 포함하면 에디터가 잘못된 형식이나 누락된 키가 있는 경우 전체 문서 및 린팅을 제공할 수 있습니다.
 
-### Sourcing from the web
+### 웹에서 가져오기
 
-A `schema.json` is accessible at the URL shown below. This has the advantage of not needing to run your package manager's install command to see in-editor validation.
+아래 표시된 URL에서 `schema.json`에 액세스할 수 있습니다. 이는 에디터 내 검증을 보기 위해 패키지 매니저의 설치 명령을 실행할 필요가 없다는 장점이 있습니다.
 
 ```json title="./turbo.json"
 {
@@ -23,7 +21,7 @@ A `schema.json` is accessible at the URL shown below. This has the advantage of 
 }
 ```
 
-There is also a major versioned `schema.json` available, following the format of `https://turborepo.com/schema.<version>.json`.
+`https://turborepo.com/schema.<version>.json` 형식을 따르는 메이저 버전 `schema.json`도 사용할 수 있습니다.
 
 ```json title="./turbo.json"
 {
@@ -31,9 +29,9 @@ There is also a major versioned `schema.json` available, following the format of
 }
 ```
 
-### Sourcing from `node_modules`
+### `node_modules`에서 가져오기
 
-Starting in Turborepo 2.4, `schema.json` is available in `node_modules` once you've run your package manager's install command:
+Turborepo 2.4부터 패키지 매니저의 설치 명령을 실행하면 `node_modules`에서 `schema.json`을 사용할 수 있습니다:
 
 ```json title="turbo.json"
 {
@@ -41,29 +39,28 @@ Starting in Turborepo 2.4, `schema.json` is available in `node_modules` once you
 }
 ```
 
-<Callout title="node_modules location">
-  We recommend installing `turbo` at the root of your repository, so the path
-  for the schema should point to `node_modules` at the root of your repository.
-  In [Package Configurations](/docs/reference/package-configurations), you may
-  need to use a path like `../../node_modules/turbo/schema.json`.
+<Callout title="node_modules 위치">
+  리포지토리의 루트에 `turbo`를 설치하는 것을 권장하므로, 스키마 경로는
+  리포지토리 루트의 `node_modules`를 가리켜야 합니다. [패키지
+  구성](/docs/reference/package-configurations)에서는
+  `../../node_modules/turbo/schema.json`과 같은 경로를 사용해야 할 수 있습니다.
 </Callout>
 
-## Linting for environment variables
+## 환경 변수 린팅
 
-Handling environment variables is an important part of building applications in a Turborepo.
+환경 변수를 처리하는 것은 Turborepo에서 애플리케이션을 구축하는 중요한 부분입니다.
 
-[The `eslint-config-turbo` package](/docs/reference/eslint-config-turbo) extends your ESLint setup to help you make sure you've taken care of all of your environment variables.
+[`eslint-config-turbo` 패키지](/docs/reference/eslint-config-turbo)는 ESLint 설정을 확장하여 모든 환경 변수를 처리했는지 확인하는 데 도움을 줍니다.
 
 ## Turborepo LSP
 
-Enable even more auto-complete and linting than provided by JSON Schema, with in-editor hinting for invalid globs, references to non-existent tasks or packages, and
-extra repository visibility tools.
+JSON Schema에서 제공하는 것보다 더 많은 자동 완성 및 린팅을 활성화하고, 잘못된 글로브, 존재하지 않는 태스크나 패키지에 대한 참조를 위한 에디터 내 힌트 및 추가 리포지토리 가시성 도구를 제공합니다.
 
-Visit the [VSCode Extension Marketplace](https://marketplace.visualstudio.com/items?itemName=Vercel.turbo-vsc) to install.
+설치하려면 [VSCode Extension Marketplace](https://marketplace.visualstudio.com/items?itemName=Vercel.turbo-vsc)를 방문하세요.
 
-<Callout type="info" title="Not using Visual Studio Code?">
-  The language server can be used on any editors that support the [Language
-  Server Protocol](https://microsoft.github.io/language-server-protocol/). Log a
-  request in our [issue tracker](https://github.com/vercel/turborepo/issues) to
-  express your interest.
+<Callout type="info" title="Visual Studio Code를 사용하지 않으시나요?">
+  언어 서버는 [Language Server
+  Protocol](https://microsoft.github.io/language-server-protocol/)을 지원하는
+  모든 에디터에서 사용할 수 있습니다. 관심을 표명하려면 [이슈
+  트래커](https://github.com/vercel/turborepo/issues)에 요청을 기록하세요.
 </Callout>

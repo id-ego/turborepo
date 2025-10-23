@@ -1,0 +1,159 @@
+# Translation Files List - 129 total files
+# Generated for Korean translation of Turborepo documentation
+
+## Blog Posts (24 files)
+blog/free-vercel-remote-cache.mdx
+blog/joining-vercel.mdx
+blog/saml-sso-now-available.mdx
+blog/turbo-0-4-0.mdx
+blog/turbo-1-1-0.mdx
+blog/turbo-1-10-0.mdx
+blog/turbo-1-11-0.mdx
+blog/turbo-1-12-0.mdx
+blog/turbo-1-13-0.mdx
+blog/turbo-1-2-0.mdx
+blog/turbo-1-3-0.mdx
+blog/turbo-1-4-0.mdx
+blog/turbo-1-5-0.mdx
+blog/turbo-1-6-0.mdx
+blog/turbo-1-7-0.mdx
+blog/turbo-1-8-0.mdx
+blog/turbo-1-9-0.mdx
+blog/turbo-2-0.mdx
+blog/turbo-2-1-0.mdx
+blog/turbo-2-2-0.mdx
+blog/turbo-2-3.mdx
+blog/turbo-2-4.mdx
+blog/turbo-2-5.mdx
+blog/you-might-not-need-typescript-project-references.mdx
+
+## Core Concepts (5 files)
+docs/core-concepts/index.mdx
+docs/core-concepts/internal-packages.mdx
+docs/core-concepts/package-and-task-graph.mdx
+docs/core-concepts/package-types.mdx
+docs/core-concepts/remote-caching.mdx
+
+## Getting Started (5 files)
+docs/getting-started/add-to-existing-repository.mdx
+docs/getting-started/editor-integration.mdx
+docs/getting-started/examples.mdx
+docs/getting-started/index.mdx
+docs/getting-started/installation.mdx
+
+## Crafting Your Repository (12 files)
+docs/crafting-your-repository/caching.mdx
+docs/crafting-your-repository/configuring-tasks.mdx
+docs/crafting-your-repository/constructing-ci.mdx
+docs/crafting-your-repository/creating-an-internal-package.mdx
+docs/crafting-your-repository/developing-applications.mdx
+docs/crafting-your-repository/index.mdx
+docs/crafting-your-repository/managing-dependencies.mdx
+docs/crafting-your-repository/running-tasks.mdx
+docs/crafting-your-repository/structuring-a-repository.mdx
+docs/crafting-your-repository/understanding-your-repository.mdx
+docs/crafting-your-repository/upgrading.mdx
+docs/crafting-your-repository/using-environment-variables.mdx
+
+## Guides - Frameworks (6 files)
+docs/guides/frameworks/framework-bindings.mdx
+docs/guides/frameworks/index.mdx
+docs/guides/frameworks/nextjs.mdx
+docs/guides/frameworks/nuxt.mdx
+docs/guides/frameworks/sveltekit.mdx
+docs/guides/frameworks/vite.mdx
+
+## Guides - CI Vendors (7 files)
+docs/guides/ci-vendors/buildkite.mdx
+docs/guides/ci-vendors/circleci.mdx
+docs/guides/ci-vendors/github-actions.mdx
+docs/guides/ci-vendors/gitlab-ci.mdx
+docs/guides/ci-vendors/index.mdx
+docs/guides/ci-vendors/travis-ci.mdx
+docs/guides/ci-vendors/vercel.mdx
+
+## Guides - Tools (12 files)
+docs/guides/tools/biome.mdx
+docs/guides/tools/docker.mdx
+docs/guides/tools/eslint.mdx
+docs/guides/tools/index.mdx
+docs/guides/tools/jest.mdx
+docs/guides/tools/playwright.mdx
+docs/guides/tools/prisma.mdx
+docs/guides/tools/shadcn-ui.mdx
+docs/guides/tools/storybook.mdx
+docs/guides/tools/tailwind.mdx
+docs/guides/tools/typescript.mdx
+docs/guides/tools/vitest.mdx
+
+## Guides - Other (9 files)
+docs/guides/generating-code.mdx
+docs/guides/handling-platforms.mdx
+docs/guides/index.mdx
+docs/guides/microfrontends.mdx
+docs/guides/migrating-from-nx.mdx
+docs/guides/multi-language.mdx
+docs/guides/publishing-libraries.mdx
+docs/guides/single-package-workspaces.mdx
+docs/guides/skipping-tasks.mdx
+
+## Reference (25 files)
+docs/reference/bin.mdx
+docs/reference/boundaries.mdx
+docs/reference/configuration.mdx
+docs/reference/create-turbo.mdx
+docs/reference/eslint-config-turbo.mdx
+docs/reference/eslint-plugin-turbo.mdx
+docs/reference/generate.mdx
+docs/reference/globs.mdx
+docs/reference/index.mdx
+docs/reference/info.mdx
+docs/reference/link.mdx
+docs/reference/login.mdx
+docs/reference/logout.mdx
+docs/reference/ls.mdx
+docs/reference/options-overview.mdx
+docs/reference/package-configurations.mdx
+docs/reference/prune.mdx
+docs/reference/query.mdx
+docs/reference/run.mdx
+docs/reference/scan.mdx
+docs/reference/system-environment-variables.mdx
+docs/reference/telemetry.mdx
+docs/reference/turbo-codemod.mdx
+docs/reference/turbo-gen.mdx
+docs/reference/turbo-ignore.mdx
+docs/reference/unlink.mdx
+docs/reference/watch.mdx
+
+## Messages (5 files)
+docs/messages/invalid-env-prefix.mdx
+docs/messages/missing-root-task-in-turbo-json.mdx
+docs/messages/package-task-in-single-package-workspace.mdx
+docs/messages/recursive-turbo-invocations.mdx
+docs/messages/unnecessary-package-task-syntax.mdx
+
+## Other Docs (4 files)
+docs/acknowledgments.mdx
+docs/community.mdx
+docs/index.mdx
+docs/support-policy.mdx
+docs/telemetry.mdx
+
+## External Blog (3 files)
+external-blog/how-turborepo-is-porting-from-go-to-rust.mdx
+external-blog/how-we-continued-porting-turborepo-to-rust.mdx
+external-blog/turbopack-moving-homes.mdx
+
+## Extra (2 files)
+extra/governance.mdx
+extra/terms.mdx
+
+## OpenAPI (7 files)
+openapi/artifacts/artifact-exists.mdx
+openapi/artifacts/artifact-query.mdx
+openapi/artifacts/download-artifact.mdx
+openapi/artifacts/record-events.mdx
+openapi/artifacts/status.mdx
+openapi/artifacts/upload-artifact.mdx
+openapi/index.mdx

@@ -1,17 +1,17 @@
 ---
 title: Tailwind CSS
-description: Learn how to use Tailwind CSS in a Turborepo.
+description: Turborepo에서 Tailwind CSS를 사용하는 방법을 알아보세요.
 ---
 
 import { PackageManagerTabs, Tabs, Tab } from '#components/tabs';
 import { Callout } from '#components/callout';
 import { Steps, Step } from '#components/steps';
 
-[Tailwind CSS](https://tailwindcss.com/) is a CSS framework that allows you to rapidly build modern websites without ever leaving your HTML.
+[Tailwind CSS](https://tailwindcss.com/)는 HTML을 벗어나지 않고 현대적인 웹사이트를 빠르게 구축할 수 있는 CSS 프레임워크입니다.
 
-## Quickstart
+## 빠른 시작
 
-If you'd rather use a template, this guide is walking throw how to build [this Tailwind CSS + Turborepo template](https://github.com/vercel/turborepo/tree/main/examples/with-tailwind).
+템플릿을 사용하려는 경우, 이 가이드는 [이 Tailwind CSS + Turborepo 템플릿](https://github.com/vercel/turborepo/tree/main/examples/with-tailwind)을 빌드하는 방법을 안내합니다.
 
 <PackageManagerTabs>
 
@@ -48,16 +48,16 @@ bunx create-turbo@latest -e with-tailwind
 </Tab>
 </PackageManagerTabs>
 
-## Guide
+## 가이드
 
-<Callout type="info">This guide is for Tailwind CSS v4.</Callout>
+<Callout type="info">이 가이드는 Tailwind CSS v4용입니다.</Callout>
 
 <Steps>
 <Step>
 
-### Create a monorepo
+### monorepo 만들기
 
-If you don't have an existing project, use [create-turbo](/docs/getting-started/installation) to create a new monorepo:
+기존 프로젝트가 없는 경우, [create-turbo](/docs/getting-started/installation)를 사용하여 새 monorepo를 만듭니다:
 
 <PackageManagerTabs>
 
@@ -98,19 +98,19 @@ bunx create-turbo@latest
 
 <Step>
 
-### Add Tailwind CSS to your application
+### 애플리케이션에 Tailwind CSS 추가
 
-[Follow Tailwind CSS's guides](https://tailwindcss.com/docs/installation/using-vite) to set up Tailwind CSS for your frontend framework.
+프론트엔드 프레임워크에 대해 Tailwind CSS를 설정하려면 [Tailwind CSS 가이드를 따르세요](https://tailwindcss.com/docs/installation/using-vite).
 
-Once completed, you can start working on bringing your UI package into the applications.
+완료되면 UI 패키지를 애플리케이션에 가져오는 작업을 시작할 수 있습니다.
 
 </Step>
 
 <Step>
 
-### Create a shared Tailwind CSS configuration package
+### 공유 Tailwind CSS 구성 패키지 만들기
 
-First, build an [Internal Package](https://turborepo.com/docs/core-concepts/internal-packages) with four files:
+먼저, 네 개의 파일이 있는 [Internal Package](https://turborepo.com/docs/core-concepts/internal-packages)를 빌드합니다:
 
 <Tabs items={["package.json", "shared-styles.css", "postcss.config.js (Optional)"]}>
 
@@ -172,11 +172,11 @@ export const postcssConfig = {
 
 <Step>
 
-### Create the UI package
+### UI 패키지 만들기
 
-You can now build the components to share to your applications.
+이제 애플리케이션에 공유할 컴포넌트를 빌드할 수 있습니다.
 
-For a full example, [visit the source code for `@repo/ui` package in the Tailwind CSS example](https://github.com/vercel/turborepo/tree/main/examples/with-tailwind/packages/ui). The files required for your Tailwind CSS setup are below.
+전체 예제는 [Tailwind CSS 예제의 `@repo/ui` 패키지 소스 코드를 방문하세요](https://github.com/vercel/turborepo/tree/main/examples/with-tailwind/packages/ui). Tailwind CSS 설정에 필요한 파일은 아래와 같습니다.
 
 <Tabs items={["package.json", "turbo.json", "styles.css"]}>
 
@@ -269,9 +269,9 @@ This `styles.css` contains component-level styles for the shared UI library.
 </Step>
 <Step>
 
-### Use the UI package in an application
+### 애플리케이션에서 UI 패키지 사용
 
-Install the packages you've created into your application.
+만든 패키지를 애플리케이션에 설치합니다.
 
 <PackageManagerTabs>
 

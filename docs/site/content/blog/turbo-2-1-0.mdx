@@ -1,7 +1,7 @@
 ---
 title: Turborepo 2.1
 date: 2024/08/27
-description: Turborepo 2.1 improves integration with your repository with affected package detection, and repository exploration tools.
+description: Turborepo 2.1은 영향을 받은 패키지 감지 및 저장소 탐색 도구를 통해 저장소와의 통합을 개선합니다.
 tag: 'web development'
 ---
 
@@ -23,103 +23,102 @@ import { Callout } from '#components/callout';
   ]}
 />
 
-Turborepo 2.1 improves integration with your repository, with features like:
+Turborepo 2.1은 저장소와의 통합을 개선합니다. 주요 기능은 다음과 같습니다:
 
-- [**Affected package graph detection**](#run-tasks-for-changed-packages-with---affected): Only run tasks with changes using `--affected`
-- [**Repository exploration tools**](#repository-exploration-tools): Find packages and tasks faster with `turbo ls` and `turbo run`
-- [**Terminal UI improvements**](#terminal-ui-improvements): Log selection, task search, resizing, and more
-- [**Expanded configuration options**](#expanded-configuration-options): More flexibility for defaults using `turbo.json`
+- [**영향을 받은 패키지 그래프 감지**](#run-tasks-for-changed-packages-with---affected): `--affected`를 사용하여 변경된 작업만 실행
+- [**저장소 탐색 도구**](#repository-exploration-tools): `turbo ls` 및 `turbo run`으로 패키지와 작업을 더 빠르게 찾기
+- [**터미널 UI 개선**](#terminal-ui-improvements): 로그 선택, 작업 검색, 크기 조정 등
+- [**확장된 구성 옵션**](#expanded-configuration-options): `turbo.json`을 사용한 기본값에 대한 더 많은 유연성
 
-Update today by running `npx @turbo/codemod migrate` or get started with `npx create-turbo@latest`.
+`npx @turbo/codemod migrate`를 실행하여 지금 업데이트하거나 `npx create-turbo@latest`로 시작하세요.
 
-## Run tasks for changed packages with `--affected`
+## `--affected`로 변경된 패키지에 대한 작업 실행
 
-Turborepo’s [Remote Caching](/docs/core-concepts/remote-caching) shares a single cache across all of your machines,
-so you never have to do the same work twice. But, what if you could ignore unchanged packages altogether?
+Turborepo의 [Remote Caching](/docs/core-concepts/remote-caching)은 모든 머신에서 단일 캐시를 공유하므로
+동일한 작업을 두 번 수행할 필요가 없습니다. 하지만 변경되지 않은 패키지를 완전히 무시할 수 있다면 어떨까요?
 
-You can now use the `--affected` flag with `turbo run` to automatically target packages with changes between the latest commit of your current branch, and the default branch of your repository (usually `main` or `master`).
-`turbo` will use your [Package Graph](/docs/core-concepts/package-and-task-graph#package-graph) to ensure tasks are run for packages with direct changes or changes to internal dependencies.
+이제 `turbo run`과 함께 `--affected` 플래그를 사용하여 현재 브랜치의 최신 커밋과 저장소의 기본 브랜치(보통 `main` 또는 `master`) 사이의 변경 사항이 있는 패키지를 자동으로 대상으로 지정할 수 있습니다.
+`turbo`는 [Package Graph](/docs/core-concepts/package-and-task-graph#package-graph)를 사용하여 직접 변경 사항이 있거나 내부 의존성에 변경 사항이 있는 패키지에 대해 작업을 실행합니다.
 
 ```bash title="Terminal"
 turbo run lint test --affected
 ```
 
-You'll want to use this flag in situations like:
+다음과 같은 상황에서 이 플래그를 사용하고 싶을 것입니다:
 
-- You're running many tasks across packages in your monorepo, and only want to run those tasks in packages with code changes.
-- You’re _not_ using a Remote Cache, but still want to do as little work as possible in CI.
-- You _are_ using a Remote Cache, and you’re in a large repository. By minimizing the amount of tasks that will be restored from cache, there will be less data to send across the network, resulting in faster cache restoration.
-- You’re already using [advanced filtering techniques](/docs/reference/run#advanced-filtering-examples) or [`turbo-ignore`](/docs/reference/turbo-ignore) to create the same or similar behavior as `--affected`. You likely have the opportunity to simplify your scripting using this new flag.
+- monorepo의 패키지 전체에서 많은 작업을 실행하고 있으며, 코드 변경 사항이 있는 패키지에서만 해당 작업을 실행하고 싶을 때.
+- Remote Cache를 사용하고 있지 _않지만_, CI에서 가능한 한 적은 작업만 수행하고 싶을 때.
+- Remote Cache를 사용하고 있으며 대규모 저장소에 있을 때. 캐시에서 복원할 작업의 양을 최소화하면 네트워크를 통해 전송할 데이터가 줄어들어 캐시 복원이 더 빨라집니다.
+- 이미 [고급 필터링 기법](/docs/reference/run#advanced-filtering-examples) 또는 [`turbo-ignore`](/docs/reference/turbo-ignore)를 사용하여 `--affected`와 동일하거나 유사한 동작을 만들고 있을 때. 이 새 플래그를 사용하여 스크립팅을 단순화할 기회가 있을 것입니다.
 
-To learn more, [visit the documentation](/docs/reference/run#--affected).
+자세한 내용은 [문서를 방문하세요](/docs/reference/run#--affected).
 
-## Repository exploration tools
+## 저장소 탐색 도구
 
-As a repository grows and changes, it can be difficult to quickly find what you’re looking for.
-We want to quickly surface your tasks, packages, and their relationships to make understanding your repository faster and easier.
+저장소가 성장하고 변경됨에 따라 찾고 있는 것을 빠르게 찾기 어려울 수 있습니다.
+저장소를 더 빠르고 쉽게 이해할 수 있도록 작업, 패키지 및 관계를 신속하게 표시하고자 합니다.
 
 ### `turbo run`
 
-Use `turbo run` (with no task arguments) to get a list of the available tasks in your repository. This command also works with [filters](/docs/crafting-your-repository/running-tasks#using-filters) and [Automatic Package Scoping](/docs/crafting-your-repository/running-tasks#automatic-package-scoping).
+`turbo run`(작업 인수 없이)을 사용하여 저장소에서 사용 가능한 작업 목록을 가져옵니다. 이 명령은 [필터](/docs/crafting-your-repository/running-tasks#using-filters) 및 [자동 패키지 스코핑](/docs/crafting-your-repository/running-tasks#automatic-package-scoping)과도 작동합니다.
 
 ```bash title="Terminal"
-# List all tasks in the repository
+# 저장소의 모든 작업 나열
 turbo run
 
-# List tasks in a specific package
+# 특정 패키지의 작업 나열
 turbo run --filter=@repo/ui
 
-# Using Automatic Package Scoping
+# 자동 패키지 스코핑 사용
 cd packages/ui && turbo run
 ```
 
-[Visit the documentation](/docs/reference/run) to learn more.
+자세한 내용은 [문서를 방문하세요](/docs/reference/run).
 
 ### `turbo ls`
 
-Use `turbo ls` to get a list of all the packages in your repository with their locations, or filter to a specific package to see a summary of its internal dependencies and tasks.
-`turbo ls` also supports `--filter`, and `--affected`, making it easy to gather a list of changed packages.
+`turbo ls`를 사용하여 위치와 함께 저장소의 모든 패키지 목록을 가져오거나, 특정 패키지로 필터링하여 내부 의존성 및 작업 요약을 확인하세요.
+`turbo ls`는 `--filter` 및 `--affected`도 지원하므로 변경된 패키지 목록을 쉽게 수집할 수 있습니다.
 
 ```bash title="Terminal"
-# List all packages in the repository
+# 저장소의 모든 패키지 나열
 turbo ls
 
-# List dependencies and tasks for the `web` package
+# `web` 패키지의 의존성 및 작업 나열
 turbo ls web
 
-## List affected packages
+## 영향을 받은 패키지 나열
 turbo ls --affected
 ```
 
 <Callout>
-  `turbo ls` supports an experimental `--output` flag that can be used to return
-  results in a specific format. For example, `--output=json` can be used to more
-  easily create inputs for other tools or custom scripts. If you were previously using
-  `turbo build --dry=json` _only_ to retrieve a list of changed packages,
-  give `turbo ls --affected --output=json` a try. Visit the docs for more information and
-  leave feedback on output format on the `turbo ls`
-[RFC](https://github.com/vercel/turborepo/discussions/8811).
+  `turbo ls`는 특정 형식으로 결과를 반환하는 데 사용할 수 있는 실험적 `--output` 플래그를 지원합니다.
+  예를 들어, `--output=json`을 사용하여 다른 도구 또는 사용자 정의 스크립트에 대한 입력을
+  더 쉽게 만들 수 있습니다. 이전에 변경된 패키지 목록을 검색하기 위해서만
+  `turbo build --dry=json`을 사용했다면 `turbo ls --affected --output=json`을 시도해 보세요.
+  자세한 내용은 문서를 참조하고 출력 형식에 대한 피드백은 `turbo ls`
+[RFC](https://github.com/vercel/turborepo/discussions/8811)에 남겨주세요.
 
 </Callout>
 
-[Visit the documentation](/docs/reference/ls) to learn more.
+자세한 내용은 [문서를 방문하세요](/docs/reference/ls).
 
-## Terminal UI Improvements
+## 터미널 UI 개선
 
-In Turborepo 2.0, we released a [new terminal UI](https://turborepo.com/blog/turbo-2-0#new-terminal-ui) to improve clarity for logs and allow for interactive tasks in local development. We heard your feedback, and prioritized polishing this UI, releasing improvements in patches to 2.0 and in this 2.1 release:
+Turborepo 2.0에서 로그의 명확성을 개선하고 로컬 개발에서 상호작용 작업을 허용하기 위해 [새로운 터미널 UI](https://turborepo.com/blog/turbo-2-0#new-terminal-ui)를 출시했습니다. 여러분의 피드백을 듣고 이 UI를 다듬는 것을 우선시하여 2.0 패치 및 이번 2.1 릴리스에서 개선 사항을 출시했습니다:
 
-- Highlighting of logs for copying to clipboard ([PR](https://github.com/vercel/turborepo/pull/8713))
-- Search through task list ([PR](https://github.com/vercel/turborepo/pull/9042))
-- Cleaner layout resizing when your terminal changes size ([PR](https://github.com/vercel/turborepo/pull/8996))
-- New icon for cache hits in task list ([PR](https://github.com/vercel/turborepo/pull/8869))
-- Task status indicators updated when Watch Mode triggers a restart ([PR](https://github.com/vercel/turborepo/pull/8960))
-- Output logs are respected after the terminal UI exits ([PR](https://github.com/vercel/turborepo/pull/8612))
+- 클립보드에 복사하기 위한 로그 강조 표시 ([PR](https://github.com/vercel/turborepo/pull/8713))
+- 작업 목록을 통한 검색 ([PR](https://github.com/vercel/turborepo/pull/9042))
+- 터미널 크기가 변경될 때 더 깔끔한 레이아웃 크기 조정 ([PR](https://github.com/vercel/turborepo/pull/8996))
+- 작업 목록의 캐시 히트에 대한 새 아이콘 ([PR](https://github.com/vercel/turborepo/pull/8869))
+- Watch Mode가 재시작을 트리거할 때 작업 상태 표시기 업데이트 ([PR](https://github.com/vercel/turborepo/pull/8960))
+- 터미널 UI가 종료된 후 출력 로그 존중 ([PR](https://github.com/vercel/turborepo/pull/8612))
 
-Building a great terminal UI experience has unique challenges, and we’re continuing to iterate on this experience. We appreciate your continued feedback as we keep up our work on creating great UI for monorepos.
+훌륭한 터미널 UI 경험을 구축하는 것은 독특한 도전 과제이며, 우리는 이 경험을 계속 반복하고 있습니다. monorepo를 위한 훌륭한 UI를 만드는 작업을 계속하는 동안 지속적인 피드백에 감사드립니다.
 
-## Expanded configuration options
+## 확장된 구성 옵션
 
-In this release, we’re adding more keys to `turbo.json` to give you more flexibility for your repository’s defaults. The following keys are new in this release:
+이번 릴리스에서는 저장소의 기본값에 대해 더 많은 유연성을 제공하기 위해 `turbo.json`에 더 많은 키를 추가합니다. 이번 릴리스의 새로운 키는 다음과 같습니다:
 
 ```json title="turbo.json"
 {
@@ -129,34 +128,34 @@ In this release, we’re adding more keys to `turbo.json` to give you more flexi
 }
 ```
 
-You may have been using the flag equivalents for these configurations on many or all of your `turbo` invocations, littering your codebase with commands like:
+많은 또는 모든 `turbo` 호출에서 이러한 구성에 대한 플래그 동등물을 사용하여 다음과 같은 명령으로 코드베이스를 어지럽혔을 수 있습니다:
 
 ```bash title="Terminal"
 turbo run build --env-mode=loose --no-daemon --cache-dir=./my-custom-directory
 ```
 
-These can now be simplified with a centralized configuration in `turbo.json` using Turborepo’s existing configuration model:
+이제 Turborepo의 기존 구성 모델을 사용하여 `turbo.json`의 중앙 집중식 구성으로 이를 단순화할 수 있습니다:
 
-- `turbo.json` sets the defaults for your repository.
-- [System environment variables](/docs/reference/system-environment-variables) customize behavior in a specific environment.
-- Flags customize behavior for specific invocations of `turbo`.
+- `turbo.json`은 저장소의 기본값을 설정합니다.
+- [시스템 환경 변수](/docs/reference/system-environment-variables)는 특정 환경에서 동작을 사용자 정의합니다.
+- 플래그는 `turbo`의 특정 호출에 대한 동작을 사용자 정의합니다.
 
-To learn more about available options and configurations, [visit the documentation](/docs/reference/configuration).
+사용 가능한 옵션 및 구성에 대해 자세히 알아보려면 [문서를 방문하세요](/docs/reference/configuration).
 
-## Other improvements
+## 기타 개선 사항
 
-- We’d like to especially thank [Shaharking](https://github.com/Shaharking) for their contribution in [#9023](https://github.com/vercel/turborepo/pull/9023) to make the colors for task names in streamed UIs deterministic, closing [#2564](https://github.com/vercel/turborepo/issues/2564). This makes it easier to compare tasks across `turbo run` invocations.
+- 스트리밍 UI에서 작업 이름의 색상을 결정론적으로 만들기 위해 [#9023](https://github.com/vercel/turborepo/pull/9023)에 기여하여 [#2564](https://github.com/vercel/turborepo/issues/2564)를 닫은 [Shaharking](https://github.com/Shaharking)에게 특별히 감사드립니다. 이를 통해 `turbo run` 호출 간 작업을 더 쉽게 비교할 수 있습니다.
 
-View the full changelog at [`vercel/turborepo`](https://github.com/vercel/turborepo/releases/tag/v2.1.0).
+전체 변경 로그는 [`vercel/turborepo`](https://github.com/vercel/turborepo/releases/tag/v2.1.0)에서 확인하세요.
 
-## Community
+## 커뮤니티
 
-Since releasing [Turborepo 2.0](/blog/turbo-2-0) we've seen incredible adoption and community growth:
+[Turborepo 2.0](/blog/turbo-2-0) 출시 이후 놀라운 채택과 커뮤니티 성장을 보았습니다:
 
 - [25.9k+ GitHub Stars](https://github.com/vercel/turbo)
-- [2.9M+ weekly NPM downloads](https://www.npmjs.com/package/turbo)
-- 428 years of compute time saved through [Remote Caching on Vercel](https://vercel.com/docs/concepts/monorepos/remote-caching)
+- [2.9M+ 주간 NPM 다운로드](https://www.npmjs.com/package/turbo)
+- [Vercel의 Remote Caching](https://vercel.com/docs/concepts/monorepos/remote-caching)을 통해 428년의 컴퓨팅 시간 절약
 
-Turborepo is the result of the combined work of all of its contributors, including our core team.
+Turborepo는 핵심 팀을 포함한 모든 기여자들의 결합된 작업의 결과입니다.
 
-Thank you for your continued support, feedback, and collaboration to make Turborepo your build tool of choice.
+Turborepo를 여러분의 빌드 도구로 만들어 주시는 지속적인 지원, 피드백 및 협력에 감사드립니다.

@@ -1,23 +1,23 @@
 ---
-title: Framework bindings in libraries
-description: Learn how to create framework bindings in packages.
+title: 라이브러리의 프레임워크 바인딩
+description: 패키지에서 프레임워크 바인딩을 생성하는 방법을 알아봅니다.
 ---
 
 import { PackageManagerTabs, Tab } from '#components/tabs';
 import { Callout } from '#components/callout';
 
-Framework bindings in a [Library Package](/docs/core-concepts/package-types#library-packages) integrate your library's code more deeply with a framework by leveraging APIs from the framework directly in the library.
+[라이브러리 패키지](/docs/core-concepts/package-types#library-packages)의 프레임워크 바인딩은 프레임워크의 API를 라이브러리에서 직접 활용하여 라이브러리 코드를 프레임워크와 더욱 깊이 통합합니다.
 
-To do this, use the `peerDependencies` field in `package.json` of the library, which makes the framework APIs available in your library without installing it directly in the package.
+이를 위해 라이브러리의 `package.json`에서 `peerDependencies` 필드를 사용합니다. 이렇게 하면 패키지에 직접 설치하지 않고도 프레임워크 API를 라이브러리에서 사용할 수 있습니다.
 
 <Callout type="good-to-know">
-  On this page, we'll be using Next.js for examples, but the concepts below
-  apply to any framework or other dependency.
+  이 페이지에서는 예시로 Next.js를 사용하지만, 아래 개념은 모든 프레임워크나
+  다른 의존성에도 적용됩니다.
 </Callout>
 
-## Example
+## 예시
 
-Add a `peerDependency` to your library for the dependency that you intend to create bindings for.
+바인딩을 생성하려는 의존성에 대해 라이브러리에 `peerDependency`를 추가합니다.
 
 ```json title="./packages/ui/package.json"
 {
@@ -29,14 +29,14 @@ Add a `peerDependency` to your library for the dependency that you intend to cre
 ```
 
 <Callout type="good-to-know">
-  In the example above, the `peerDependency` for `next` accepts any version. You
-  may want to specify a range (for example, `">=15"`) according to your needs.
-  Additionally, for older package managers, you may need to instruct your
-  package manager to install peer dependencies with configuration, or add the
-  dependency to `devDependencies` as a workaround.
+  위 예시에서 `next`에 대한 `peerDependency`는 모든 버전을 허용합니다. 필요에
+  따라 범위(예: `">=15"`)를 지정할 수 있습니다. 또한 이전 버전의 패키지 매니저를
+  사용하는 경우, 구성을 통해 peer dependencies를 설치하도록 패키지 매니저에
+  지시하거나, 임시 방편으로 의존성을 `devDependencies`에 추가해야 할 수
+  있습니다.
 </Callout>
 
-This will make the dependency available in your library, allowing you to write code like below. Note the `className` prop, which sets a default styling for this component in the monorepo and can be overridden in the `props` object.
+이렇게 하면 라이브러리에서 의존성을 사용할 수 있게 되어 아래와 같은 코드를 작성할 수 있습니다. `className` prop에 주목하세요. 이 prop은 모노레포에서 이 컴포넌트의 기본 스타일을 설정하며 `props` 객체에서 재정의할 수 있습니다.
 
 ```tsx title="./packages/ui/src/link.tsx"
 import Link from 'next/link';
@@ -53,17 +53,17 @@ export function CustomLink({ children, ...props }: CustomLinkProps) {
 }
 ```
 
-The version of `next` that will be resolved for the package will come from the consumers of the library. For example, if Next.js 15 is installed in your applications, the TypeScript types and APIs for `next` will also be Next.js 15.
+패키지에 대해 해석될 `next`의 버전은 라이브러리 소비자로부터 가져옵니다. 예를 들어, 애플리케이션에 Next.js 15가 설치되어 있으면 `next`에 대한 TypeScript 타입과 API도 Next.js 15가 됩니다.
 
-## Splitting framework bindings using entrypoints
+## 진입점을 사용하여 프레임워크 바인딩 분리
 
-Using export paths to split a package into framework-specific entrypoints is the simplest way to add bindings to a library that aims to support multiple frameworks. By splitting entrypoints, bundlers have an easier time understanding the framework you intend to target and you're less likely to see strange bundling errors.
+export 경로를 사용하여 패키지를 프레임워크별 진입점으로 분리하는 것은 여러 프레임워크를 지원하고자 하는 라이브러리에 바인딩을 추가하는 가장 간단한 방법입니다. 진입점을 분리하면 번들러가 대상 프레임워크를 더 쉽게 이해할 수 있으며 이상한 번들링 오류가 발생할 가능성이 줄어듭니다.
 
-The example below shows a library with two entrypoints, each for a different type of link component. These abstractions likely contain your own styles, APIs, and other adjustments on top of the element they're wrapping.
+아래 예시는 서로 다른 유형의 링크 컴포넌트를 위한 두 개의 진입점이 있는 라이브러리를 보여줍니다. 이러한 추상화는 래핑하는 요소 위에 자체 스타일, API 및 기타 조정을 포함할 가능성이 높습니다.
 
-- `./link`: An `<a>` HTML tag with some default styles from your design system
-- `./next-js/link`: A customized version of [the Next.js `Link` component](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating#link-component) with props that are preset to your organization's preferences
-- `./svelte/link`: A customized version of an [`a` tag for Svelte](https://svelte.dev/docs/kit/link-options) with presets.
+- `./link`: 디자인 시스템의 일부 기본 스타일이 적용된 `<a>` HTML 태그
+- `./next-js/link`: 조직의 선호도에 맞게 사전 설정된 props가 있는 [Next.js `Link` 컴포넌트](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating#link-component)의 사용자 정의 버전
+- `./svelte/link`: 사전 설정이 있는 [Svelte용 `a` 태그](https://svelte.dev/docs/kit/link-options)의 사용자 정의 버전
 
 ```json title="./packages/ui/package.json"
 {
@@ -78,8 +78,8 @@ The example below shows a library with two entrypoints, each for a different typ
 ```
 
 <Callout type="good-to-know">
-  In the example above, the `peerDependency` for `next` accepts any version. You
-  may want to specify a range (for example, `">=15"`) according to your needs.
+  위 예시에서 `next`에 대한 `peerDependency`는 모든 버전을 허용합니다. 필요에
+  따라 범위(예: `">=15"`)를 지정할 수 있습니다.
 </Callout>
 
-This concept can be applied to any number of frameworks or other dependencies that you'd like to provide bindings for.
+이 개념은 바인딩을 제공하려는 여러 프레임워크나 기타 의존성에 적용할 수 있습니다.

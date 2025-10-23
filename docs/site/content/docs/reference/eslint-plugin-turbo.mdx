@@ -1,15 +1,15 @@
 ---
 title: eslint-plugin-turbo
-description: Learn more about eslint-plugin-turbo.
+description: eslint-plugin-turbo에 대해 자세히 알아봅니다.
 ---
 
 import { PackageManagerTabs, Tab } from '#components/tabs';
 
-[The `eslint-plugin-turbo` package](https://www.npmjs.com/package/eslint-plugin-turbo) helps you find environment variables that are used in your code that are not a part of Turborepo's hashing. Environment variables used in your source code that are not accounted for in `turbo.json` will be highlighted in your editor and errors will show as ESLint output.
+[`eslint-plugin-turbo` 패키지](https://www.npmjs.com/package/eslint-plugin-turbo)는 Turborepo의 해싱에 포함되지 않은 코드에서 사용되는 환경 변수를 찾는 데 도움이 됩니다. `turbo.json`에 고려되지 않은 소스 코드에서 사용된 환경 변수는 편집기에서 강조 표시되고 오류가 ESLint 출력으로 표시됩니다.
 
-## Installation
+## 설치
 
-Install `eslint-plugin-turbo` into the location where your ESLint configuration is held:
+ESLint 설정이 있는 위치에 `eslint-plugin-turbo`를 설치합니다:
 
 <PackageManagerTabs>
 
@@ -46,9 +46,9 @@ Install `eslint-plugin-turbo` into the location where your ESLint configuration 
   </Tab>
 </PackageManagerTabs>
 
-## Usage (Flat Config `eslint.config.js`)
+## 사용법 (Flat Config `eslint.config.js`)
 
-ESLint v9 uses the Flat Config format seen below:
+ESLint v9는 아래와 같은 Flat Config 형식을 사용합니다:
 
 ```js title="./packages/eslint-config/base.js"
 import turbo from 'eslint-plugin-turbo';
@@ -56,7 +56,7 @@ import turbo from 'eslint-plugin-turbo';
 export default [turbo.configs['flat/recommended']];
 ```
 
-Otherwise, you may configure the rules you want to use under the rules section.
+또는 rules 섹션에서 사용하려는 규칙을 구성할 수 있습니다.
 
 ```js title="./packages/eslint-config/base.js"
 import turbo from 'eslint-plugin-turbo';
@@ -73,7 +73,7 @@ export default [
 ];
 ```
 
-## Example (Flat Config `eslint.config.js`)
+## 예제 (Flat Config `eslint.config.js`)
 
 ```js title="./packages/eslint-config/base.js"
 import turbo from 'eslint-plugin-turbo';
@@ -95,9 +95,9 @@ export default [
 ];
 ```
 
-## Usage (Legacy `eslintrc*`)
+## 사용법 (레거시 `eslintrc*`)
 
-Add `turbo` to the plugins section of your `.eslintrc` configuration file. You can omit the `eslint-plugin-` prefix:
+`.eslintrc` 설정 파일의 plugins 섹션에 `turbo`를 추가합니다. `eslint-plugin-` 접두사는 생략할 수 있습니다:
 
 ```json title="./packages/eslint-config/base.json"
 {
@@ -105,7 +105,7 @@ Add `turbo` to the plugins section of your `.eslintrc` configuration file. You c
 }
 ```
 
-Then configure the rules you want to use under the rules section.
+그런 다음 rules 섹션에서 사용하려는 규칙을 구성합니다.
 
 ```json title="./packages/eslint-config/base.json"
 {
@@ -115,7 +115,7 @@ Then configure the rules you want to use under the rules section.
 }
 ```
 
-## Example (Legacy `eslintrc*`)
+## 예제 (레거시 `eslintrc*`)
 
 ```json title="./packages/eslint-config/base.json"
 {

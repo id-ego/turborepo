@@ -1,37 +1,29 @@
 ---
-title: Package and Task Graphs
-description: Turborepo builds a Task Graph based on your configuration and repository structure.
+title: 패키지 및 태스크 그래프
+description: Turborepo는 구성 및 리포지토리 구조를 기반으로 태스크 그래프를 구축합니다.
 ---
 
 import { File, Folder, Files } from '#components/files';
 import { Callout } from '#components/callout';
 
-## Package Graph
+## 패키지 그래프
 
-The Package Graph is the structure of your monorepo created by your package manager. When you install [Internal Packages](/docs/core-concepts/internal-packages) into each other, Turborepo will automatically identify those dependency relationships to build a foundational understanding of your Workspace.
+패키지 그래프는 패키지 매니저에 의해 생성된 모노레포의 구조입니다. [내부 패키지](/docs/core-concepts/internal-packages)를 서로 설치하면 Turborepo는 자동으로 해당 의존성 관계를 식별하여 워크스페이스에 대한 기본적인 이해를 구축합니다.
 
-This sets the groundwork for the Task Graph, where you'll define how **tasks** relate to each other.
+이는 **태스크**가 서로 어떻게 관련되는지 정의할 태스크 그래프의 기초를 마련합니다.
 
-## Task Graph
+## 태스크 그래프
 
-In `turbo.json`, you express how tasks relate to each other. You can think of these relationships as
-dependencies between tasks, but we have a more formal name for them: the Task Graph.
+`turbo.json`에서 태스크가 서로 어떻게 관련되는지 표현합니다. 이러한 관계를 태스크 간의 의존성으로 생각할 수 있지만, 우리는 이를 위한 더 공식적인 이름인 태스크 그래프를 사용합니다.
 
 <Callout type="good-to-know">
-  You can generate a visualization of the task graph for your tasks using [the
-  `--graph` flag](/docs/reference/run#--graph-file-type).
+  [`--graph` 플래그](/docs/reference/run#--graph-file-type)를 사용하여 태스크의
+  태스크 그래프 시각화를 생성할 수 있습니다.
 </Callout>
 
-Turborepo uses a data structure called a [directed acyclic graph (DAG)](https://en.wikipedia.org/wiki/Directed_acyclic_graph) to
-understand your repository and its tasks. A graph is made up of "nodes" and
-"edges". In the Task Graph, the nodes are tasks and the edges are the
-dependencies between tasks. A _directed_ graph indicates that the edges
-connecting each node have a direction, so if Task A points to Task B, we can say
-that Task A depends on Task B. The direction of the edge depends on which task
-depends on which.
+Turborepo는 리포지토리와 태스크를 이해하기 위해 [방향성 비순환 그래프(DAG)](https://en.wikipedia.org/wiki/Directed_acyclic_graph)라는 데이터 구조를 사용합니다. 그래프는 "노드"와 "에지"로 구성됩니다. 태스크 그래프에서 노드는 태스크이고 에지는 태스크 간의 의존성입니다. _방향성_ 그래프는 각 노드를 연결하는 에지에 방향이 있음을 나타내므로, 태스크 A가 태스크 B를 가리키면 태스크 A가 태스크 B에 의존한다고 말할 수 있습니다. 에지의 방향은 어떤 태스크가 어떤 태스크에 의존하는지에 따라 달라집니다.
 
-For example, let's say you have a monorepo with an application in `./apps/web` that
-depends on two packages: `@repo/ui` and `@repo/utils`:
+예를 들어, `./apps/web`에 두 개의 패키지 `@repo/ui`와 `@repo/utils`에 의존하는 애플리케이션이 있는 모노레포가 있다고 가정해 봅시다:
 
 <Files>
   <Folder name="apps" defaultOpen>
@@ -43,7 +35,7 @@ depends on two packages: `@repo/ui` and `@repo/utils`:
   </Folder>
 </Files>
 
-You also have a `build` task that depends on `^build`:
+`^build`에 의존하는 `build` 태스크도 있습니다:
 
 ```json title="./turbo.json"
 {
@@ -55,15 +47,13 @@ You also have a `build` task that depends on `^build`:
 }
 ```
 
-Turborepo will build a task graph like this:
+Turborepo는 다음과 같은 태스크 그래프를 구축합니다:
 
-![Task graph visualization. The diagram has one node at the top named "apps/web" with two lines that connect to other nodes, "packages/ui" and "packages/utils" respectively.](/images/docs/simple-task-graph.png)
+![태스크 그래프 시각화. 다이어그램에는 "apps/web"이라는 상단 노드가 있고, 각각 "packages/ui"와 "packages/utils" 노드에 연결되는 두 개의 선이 있습니다.](/images/docs/simple-task-graph.png)
 
-### Transit Nodes
+### Transit 노드
 
-A challenge when building a Task Graph is handling nested dependencies. For
-example, let's say your monorepo has a `docs` app that depends on the `ui`
-package, which depends on the `core` package:
+태스크 그래프를 구축할 때의 과제는 중첩된 의존성을 처리하는 것입니다. 예를 들어, 모노레포에 `ui` 패키지에 의존하고, `ui` 패키지는 `core` 패키지에 의존하는 `docs` 앱이 있다고 가정해 봅시다:
 
 <Files>
   <Folder name="apps" defaultOpen>
@@ -75,36 +65,25 @@ package, which depends on the `core` package:
   </Folder>
 </Files>
 
-Let's assume the `docs` app and the `core` package each have a `build` task, but
-the `ui` package does not. You also have a `turbo.json` that configures the
-`build` task the same way as above with `"dependsOn": ["^build"]`. When you run
-`turbo run build`, what would you expect to happen?
+`docs` 앱과 `core` 패키지는 각각 `build` 태스크를 가지고 있지만, `ui` 패키지는 가지고 있지 않다고 가정해 봅시다. 또한 위와 같이 `"dependsOn": ["^build"]`로 `build` 태스크를 구성하는 `turbo.json`이 있습니다. `turbo run build`를 실행하면 어떤 일이 일어날 것으로 예상하시나요?
 
-Turborepo will build this Task Graph:
+Turborepo는 다음 태스크 그래프를 구축합니다:
 
-![A Task Graph visualization with a Transit Node. The diagram has one node at the top named "apps/doc" with a line that connects to a "packages/ui" node. This node does not have a "build" task. The "packages/ui" node has another line to a "packages/core" node that does have a "build" task.](/images/docs/transitive-nodes.png)
+![Transit 노드가 있는 태스크 그래프 시각화. 다이어그램에는 "apps/doc"이라는 상단 노드가 있고 "packages/ui" 노드에 연결되는 선이 있습니다. 이 노드에는 "build" 태스크가 없습니다. "packages/ui" 노드에는 "build" 태스크가 있는 "packages/core" 노드로 연결되는 또 다른 선이 있습니다.](/images/docs/transitive-nodes.png)
 
-You can think of this graph in a series of steps:
+이 그래프를 일련의 단계로 생각할 수 있습니다:
 
-- The `docs` app only depends on `ui`.
-- The `ui` package does **not** have a build script.
-- The `ui` package's _dependencies_ have a `build` script, so the task graph knows to include those.
+- `docs` 앱은 `ui`에만 의존합니다.
+- `ui` 패키지는 빌드 스크립트를 가지고 **있지 않습니다**.
+- `ui` 패키지의 *의존성*은 `build` 스크립트를 가지고 있으므로 태스크 그래프는 이를 포함하는 것을 알고 있습니다.
 
-Turborepo calls the `ui` package a Transit Node in this scenario, because it
-doesn't have its own `build` script. Since it doesn't have a `build` script,
-Turborepo won't execute anything for it, but it's still part of the graph for
-the purpose of including its own dependencies.
+Turborepo는 이 시나리오에서 자체 `build` 스크립트를 가지고 있지 않기 때문에 `ui` 패키지를 Transit 노드라고 부릅니다. `build` 스크립트가 없기 때문에 Turborepo는 이를 위해 아무것도 실행하지 않지만, 자체 의존성을 포함하기 위한 목적으로 여전히 그래프의 일부입니다.
 
-#### Transit Nodes as entry points
+#### 진입점으로서의 Transit 노드
 
-What if the `docs/` package didn't implement the `build` task? What would
-you expect to happen in this case? Should the `ui` and `core` packages still
-execute their build tasks? Should _anything_ happen here?
+`docs/` 패키지가 `build` 태스크를 구현하지 않았다면 어떻게 될까요? 이 경우 어떤 일이 일어날 것으로 예상하시나요? `ui` 및 `core` 패키지가 여전히 빌드 태스크를 실행해야 할까요? _어떤 일이든_ 일어나야 할까요?
 
-Turborepo's mental model is that all nodes in the Task Graph are the same. In other words,
-Transit Nodes are included in the graph regardless of where they appear in the graph.
-This model can have unexpected consequences. For example, let's say you've configured
-your `build` task to depend on `^test`:
+Turborepo의 정신 모델은 태스크 그래프의 모든 노드가 동일하다는 것입니다. 즉, Transit 노드는 그래프에서 어디에 나타나든 관계없이 그래프에 포함됩니다. 이 모델은 예상치 못한 결과를 가져올 수 있습니다. 예를 들어, `build` 태스크를 `^test`에 의존하도록 구성했다고 가정해 봅시다:
 
 ```json title="./turbo.json"
 {
@@ -116,7 +95,4 @@ your `build` task to depend on `^test`:
 }
 ```
 
-Let's say your monorepo has many apps and many packages. All packages have
-`test` tasks, but only one app has a `build` task. Turborepo's mental model
-says that when you run `turbo run build`, even if an app doesn't implement `build`
-the `test` task of all packages that are dependencies will show up in the graph.
+모노레포에 많은 앱과 많은 패키지가 있다고 가정해 봅시다. 모든 패키지에는 `test` 태스크가 있지만 한 앱에만 `build` 태스크가 있습니다. Turborepo의 정신 모델에 따르면 `turbo run build`를 실행할 때 앱이 `build`를 구현하지 않더라도 의존성인 모든 패키지의 `test` 태스크가 그래프에 표시됩니다.

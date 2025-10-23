@@ -1,13 +1,13 @@
 ---
-title: Understanding your repository
-description: Learn how to understand your repository structure using Turborepo.
+title: 저장소 이해하기
+description: Turborepo를 사용하여 저장소 구조를 이해하는 방법을 알아봅니다.
 ---
 
-Turborepo includes tools for understanding your repository structure, that can help you use and optimize your codebase.
+Turborepo에는 코드베이스를 사용하고 최적화하는 데 도움이 되는 저장소 구조를 이해하기 위한 도구가 포함되어 있습니다.
 
 ## `turbo ls`
 
-To list your packages, you can run `turbo ls`. This will show the packages in your repository and where they're located.
+패키지를 나열하려면 `turbo ls`를 실행할 수 있습니다. 이는 저장소의 패키지와 해당 위치를 보여줍니다.
 
 ```bash title="Terminal"
 > turbo ls
@@ -19,7 +19,7 @@ To list your packages, you can run `turbo ls`. This will show the packages in yo
   web apps/web
 ```
 
-You can [apply filters](/docs/crafting-your-repository/running-tasks#using-filters) to `ls`, just like `run`:
+`run`과 마찬가지로 `ls`에 [필터를 적용](/docs/crafting-your-repository/running-tasks#using-filters)할 수 있습니다:
 
 ```bash title="Terminal"
 > turbo ls --filter ...ui
@@ -32,8 +32,7 @@ You can [apply filters](/docs/crafting-your-repository/running-tasks#using-filte
 
 ## `turbo run`
 
-To determine which tasks can be run in your monorepo, simply call `turbo run` without any tasks. You will get a list of
-tasks and the packages in which they are defined:
+모노레포에서 실행할 수 있는 작업을 확인하려면 작업 없이 `turbo run`을 호출하기만 하면 됩니다. 작업 목록과 해당 작업이 정의된 패키지를 얻을 수 있습니다:
 
 ```bash title="Terminal"
 > turbo run
@@ -53,8 +52,7 @@ No tasks provided, here are some potential ones
 
 ## `turbo query`
 
-If you wish to dig into your repository structure, since `2.2.0`, Turborepo provides a GraphQL interface into your repository
-via `turbo query`. You can execute queries such as finding all packages that have a `test` task:
+저장소 구조를 자세히 알아보고 싶다면 `2.2.0`부터 Turborepo는 `turbo query`를 통해 저장소에 대한 GraphQL 인터페이스를 제공합니다. `test` 작업이 있는 모든 패키지를 찾는 것과 같은 쿼리를 실행할 수 있습니다:
 
 ```bash title="Terminal"
 > turbo query "query { packages(filter: { has: { field: TASK_NAME, value: \"build\"}}) { items { name } } }"
@@ -77,11 +75,9 @@ via `turbo query`. You can execute queries such as finding all packages that hav
 }
 ```
 
-This can be helpful for diagnosing potential problems in your package or task dependency graph. For instance, let's say
-you're getting a lot of cache misses in your builds. This could be because there's a package that keeps getting changed
-and is imported throughout your codebase.
+이는 패키지 또는 작업 종속성 그래프의 잠재적인 문제를 진단하는 데 도움이 될 수 있습니다. 예를 들어 빌드에서 캐시 미스가 많이 발생한다고 가정해 보겠습니다. 이는 계속 변경되고 코드베이스 전체에서 import되는 패키지가 있기 때문일 수 있습니다.
 
-To do this, we can run a query to find packages that are directly imported more than 10 times in your monorepo:
+이를 위해 모노레포에서 10번 이상 직접 import되는 패키지를 찾는 쿼리를 실행할 수 있습니다:
 
 ```bash title="Terminal"
 > turbo query "query { packages(filter: { greaterThan: { field: DIRECT_DEPENDENT_COUNT, value: 10 } }) { items { name } } }"
@@ -98,11 +94,9 @@ To do this, we can run a query to find packages that are directly imported more 
 }
 ```
 
-Now that we've found this package, we can try to split it up into smaller packages so that a small change won't
-invalidate the whole dependency graph.
+이제 이 패키지를 찾았으므로 작은 변경 사항이 전체 종속성 그래프를 무효화하지 않도록 더 작은 패키지로 분할할 수 있습니다.
 
-Or let's say you're using our new `--affected` flag, but you're still running more tasks than you'd like.
-With `turbo query`, you can find all the packages and the reason why they were invalidated:
+또는 새로운 `--affected` 플래그를 사용하고 있지만 여전히 원하는 것보다 더 많은 작업을 실행하고 있다고 가정해 보겠습니다. `turbo query`를 사용하면 무효화된 모든 패키지와 그 이유를 찾을 수 있습니다:
 
 ```bash title="Terminal"
 > turbo query "query { affectedPackages(base: \"HEAD^\", head: \"HEAD\") { items { reason {  __typename } } } }"

@@ -1,6 +1,6 @@
 ---
 title: Turborepo 1.3
-description: Turborepo 1.3 introduces restricted hash inputs, root script running and caching, new CI/CD Recipes, and more!
+description: Turborepo 1.3에서는 제한된 해시 입력, 루트 스크립트 실행 및 캐싱, 새로운 CI/CD 레시피 등을 소개합니다!
 date: '2022/06/23'
 tag: 'web development'
 ---
@@ -24,24 +24,24 @@ import { Callout } from '#components/callout';
   ]}
 />
 
-With Turborepo 1.3 we are bringing improved caching and flexibility which includes:
+Turborepo 1.3에서는 향상된 캐싱 및 유연성을 제공합니다:
 
-- [**Restricted hash inputs:**](#pipeline-inputs) Specify the files in a package folder that impact caching with `inputs`.
-- [**Root script running and caching:**](#run-and-cache-scripts-from-the-root-of-your-monorepo) Run and cache `package.json` scripts from the root of the monorepo.
-- [**New CI/CD Recipes:**](#new-cicd-recipes) We added recipes for using Turborepo with popular CI providers.
+- [**제한된 해시 입력:**](#pipeline-inputs) `inputs`를 사용하여 캐싱에 영향을 미치는 패키지 폴더의 파일을 지정합니다.
+- [**루트 스크립트 실행 및 캐싱:**](#run-and-cache-scripts-from-the-root-of-your-monorepo) 모노레포의 루트에서 `package.json` 스크립트를 실행하고 캐시합니다.
+- [**새로운 CI/CD 레시피:**](#new-cicd-recipes) 인기 있는 CI 제공업체와 Turborepo를 사용하기 위한 레시피를 추가했습니다.
 
-Update today by running `npm install turbo@latest`.
+`npm install turbo@latest`를 실행하여 오늘 업데이트하세요.
 
 ## Pipeline `inputs`
 
-In addition to [environment variables, dependencies, and pipeline configurations,](/docs/crafting-your-repository/caching#task-inputs) `turbo` will consider all non-gitignored files in package folder when calculating each `package.json` script's hash fingerprint (the key that `turbo` uses to index its cache and to determine if a script needs to be re-executed). **With Turborepo 1.3+, you can now specify globs of `inputs` in your `turbo.json` `pipeline` to control which files are relevant for a particular script for caching.** This means that you can now express the following in `turbo.json`
+[환경 변수, 종속성 및 파이프라인 구성](/docs/crafting-your-repository/caching#task-inputs) 외에도, `turbo`는 각 `package.json` 스크립트의 해시 핑거프린트(turbo가 캐시를 인덱싱하고 스크립트를 다시 실행해야 하는지 판단하는 데 사용하는 키)를 계산할 때 패키지 폴더에 있는 모든 gitignore되지 않은 파일을 고려합니다. **Turborepo 1.3+에서는 `turbo.json` `pipeline`에서 `inputs` glob을 지정하여 캐싱을 위한 특정 스크립트와 관련된 파일을 제어할 수 있습니다.** 이는 `turbo.json`에서 다음을 표현할 수 있음을 의미합니다:
 
-- Ignore changes to all markdown files in a package or app's folder.
-- Don't bother rebuilding an app if only its test files have changed.
-- Only re-run tests if either source files or test files have been changed in a package or folder.
-- and more.
+- 패키지 또는 앱 폴더의 모든 마크다운 파일 변경 사항 무시하기
+- 테스트 파일만 변경된 경우 앱을 다시 빌드하지 않기
+- 패키지 또는 폴더에서 소스 파일 또는 테스트 파일이 변경된 경우에만 테스트 다시 실행하기
+- 그 외 다양한 사항들
 
-Let's walk through a concrete example: imagine we have a monorepo with a Next.js application for a documentation website in `./apps/docs-site`, some packages, and some markdown files in the root of the monorepo in a `./docs` folder.
+구체적인 예시를 살펴보겠습니다: `./apps/docs-site`에 문서 웹사이트용 Next.js 애플리케이션, 일부 패키지 및 모노레포 루트의 `./docs` 폴더에 일부 마크다운 파일이 있는 모노레포가 있다고 가정해봅시다.
 
 ```bash title="Example monorepo"
 .
@@ -67,13 +67,13 @@ Let's walk through a concrete example: imagine we have a monorepo with a Next.js
 └── turbo.json
 ```
 
-Let's assume that the Next.js `docs-site` renders the markdown files from the `./docs` folder. We can now set up the `build` script in the app's `package.json` to use `inputs` in `turbo.json` to better specify exactly which files are relevant (and which should impact caching) as follows:
+Next.js `docs-site`가 `./docs` 폴더의 마크다운 파일을 렌더링한다고 가정해봅시다. 이제 앱의 `package.json`에서 `build` 스크립트를 설정하여 `turbo.json`에서 `inputs`를 사용하여 관련된 파일(및 캐싱에 영향을 미쳐야 하는 파일)을 더 잘 지정할 수 있습니다:
 
 ```jsonc title="./turbo.json"
 {
   "$schema": "https://turborepo.com/schema.json",
   "pipeline": {
-    // ... omitted for brevity
+    // ... 간결성을 위해 생략
     "build": {
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
@@ -81,8 +81,7 @@ Let's assume that the Next.js `docs-site` renders the markdown files from the `.
     "docs#build": {
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**"],
-      // Define set of relevant globs which impact caching of docs site
-      // builds
+      // 문서 사이트 빌드의 캐싱에 영향을 미치는 관련 glob 세트 정의
       "inputs": [
         "../../docs/**/*.md",
         "pages/**",
@@ -94,20 +93,20 @@ Let's assume that the Next.js `docs-site` renders the markdown files from the `.
 }
 ```
 
-Note: Like `outputs`, `inputs` are defined relative to the related `package.json` , but they can be outside of a given folder (`e.g. ../../docs/**`).
+참고: `outputs`와 마찬가지로 `inputs`는 관련 `package.json`을 기준으로 정의되지만, 특정 폴더 외부에 있을 수 있습니다 (예: `../../docs/**`).
 
-## Run and cache scripts from the root of your monorepo
+## 모노레포 루트에서 스크립트 실행 및 캐시
 
-As of 1.3, **`turbo` can now run and cache scripts from the `package.json` file at the root of the monorepo**, which will help significantly when migrating to Turborepo.
+1.3부터 **`turbo`는 모노레포 루트의 `package.json` 파일에서 스크립트를 실행하고 캐시할 수 있습니다**. 이는 Turborepo로 마이그레이션할 때 크게 도움이 됩니다.
 
-To set this up, specify a root script in your `pipeline` configuration in your `turbo.json` using the form `"//#<script>": {...}`. The `//` tells `turbo` that the script is relative to the root of the monorepo and not each workspace package.
+이를 설정하려면 `turbo.json`의 `pipeline` 구성에서 `"//#<script>": {...}` 형식을 사용하여 루트 스크립트를 지정합니다. `//`는 `turbo`에게 스크립트가 각 워크스페이스 패키지가 아닌 모노레포 루트를 기준으로 한다는 것을 알려줍니다.
 
-There are 2 important things to note about root scripts and execution scope:
+루트 스크립트 및 실행 범위에 대해 주의해야 할 2가지 중요한 사항이 있습니다:
 
-- If you already have `"build": {...}` in your `pipeline`, but want to include the `build` script defined in the monorepo's root `package.json` file when running `turbo run build`, you may opt the root into the execution's scope by also including `"//#build": {...}` in your configuration as well.
-- Conversely, you _do not_ need to define a generic `"my-script": {...}` entry if all you need is `"//#my-script": {...}`.
+- `pipeline`에 이미 `"build": {...}`가 있지만 `turbo run build`를 실행할 때 모노레포 루트 `package.json` 파일에 정의된 `build` 스크립트를 포함하려면 구성에 `"//#build": {...}`도 포함하여 루트를 실행 범위에 옵트인할 수 있습니다.
+- 반대로, `"//#my-script": {...}`만 필요한 경우 일반 `"my-script": {...}` 항목을 정의할 필요가 _없습니다_.
 
-A sample pipeline that defines the root script `check-examples` and opts the root into `test` might look like:
+루트 스크립트 `check-examples`를 정의하고 루트를 `test`에 옵트인하는 샘플 파이프라인은 다음과 같습니다:
 
 ```json title="./package.json"
 {
@@ -162,38 +161,38 @@ A sample pipeline that defines the root script `check-examples` and opts the roo
 }
 ```
 
-Note: We suggest specifying `inputs` whenever declaring a root task in your `pipeline` to improve caching.
+참고: 캐싱을 개선하려면 `pipeline`에서 루트 작업을 선언할 때마다 `inputs`를 지정하는 것이 좋습니다.
 
-## New CI/CD Recipes
+## 새로운 CI/CD 레시피
 
-We added recipes for using Turborepo and Remote Caching with:
+다음을 사용하여 Turborepo 및 Remote Caching을 사용하기 위한 레시피를 추가했습니다:
 
 - [CircleCI](/docs/guides/ci-vendors/circleci)
 - [GitHub Actions](/docs/guides/ci-vendors/github-actions)
 - [Gitlab CI](/docs/guides/ci-vendors/gitlab-ci)
 - [Travis CI](/docs/guides/ci-vendors/travis-ci)
 
-If there are other recipes you would like to see here please let us know by opening up a [GitHub Discussion](https://github.com/vercel/turbo/discussions/categories/ideas).
+여기에서 보고 싶은 다른 레시피가 있다면 [GitHub Discussion](https://github.com/vercel/turbo/discussions/categories/ideas)을 열어 알려주세요.
 
-## Other Bug Fixes and Improvements
+## 기타 버그 수정 및 개선 사항
 
-- Improved git operations and hashing
-- Better cycle detection in dependency graph analysis
-- Added support for Windows ARM 64-bit architectures
-- Improved Remote Cache error logging
-- Added Storybook to the Design System example
+- git 작업 및 해싱 개선
+- 종속성 그래프 분석에서 순환 감지 개선
+- Windows ARM 64비트 아키텍처 지원 추가
+- Remote Cache 오류 로깅 개선
+- Design System 예제에 Storybook 추가
 
-## Community
+## 커뮤니티
 
-Since releasing [Turborepo v1.2 in early April](/blog/turbo-1-2-0), we've seen incredible adoption and community growth:
+[4월 초 Turborepo v1.2 릴리스](/blog/turbo-1-2-0) 이후, 놀라운 채택률과 커뮤니티 성장을 보았습니다:
 
-- [8.1k+ GitHub Stars](https://github.com/vercel/turbo)
-- 275k+ weekly NPM downloads (up ~2x)
-- 1,200+ members of the [Turborepo Community Discord](https://turborepo.com/discord)
-- 5.8 years of compute time saved through Remote Caching on Vercel (up ~5x), saving +7 months per week now
+- [GitHub Stars 8.1k+](https://github.com/vercel/turbo)
+- 주간 NPM 다운로드 275k+ (약 2배 증가)
+- [Turborepo Community Discord](https://turborepo.com/discord) 회원 1,200+
+- Vercel의 Remote Caching을 통해 5.8년의 컴퓨팅 시간 절감 (약 5배 증가), 현재 주당 7개월 이상 절감
 
-Turborepo is the result of the combined work of over 136 contributors including our core team.
+Turborepo는 핵심 팀을 포함한 136명 이상의 기여자들의 결합된 작업의 결과입니다.
 
-This release was brought to you by the contributions of: @gsoltis, @nathanhammond, @tknickman, @jaredpalmer, @zvictor, @ObliviousHarmony, @O4epegb, @rafaeltab, @mcmontseny, @bertspaan, @Jastor11, and @enBonnet
+이 릴리스는 다음 기여자들의 기여로 완성되었습니다: @gsoltis, @nathanhammond, @tknickman, @jaredpalmer, @zvictor, @ObliviousHarmony, @O4epegb, @rafaeltab, @mcmontseny, @bertspaan, @Jastor11, @enBonnet
 
-Thank you for your continued support, feedback, and collaboration with us to make Turborepo your build tool of choice.
+Turborepo를 여러분의 빌드 도구로 선택하는 데 대한 지속적인 지원, 피드백 및 협력에 감사드립니다.

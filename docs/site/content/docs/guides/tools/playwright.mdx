@@ -1,23 +1,23 @@
 ---
 title: Playwright
-description: Learn how to use Playwright in a Turborepo.
+description: Turborepo에서 Playwright를 사용하는 방법을 알아보세요.
 ---
 
 import { Tabs, Tab, PackageManagerTabs } from '#components/tabs';
 
-[Playwright](https://playwright.dev/) enables reliable end-to-end testing for modern web apps.
+[Playwright](https://playwright.dev/)는 현대 웹 앱을 위한 안정적인 end-to-end 테스트를 가능하게 합니다.
 
-We recommend creating a Playwright package for each test suite that you'd like to run in your monorepo. This may mean suites broken up per-application, per-domain, or some other scheme, according to your needs. If you are unsure, start with creating a Playwright package per-application.
+monorepo에서 실행하려는 각 테스트 스위트에 대해 Playwright 패키지를 만드는 것을 권장합니다. 이는 필요에 따라 애플리케이션별, 도메인별 또는 기타 체계로 분할된 스위트를 의미할 수 있습니다. 확실하지 않은 경우 애플리케이션당 Playwright 패키지를 만드는 것으로 시작하세요.
 
-## Handling Playwright's environment variables
+## Playwright의 환경 변수 처리
 
-Playwright requires several environment variables to run correctly. To ensure that these variables are available within your tasks in [Strict Mode](/docs/crafting-your-repository/using-environment-variables#strict-mode), you'll want to add them to your pass through variables using [`passThroughEnv`](/docs/reference/configuration#passthroughenv) in your end-to-end task or [`globalPassThroughEnv`](/docs/reference/configuration#globalpassthroughenv) globally, depending on your scoping preferences.
+Playwright가 올바르게 실행되려면 여러 환경 변수가 필요합니다. [Strict Mode](/docs/crafting-your-repository/using-environment-variables#strict-mode)의 작업 내에서 이러한 변수를 사용할 수 있도록 하려면 범위 지정 기본 설정에 따라 end-to-end 작업에서 [`passThroughEnv`](/docs/reference/configuration#passthroughenv)를 사용하거나 전역적으로 [`globalPassThroughEnv`](/docs/reference/configuration#globalpassthroughenv)를 사용하여 pass through 변수에 추가해야 합니다.
 
 <Tabs items={["Only in end-to-end task", "Globally"]}>
 
 <Tab value="Only in end-to-end task">
 
-The configuration below using `passThroughEnv` will allow environment variables that start with `PLAYWRIGHT_` into **the `e2e` task** and **will not affect hashing**.
+아래 `passThroughEnv`를 사용하는 구성은 `PLAYWRIGHT_`로 시작하는 환경 변수를 **`e2e` 작업**에 허용하며 **해싱에 영향을 주지 않습니다**.
 
 ```json title="./turbo.json"
 {
@@ -32,7 +32,7 @@ The configuration below using `passThroughEnv` will allow environment variables 
 </Tab>
 <Tab value="Globally">
 
-The configuration below using `globalPassThroughEnv` will allow environment variables that start with `PLAYWRIGHT_` into **all tasks** and **will not affect hashing**.
+아래 `globalPassThroughEnv`를 사용하는 구성은 `PLAYWRIGHT_`로 시작하는 환경 변수를 **모든 작업**에 허용하며 **해싱에 영향을 주지 않습니다**.
 
 ```json title="./turbo.json"
 {
@@ -44,18 +44,18 @@ The configuration below using `globalPassThroughEnv` will allow environment vari
 
 </Tabs>
 
-Note that pass through variables are used since we don't want to miss cache in situations where these Playwright-internal variables change. For example,`PLAYWRIGHT_BROWSERS_PATH` is used to locate browser binaries used by Playwright, and we don't want to miss cache if this location changes.
+이러한 Playwright 내부 변수가 변경될 때 캐시를 놓치지 않도록 pass through 변수가 사용됩니다. 예를 들어, `PLAYWRIGHT_BROWSERS_PATH`는 Playwright에서 사용하는 브라우저 바이너리를 찾는 데 사용되며, 이 위치가 변경되면 캐시를 놓치지 않으려고 합니다.
 
-## Designing the task graph
+## 작업 그래프 설계
 
-We want to ensure the proper caching behavior for our end-to-end suites. Specifically, we want to make sure of cache misses in a few key situations:
+end-to-end 스위트에 대한 적절한 캐싱 동작을 보장하려고 합니다. 특히, 몇 가지 주요 상황에서 캐시 미스를 확인하려고 합니다:
 
-- If test suites change, cache gets missed.
-- If code tested by the suites changes, cache gets missed.
+- 테스트 스위트가 변경되면 캐시가 미스됩니다.
+- 스위트에서 테스트한 코드가 변경되면 캐시가 미스됩니다.
 
-The first requirement will be met naturally since the hash for the task will change when test code is changed. However, the second requirement means you need to ensure end-to-end tests depend on changes in application source code.
+첫 번째 요구 사항은 테스트 코드가 변경되면 작업의 해시가 변경되므로 자연스럽게 충족됩니다. 그러나 두 번째 요구 사항은 end-to-end 테스트가 애플리케이션 소스 코드의 변경 사항에 의존하도록 해야 함을 의미합니다.
 
-This relationship can be expressed in `turbo.json` and the end-to-end suite's `package.json`.
+이 관계는 `turbo.json`과 end-to-end 스위트의 `package.json`에서 표현할 수 있습니다.
 
 <Tabs items={["turbo.json", "package.json" ]}>
 
@@ -91,11 +91,11 @@ This relationship can be expressed in `turbo.json` and the end-to-end suite's `p
 
 </Tabs>
 
-Later on, when you want to run your end-to-end tests, use [the `--only` flag](/docs/reference/run#--only) to run end-to-end tests without running the application's build first. As an example, your command may look like `turbo run e2e --filter=@repo/playwright-myapp --only`.
+나중에 end-to-end 테스트를 실행하려면 [the `--only` 플래그](/docs/reference/run#--only)를 사용하여 애플리케이션의 빌드를 먼저 실행하지 않고 end-to-end 테스트를 실행합니다. 예를 들어, 명령은 `turbo run e2e --filter=@repo/playwright-myapp --only`와 같을 수 있습니다.
 
-## Sharing Playwright utilities
+## Playwright 유틸리티 공유
 
-You can also create a common package for shared utilities that you need in your end-to-end test suites. We recommend using `peerDependencies` in this shared package so that you can get access to Playwright used in consumers without having to install Playwright into the shared package itself.
+end-to-end 테스트 스위트에서 필요한 공유 유틸리티에 대한 공통 패키지를 만들 수도 있습니다. 이 공유 패키지에서 `peerDependencies`를 사용하여 공유 패키지 자체에 Playwright를 설치하지 않고도 소비자에서 사용되는 Playwright에 액세스할 수 있도록 하는 것을 권장합니다.
 
 <PackageManagerTabs>
 

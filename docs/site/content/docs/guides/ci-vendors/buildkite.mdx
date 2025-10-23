@@ -1,13 +1,13 @@
 ---
 title: Buildkite
-description: Learn how to use Buildkite with Turborepo.
+description: Turborepo와 함께 Buildkite를 사용하는 방법을 알아봅니다.
 ---
 
 import { PackageManagerTabs, Tab } from '#components/tabs';
 
-The following example shows how to use Turborepo with [Buildkite](https://buildkite.com/).
+다음 예제는 Turborepo를 [Buildkite](https://buildkite.com/)와 함께 사용하는 방법을 보여줍니다.
 
-For a given root `package.json`:
+주어진 루트 `package.json`의 경우:
 
 ```json title="./package.json"
 {
@@ -39,7 +39,7 @@ And a `turbo.json`:
 }
 ```
 
-Create a file called `.buildkite/pipeline.yml` in your repository with the following contents:
+저장소에 다음 내용으로 `.buildkite/pipeline.yml` 파일을 생성합니다:
 
 <PackageManagerTabs>
 
@@ -111,17 +111,17 @@ Create a file called `.buildkite/pipeline.yml` in your repository with the follo
   </Tab>
 </PackageManagerTabs>
 
-## Create a Pipeline
+## 파이프라인 생성
 
-To create your pipeline in the Buildkite dashboard, you'll need to first upload the pipeline definition from your repository.
+Buildkite 대시보드에서 파이프라인을 생성하려면 먼저 저장소에서 파이프라인 정의를 업로드해야 합니다.
 
-1. Select **Pipelines** to navigate to the Buildkite dashboard.
+1. Buildkite 대시보드로 이동하려면 **Pipelines**를 선택합니다.
 
-2. Select **New pipeline**.
+2. **New pipeline**을 선택합니다.
 
-3. Enter your pipeline's details in the respective **Name** and **Description** fields.
+3. 각각의 **Name** 및 **Description** 필드에 파이프라인의 세부 정보를 입력합니다.
 
-4. In the **Steps** editor, ensure there's a step to upload the definition from your repository:
+4. **Steps** 편집기에서 저장소에서 정의를 업로드하는 단계가 있는지 확인합니다:
 
 ```yaml title=".buildkite/pipeline.yml"
 steps:
@@ -129,28 +129,28 @@ steps:
     command: buildkite-agent pipeline upload
 ```
 
-5. Select **Create Pipeline**, then click **New Build**, then select **Create Build**.
+5. **Create Pipeline**을 선택한 다음 **New Build**를 클릭하고 **Create Build**를 선택합니다.
 
-Run the pipeline whenever you make changes you want to verify.
+확인하려는 변경 사항을 만들 때마다 파이프라인을 실행합니다.
 
 ## Remote Caching
 
-To use Remote Caching, retrieve the team and token for the Remote Cache for your provider. In this example, we'll use [Vercel Remote Cache](https://vercel.com/docs/monorepos/remote-caching):
+Remote Caching을 사용하려면 제공자의 Remote Cache에 대한 팀과 토큰을 검색합니다. 이 예제에서는 [Vercel Remote Cache](https://vercel.com/docs/monorepos/remote-caching)를 사용합니다:
 
-- `TURBO_TOKEN` - The Bearer token to access the Remote Cache
-- `TURBO_TEAM` - The account to which the monorepo belongs
+- `TURBO_TOKEN` - Remote Cache에 액세스하기 위한 Bearer 토큰
+- `TURBO_TEAM` - 모노레포가 속한 계정
 
-To use Vercel Remote Caching, you can get the value of these variables in a few steps:
+Vercel Remote Caching을 사용하려면 몇 가지 단계로 이러한 변수의 값을 얻을 수 있습니다:
 
-1. Create a Scoped Access Token to your account in the [Vercel Dashboard](https://vercel.com/account/tokens). Copy the value to a safe place. You'll need it in a moment.
+1. [Vercel Dashboard](https://vercel.com/account/tokens)에서 계정에 대한 Scoped Access Token을 생성합니다. 값을 안전한 곳에 복사하세요. 잠시 후에 필요합니다.
 
    ![Vercel Access Tokens](/images/docs/vercel-create-token.png)
 
-2. Obtain [your Team URL](https://vercel.com/d?to=%2F%5Bteam%5D%2F%7E%2Fsettings&title=Find+Team+URL) and copy its value as well. Both values will be used in the next step.
+2. [팀 URL](https://vercel.com/d?to=%2F%5Bteam%5D%2F%7E%2Fsettings&title=Find+Team+URL)을 가져와 그 값도 복사합니다. 두 값 모두 다음 단계에서 사용됩니다.
 
-3. In the Buildkite dashboard, create two new [Buildkite secrets](https://buildkite.com/docs/pipelines/security/secrets/buildkite-secrets), one for each value. Name them `TURBO_TOKEN` and `TURBO_TEAM`.
+3. Buildkite 대시보드에서 각 값에 대해 두 개의 새로운 [Buildkite secrets](https://buildkite.com/docs/pipelines/security/secrets/buildkite-secrets)를 생성합니다. 이름을 `TURBO_TOKEN` 및 `TURBO_TEAM`으로 지정합니다.
 
-4. Update `pipeline.yml` to fetch and apply `TURBO_TOKEN` and `TURBO_TEAM` as environment variables with the [Buildkite Secrets](https://github.com/buildkite-plugins/secrets-buildkite-plugin) plugin as shown. (For additional secret-management options, read [Managing pipeline secrets](https://buildkite.com/docs/pipelines/security/secrets/managing) in the Buildkite documentation.)
+4. 표시된 대로 [Buildkite Secrets](https://github.com/buildkite-plugins/secrets-buildkite-plugin) 플러그인을 사용하여 환경 변수로 `TURBO_TOKEN` 및 `TURBO_TEAM`을 가져오고 적용하도록 `pipeline.yml`을 업데이트합니다. (추가 비밀 관리 옵션은 Buildkite 문서의 [Managing pipeline secrets](https://buildkite.com/docs/pipelines/security/secrets/managing)를 참조하세요.)
 
    ```yaml title=".buildkite/pipeline.yml"
    steps:
@@ -175,4 +175,4 @@ To use Vercel Remote Caching, you can get the value of these variables in a few 
                TURBO_TEAM: TURBO_TEAM
    ```
 
-   Commit and push these changes to your repository, and on the next pipeline run, the secrets will be applied and Vercel Remote Caching will be active.
+   이러한 변경 사항을 저장소에 커밋하고 푸시하면 다음 파이프라인 실행 시 비밀이 적용되고 Vercel Remote Caching이 활성화됩니다.

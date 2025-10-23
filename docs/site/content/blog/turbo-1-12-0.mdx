@@ -1,7 +1,7 @@
 ---
 title: Turborepo 1.12
 date: 2024/01/30
-description: Turborepo 1.12 adds popular community-requested features and feedback improvements.
+description: Turborepo 1.12는 커뮤니티에서 요청한 인기 기능 및 피드백 개선 사항을 추가합니다.
 tag: 'web development'
 ---
 
@@ -15,20 +15,20 @@ import { ThemeAwareImage } from '#components/theme-aware-image';
 
 <Authors authors={['mehulkar', 'tomknickman', 'gregsoltis']} />
 
-Turborepo 1.12 adds popular community-requested features and feedback improvements, including:
+Turborepo 1.12는 커뮤니티에서 요청한 인기 기능 및 피드백 개선 사항을 추가합니다:
 
-- [**Colors in task logs**](#colors-in-task-logs): Colors from original shell logs used by default
-- [**Errors overhaul**](#errors-overhaul): Improved error messages for misconfigurations
-- [**Improved `inputs` ergonomics**](#improved-inputs-ergonomics): Use Turborepo's defaults with your input customizations
-- [**Telemetry**](#telemetry): Help us focus on what matters most to Turborepo users
+- [**작업 로그의 색상**](#colors-in-task-logs): 기본적으로 원본 셸 로그의 색상 사용
+- [**오류 개편**](#errors-overhaul): 잘못된 구성에 대한 개선된 오류 메시지
+- [**개선된 `inputs` 인체공학**](#improved-inputs-ergonomics): 입력 사용자 지정과 함께 Turborepo의 기본값 사용
+- [**텔레메트리**](#telemetry): Turborepo 사용자에게 가장 중요한 것에 집중할 수 있도록 도와주세요
 
-We're also done cleaning up our migration to Rust in this release by removing the `--go-fallback` flag and shrinking the `turbo` binary by 58% compared to 1.11.
+또한 이번 릴리스에서는 `--go-fallback` 플래그를 제거하고 `turbo` 바이너리를 1.11에 비해 58% 축소하여 Rust로의 마이그레이션 정리를 완료했습니다.
 
-Update today by running `npx @turbo/codemod migrate` or get started with `npx create-turbo@latest`.
+`npx @turbo/codemod migrate`를 실행하여 오늘 업데이트하거나 `npx create-turbo@latest`로 시작하세요.
 
-## Colors in task logs
+## 작업 로그의 색상
 
-Color is a great way to quickly surface important information in user interfaces. It's common for developer tooling to highlight success in green, warnings in yellow, or errors in red.
+색상은 사용자 인터페이스에서 중요한 정보를 빠르게 표시하는 좋은 방법입니다. 개발자 도구가 성공을 녹색으로, 경고를 노란색으로, 오류를 빨간색으로 강조하는 것이 일반적입니다.
 
 <ThemeAwareImage
   className="my-4 flex justify-center"
@@ -52,11 +52,11 @@ Color is a great way to quickly surface important information in user interfaces
   }}
 />
 
-In this release, we're now showing the colors from your underlying tasks in your local environment by default. This has been a popular request from the community and we're excited to ship support for macOS and Linux today. We will be following up with Windows support in a future release.
+이번 릴리스에서는 기본적으로 로컬 환경에서 기본 작업의 색상을 표시합니다. 이는 커뮤니티에서 인기 있는 요청이었으며 오늘 macOS 및 Linux에 대한 지원을 제공하게 되어 기쁩니다. 향후 릴리스에서 Windows 지원을 추가할 예정입니다.
 
-## Errors overhaul
+## 오류 개편
 
-An important part of developer experience is ensuring that, when things go wrong, it's clear how to get back to the happy path. In this release, we've improved the error messages that come from Turborepo misconfigurations.
+개발자 경험의 중요한 부분은 문제가 발생했을 때 행복한 경로로 돌아가는 방법이 명확하도록 하는 것입니다. 이번 릴리스에서는 Turborepo 잘못된 구성에서 발생하는 오류 메시지를 개선했습니다.
 
 <ThemeAwareImage
   className="my-4 flex justify-center"
@@ -80,19 +80,19 @@ An important part of developer experience is ensuring that, when things go wrong
   }}
 />
 
-In this enhanced UI, we are:
+이 향상된 UI에서 우리는:
 
-- Showing you the errorful code
-- Improving the help text in your terminal for each type of error
-- Providing a link to documentation when it can provide you with useful context
+- 오류가 있는 코드 표시
+- 각 오류 유형에 대한 터미널의 도움말 텍스트 개선
+- 유용한 컨텍스트를 제공할 수 있을 때 문서 링크 제공
 
-## Improved `inputs` ergonomics
+## 개선된 `inputs` 인체공학
 
-Turborepo intelligently understands the inputs to your tasks by default. But there are also situations where you may want to include or exclude specific files or directories from your task inputs.
+Turborepo는 기본적으로 작업에 대한 입력을 지능적으로 이해합니다. 그러나 작업 입력에서 특정 파일이나 디렉토리를 포함하거나 제외하려는 상황도 있습니다.
 
-Importantly, using the `inputs` key on a task opts you out of all of the default inputs for a task, like omitting gitignored files from your inputs. Until today, you had to manually bring back these defaults by creating glob patterns for them yourself.
+중요한 점은 작업에서 `inputs` 키를 사용하면 gitignored 파일을 입력에서 생략하는 것과 같이 작업의 모든 기본 입력에서 제외된다는 것입니다. 오늘까지는 이러한 기본값을 직접 glob 패턴을 생성하여 수동으로 다시 가져와야 했습니다.
 
-Today, we're adding `$TURBO_DEFAULT$` as a special value when used in the `inputs` array.
+오늘 우리는 `inputs` 배열에서 사용할 때 `$TURBO_DEFAULT$`를 특수 값으로 추가합니다.
 
 ```json title="turbo.json"
 {
@@ -104,63 +104,63 @@ Today, we're adding `$TURBO_DEFAULT$` as a special value when used in the `input
 }
 ```
 
-This microsyntax allows you to use the Turborepo defaults you're used to while adding in your own custom globs to fine tune the default input behavior.
+이 마이크로 구문을 사용하면 익숙한 Turborepo 기본값을 사용하면서 기본 입력 동작을 미세 조정하기 위해 자신의 커스텀 glob을 추가할 수 있습니다.
 
-[Check out the `inputs` documentation](/docs/reference/configuration#inputs) for more information.
+자세한 내용은 [`inputs` 문서](/docs/reference/configuration#inputs)를 확인하세요.
 
-## Telemetry
+## 텔레메트리
 
-Turborepo was released almost two years ago, and `turbo` has developed considerably over the past two years. As the community has grown, the value of your feedback is immeasurable in helping us stay focused on what matters most to Turborepo users.
+Turborepo는 거의 2년 전에 출시되었으며, 지난 2년 동안 `turbo`는 상당히 발전했습니다. 커뮤니티가 성장함에 따라 Turborepo 사용자에게 가장 중요한 것에 집중하는 데 있어 여러분의 피드백의 가치는 측정할 수 없습니다.
 
-Until now, our feedback gathering process has been manual, slow, and error prone. While we will always highly appreciate users who file [GitHub Issues](https://github.com/vercel/turbo/issues), speak to us in [GitHub Discussions](https://github.com/vercel/turbo/discussions), and chat with the community in [Discord](https://turborepo.com/discord), this feedback only captures the sentiment of a small corner of the Turboverse.
+지금까지 피드백 수집 프로세스는 수동적이고 느리며 오류가 발생하기 쉬웠습니다. [GitHub Issues](https://github.com/vercel/turbo/issues)를 제출하고, [GitHub Discussions](https://github.com/vercel/turbo/discussions)에서 대화하고, [Discord](https://turborepo.com/discord)에서 커뮤니티와 채팅하는 사용자를 항상 높이 평가하지만, 이 피드백은 Turboverse의 작은 일부의 정서만 포착합니다.
 
-Today, we're introducing a **completely anonymous**, automated approach to feedback to learn more about the ways that the community is using Turborepo. As we continue to iterate on `turbo`, this information will help us ensure performance, confirm stability, design new features, and drive the project's direction.
+오늘 우리는 커뮤니티가 Turborepo를 사용하는 방식에 대해 자세히 알아보기 위해 **완전히 익명**의 자동화된 피드백 접근 방식을 도입합니다. `turbo`를 계속 반복함에 따라 이 정보는 성능을 보장하고, 안정성을 확인하고, 새로운 기능을 설계하고, 프로젝트의 방향을 주도하는 데 도움이 될 것입니다.
 
-We're creating the build system of the future and this information will be highly valuable to guide us in that effort. For more information, visit [turborepo.com/docs/telemetry](https://turborepo.com/docs/telemetry).
+우리는 미래의 빌드 시스템을 만들고 있으며 이 정보는 그 노력을 안내하는 데 매우 가치가 있을 것입니다. 자세한 내용은 [turborepo.com/docs/telemetry](https://turborepo.com/docs/telemetry)를 방문하세요.
 
-If you'd like to opt out of telemetry, run:
+텔레메트리를 선택 해제하려면 다음을 실행하세요:
 
 ```bash title="Terminal"
 turbo telemetry disable
 ```
 
-You may also opt-out by setting an environment variable:
+환경 변수를 설정하여 선택 해제할 수도 있습니다:
 
 - `TURBO_TELEMETRY_DISABLED=1`
-- `DO_NOT_TRACK=1` (per the [Console Do Not Track (DNT)](https://consoledonottrack.com/) specification)
+- `DO_NOT_TRACK=1` ([Console Do Not Track (DNT)](https://consoledonottrack.com/) 사양에 따름)
 
-## Other Improvements
+## 기타 개선 사항
 
-- **[Feature]**: Enable pty usage [(PR)](https://github.com/vercel/turbo/pull/7128)
-- **[Feature]**: Support `$TURBO_DEFAULT$` in inputs [(PR)](https://github.com/vercel/turbo/pull/7113)
-- **[Feature]**: Support Yarn 4 patches [(PR)](https://github.com/vercel/turbo/pull/6974)
-- **[Feature]**: Enable telemetry [(PR)](https://github.com/vercel/turbo/pull/7122)
-- **[Improvement]**: Treat empty environment variables as unset [(PR)](https://github.com/vercel/turbo/pull/6929)
-- **[Improvement]**: Error out if dependent flags are provided without their parent [(PR)](https://github.com/vercel/turbo/pull/6780)
-- **[Improvement]**: Make sure that our concurrency check ignore packages without tasks [(PR)](https://github.com/vercel/turbo/pull/6790)
-- **[Improvement]**: Avoid panic on invalid directory filters [(PR)](https://github.com/vercel/turbo/pull/6955)
-- **[Improvement]**: Ignore permission errors during globbing [(PR)](https://github.com/vercel/turbo/pull/6957)
-- **[Improvement]**: Avoid retry panic [(PR)](https://github.com/vercel/turbo/pull/6926)
-- **[Improvement]**: Rewrite prefix after carriage return [(PR)](https://github.com/vercel/turbo/pull/6989)
-- **[Improvement]**: Validate graph extension [(PR)](https://github.com/vercel/turbo/pull/6995)
-- **[Improvement]**: Truncate metadata file when writing [(PR)](https://github.com/vercel/turbo/pull/7016)
-- **[Improvement]**: Correctly create symlinks to directories [(PR)](https://github.com/vercel/turbo/pull/6983)
-- **[Improvement]**: Make sure cookie dir exists before writing cookie [(PR)](https://github.com/vercel/turbo/pull/7015)
-- **[Improvement]**: Examples turbo.json outputs key [(PR)](https://github.com/vercel/turbo/pull/7071)
-- **[Improvement]**: Filter package.json files that are subfolders of other packages [(PR)](https://github.com/vercel/turbo/pull/7025)
-- **[Improvement]**: Sort dependents and dependencies during normalization [(PR)](https://github.com/vercel/turbo/pull/7018)
-- **[Improvement]**: Swap fallback logs to debug [(PR)](https://github.com/vercel/turbo/pull/7102)
-- **[Improvement]**: Include gitignored files in fallback [(PR)](https://github.com/vercel/turbo/pull/7105)
-- **[Improvement]**: Include default files in fallback [(PR)](https://github.com/vercel/turbo/pull/7106)
+- **[기능]**: pty 사용 활성화 [(PR)](https://github.com/vercel/turbo/pull/7128)
+- **[기능]**: inputs에서 `$TURBO_DEFAULT$` 지원 [(PR)](https://github.com/vercel/turbo/pull/7113)
+- **[기능]**: Yarn 4 패치 지원 [(PR)](https://github.com/vercel/turbo/pull/6974)
+- **[기능]**: 텔레메트리 활성화 [(PR)](https://github.com/vercel/turbo/pull/7122)
+- **[개선]**: 빈 환경 변수를 설정 해제된 것으로 처리 [(PR)](https://github.com/vercel/turbo/pull/6929)
+- **[개선]**: 부모 없이 종속 플래그가 제공되면 오류 발생 [(PR)](https://github.com/vercel/turbo/pull/6780)
+- **[개선]**: 동시성 검사가 작업이 없는 패키지를 무시하도록 함 [(PR)](https://github.com/vercel/turbo/pull/6790)
+- **[개선]**: 잘못된 디렉토리 필터에서 패닉 방지 [(PR)](https://github.com/vercel/turbo/pull/6955)
+- **[개선]**: globbing 중 권한 오류 무시 [(PR)](https://github.com/vercel/turbo/pull/6957)
+- **[개선]**: 재시도 패닉 방지 [(PR)](https://github.com/vercel/turbo/pull/6926)
+- **[개선]**: 캐리지 리턴 후 접두사 다시 쓰기 [(PR)](https://github.com/vercel/turbo/pull/6989)
+- **[개선]**: 그래프 확장 검증 [(PR)](https://github.com/vercel/turbo/pull/6995)
+- **[개선]**: 쓸 때 메타데이터 파일 자르기 [(PR)](https://github.com/vercel/turbo/pull/7016)
+- **[개선]**: 디렉토리에 대한 심볼릭 링크 올바르게 생성 [(PR)](https://github.com/vercel/turbo/pull/6983)
+- **[개선]**: 쿠키를 쓰기 전에 쿠키 디렉토리가 존재하는지 확인 [(PR)](https://github.com/vercel/turbo/pull/7015)
+- **[개선]**: 예제 turbo.json 출력 키 [(PR)](https://github.com/vercel/turbo/pull/7071)
+- **[개선]**: 다른 패키지의 하위 폴더인 package.json 파일 필터링 [(PR)](https://github.com/vercel/turbo/pull/7025)
+- **[개선]**: 정규화 중 종속 항목 및 종속성 정렬 [(PR)](https://github.com/vercel/turbo/pull/7018)
+- **[개선]**: 폴백 로그를 디버그로 교체 [(PR)](https://github.com/vercel/turbo/pull/7102)
+- **[개선]**: 폴백에 gitignored 파일 포함 [(PR)](https://github.com/vercel/turbo/pull/7105)
+- **[개선]**: 폴백에 기본 파일 포함 [(PR)](https://github.com/vercel/turbo/pull/7106)
 
-## Community
+## 커뮤니티
 
-Since releasing [Turborepo 1.11](/blog/turbo-1-11-0) we've seen incredible adoption and community growth:
+[Turborepo 1.11](/blog/turbo-1-11-0) 출시 이후 놀라운 채택률과 커뮤니티 성장을 보았습니다:
 
 - [24.0k+ GitHub Stars](https://github.com/vercel/turbo)
-- [1.9M+ weekly NPM downloads](https://www.npmjs.com/package/turbo)
-- 238 years of compute time saved using [Vercel Remote Cache](https://vercel.com/docs/concepts/monorepos/remote-caching)
+- [주간 NPM 다운로드 1.9M+회](https://www.npmjs.com/package/turbo)
+- [Vercel Remote Cache](https://vercel.com/docs/concepts/monorepos/remote-caching)를 사용하여 238년의 컴퓨팅 시간 절약
 
-Turborepo is the result of the combined work of all of its contributors, including our core team.
+Turborepo는 핵심 팀을 포함한 모든 기여자들의 노력이 결합된 결과입니다.
 
-Thank you for your continued support, feedback, and collaboration to make Turborepo your build tool of choice.
+Turborepo를 여러분의 빌드 도구로 선택하기 위해 지속적인 지원, 피드백, 협업에 감사드립니다.

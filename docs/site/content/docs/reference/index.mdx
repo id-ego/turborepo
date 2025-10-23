@@ -1,159 +1,159 @@
 ---
-title: Turborepo API reference
-description: Learn about Turborepo's APIs using the reference.
+title: Turborepo API 레퍼런스
+description: 레퍼런스를 사용하여 Turborepo의 API에 대해 알아봅니다.
 ---
 
 import { Card, Cards } from '#components/card';
 
-Turborepo's API reference is broken up into the following sections:
+Turborepo의 API 레퍼런스는 다음 섹션으로 나뉩니다:
 
-## Configuration
+## 설정
 
 <Cards>
     <Card
-        title="Configuring turbo.json"
+        title="turbo.json 설정하기"
         href="/docs/reference/configuration"
-        description="Configure the behavior of `turbo`."
+        description="`turbo`의 동작을 설정합니다."
     />
 
     <Card
-        title="Package Configurations"
+        title="패키지 설정"
         href="/docs/reference/package-configurations"
-        description="Create configurations specific to a package."
+        description="패키지에 특정한 설정을 만듭니다."
     />
 
     <Card
-        title="System environment variables"
+        title="시스템 환경 변수"
         href="/docs/reference/system-environment-variables"
-        description="Change `turbo`'s behavior using environment variables."
+        description="환경 변수를 사용하여 `turbo`의 동작을 변경합니다."
     />
 
     <Card
-        title="File glob specification"
+        title="파일 glob 사양"
         href="/docs/reference/globs"
-        description="Define files for `turbo` to use."
+        description="`turbo`가 사용할 파일을 정의합니다."
     />
 
 </Cards>
 
-## Commands
+## 명령어
 
 <Cards>
     <Card
         title="run"
         href="/docs/reference/run"
-        description="Run tasks using `turbo`."
+        description="`turbo`를 사용하여 작업을 실행합니다."
     />
 
     <Card
         title="watch"
         href="/docs/reference/watch"
-        description="Dependency-aware, single-process task watcher."
+        description="의존성을 인식하는 단일 프로세스 작업 감시자입니다."
     />
     <Card
         title="prune"
         href="/docs/reference/prune"
-        description="Create partial monorepos for target workspaces."
+        description="대상 workspace에 대한 부분 monorepo를 생성합니다."
     />
     <Card
         title="boundaries"
         href="/docs/reference/boundaries"
-        description="Enforce best practices in your monorepo."
+        description="monorepo에서 모범 사례를 시행합니다."
     />
     <Card
         title="ls"
         href="/docs/reference/ls"
-        description="List packages in your monorepo."
+        description="monorepo의 패키지를 나열합니다."
     />
 
     <Card
         title="query"
         href="/docs/reference/query"
-        description="Run GraphQL queries against your monorepo."
+        description="monorepo에 대해 GraphQL 쿼리를 실행합니다."
     />
 
     <Card
         title="generate"
         href="/docs/reference/generate"
-        description="Extend your Turborepo with new apps and packages."
+        description="새로운 앱과 패키지로 Turborepo를 확장합니다."
     />
 
     <Card
         title="login"
         href="/docs/reference/login"
-        description="Log in to your Remote Cache provider."
+        description="Remote Cache 제공자에 로그인합니다."
     />
 
     <Card
         title="logout"
         href="/docs/reference/logout"
-        description="Log out of your Remote Cache provider."
+        description="Remote Cache 제공자에서 로그아웃합니다."
     />
 
     <Card
         title="link"
         href="/docs/reference/link"
-        description="Link your repository to Remote Cache."
+        description="저장소를 Remote Cache에 연결합니다."
     />
 
     <Card
         title="unlink"
         href="/docs/reference/unlink"
-        description="Disconnect your repository from Remote Cache."
+        description="Remote Cache에서 저장소 연결을 해제합니다."
     />
 
     <Card
         title="scan"
         href="/docs/reference/scan"
-        description="Enable the fastest defaults for your Turborepo."
+        description="Turborepo에 가장 빠른 기본값을 활성화합니다."
     />
 
     <Card
         title="bin"
         href="/docs/reference/bin"
-        description="Get the path to the `turbo` binary."
+        description="`turbo` 바이너리의 경로를 가져옵니다."
     />
 
     <Card
         title="telemetry"
         href="/docs/reference/telemetry"
-        description="Manage telemetry for the machine."
+        description="머신의 텔레메트리를 관리합니다."
     />
 
 </Cards>
 
-## Packages
+## 패키지
 
 <Cards>
     <Card
         title="create-turbo"
         href="/docs/reference/create-turbo"
-        description="Get started with Turborepo using an example."
+        description="예제를 사용하여 Turborepo를 시작합니다."
     />
 
     <Card
         title="eslint-config-turbo"
         href="/docs/reference/eslint-config-turbo"
-        description="Find environment variables not listed in `turbo.json`."
+        description="`turbo.json`에 나열되지 않은 환경 변수를 찾습니다."
     />
 
     <Card
         title="turbo-ignore"
         href="/docs/reference/turbo-ignore"
-        description="Skip work using `turbo-ignore`."
+        description="`turbo-ignore`를 사용하여 작업을 건너뜁니다."
     />
 
     <Card
         title="@turbo/gen"
         href="/docs/reference/turbo-gen"
-        description="Type definitions for Turborepo generators."
+        description="Turborepo 생성기의 타입 정의입니다."
     />
 
 </Cards>
 
-## Flag syntax
+## 플래그 구문
 
-Options that require a value can be passed with an equals sign, using quotes when spaces are needed.
+값이 필요한 옵션은 등호와 함께 전달할 수 있으며, 공백이 필요한 경우 따옴표를 사용합니다.
 
 ```bash title="Terminal"
 --opt=value
@@ -162,18 +162,18 @@ Options that require a value can be passed with an equals sign, using quotes whe
 --opt "value with a space"
 ```
 
-## Global flags
+## 전역 플래그
 
 ### `--color`
 
-Forces the use of color, even in non-interactive terminals. This is useful for enabling color output in CI environments like GitHub Actions that have support for rendering color.
+비대화형 터미널에서도 색상 사용을 강제합니다. 이는 색상 렌더링을 지원하는 GitHub Actions와 같은 CI 환경에서 색상 출력을 활성화하는 데 유용합니다.
 
 ### `--no-color`
 
-Suppresses color in terminal output, even in interactive terminals.
+대화형 터미널에서도 터미널 출력에서 색상을 억제합니다.
 
 ### `--no-update-notifier`
 
-Disables the update notification. This notification will be automatically disabled when running in CI environments, but can also be disabled manually via this flag.
+업데이트 알림을 비활성화합니다. 이 알림은 CI 환경에서 실행할 때 자동으로 비활성화되지만 이 플래그를 통해 수동으로 비활성화할 수도 있습니다.
 
-Alternatively, you can disable the notification using [the `TURBO_NO_UPDATE_NOTIFIER` environment variable](/docs/reference/system-environment-variables).
+또는 [`TURBO_NO_UPDATE_NOTIFIER` 환경 변수](/docs/reference/system-environment-variables)를 사용하여 알림을 비활성화할 수 있습니다.

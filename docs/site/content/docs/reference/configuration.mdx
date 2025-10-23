@@ -1,6 +1,6 @@
 ---
-title: Configuring turbo.json
-description: Learn how to configure Turborepo through `turbo.json`.
+title: turbo.json 설정하기
+description: `turbo.json`을 통해 Turborepo를 설정하는 방법을 알아봅니다.
 ---
 
 import { Callout } from '#components/callout';
@@ -8,12 +8,12 @@ import { InVersion } from '#components/in-version';
 import { ExperimentalBadge } from '#components/experimental-badge';
 import Link from 'next/link';
 
-Configure the behavior of `turbo` by using a `turbo.json` file in your Workspace's root directory. You can also:
+Workspace의 루트 디렉토리에 `turbo.json` 파일을 사용하여 `turbo`의 동작을 설정합니다. 다음과 같은 방법도 사용할 수 있습니다:
 
-- Use [Package Configurations](/docs/reference/package-configurations) for more granular control.
-- Use `turbo.jsonc` to add comments to your configuration with IDE support.
+- 더 세밀한 제어를 위해 [패키지 설정](/docs/reference/package-configurations)을 사용합니다.
+- IDE 지원과 함께 설정에 주석을 추가하려면 `turbo.jsonc`를 사용합니다.
 
-## Global options
+## 전역 옵션
 
 ### `extends`
 
@@ -23,10 +23,10 @@ Configure the behavior of `turbo` by using a `turbo.json` file in your Workspace
 }
 ```
 
-Extend from the root `turbo.json` to create specific configuration for a package using [Package Configurations](/docs/reference/package-configurations).
+[패키지 설정](/docs/reference/package-configurations)을 사용하여 패키지에 대한 특정 설정을 만들기 위해 루트 `turbo.json`을 확장합니다.
 
-- The only valid value for `extends` is `["//"]` to inherit configuration from the root `turbo.json`.
-- If `extends` is used in the root `turbo.json`, it will be ignored.
+- `extends`의 유일한 유효한 값은 루트 `turbo.json`에서 설정을 상속하기 위한 `["//"]`입니다.
+- 루트 `turbo.json`에서 `extends`를 사용하면 무시됩니다.
 
 ### `globalDependencies`
 
@@ -36,13 +36,13 @@ Extend from the root `turbo.json` to create specific configuration for a package
 }
 ```
 
-A list of globs that you want to include in all task hashes. **If any file matching these globs changes, all tasks will miss cache.** Globs are relative to the location of `turbo.json`.
+모든 작업 해시에 포함할 glob 목록입니다. **이러한 glob과 일치하는 파일이 변경되면 모든 작업이 캐시를 놓치게 됩니다.** glob은 `turbo.json`의 위치를 기준으로 합니다.
 
-By default, only the root package.json and lockfile are included in [the global hash](/docs/crafting-your-repository/caching) and can't be ignored. Any added `globalDependencies` will also be included in the global hash.
+기본적으로 루트 package.json과 lockfile만 [전역 해시](/docs/crafting-your-repository/caching)에 포함되며 무시할 수 없습니다. 추가된 `globalDependencies`도 전역 해시에 포함됩니다.
 
 <Callout type="error">
-  Globs must be in the repository's source control root. Globs outside of the
-  repository aren't supported.
+  glob은 저장소의 소스 제어 루트에 있어야 합니다. 저장소 외부의 glob은 지원되지
+  않습니다.
 </Callout>
 
 ### `globalEnv`
@@ -53,9 +53,9 @@ By default, only the root package.json and lockfile are included in [the global 
 }
 ```
 
-A list of environment variables that you want to impact the hash of all tasks. Any change to these environment variables will cause all tasks to miss cache.
+모든 작업의 해시에 영향을 주려는 환경 변수 목록입니다. 이러한 환경 변수의 모든 변경 사항은 모든 작업이 캐시를 놓치게 합니다.
 
-For more on wildcard and negation syntax, [see the `env` section](#env).
+와일드카드 및 부정 구문에 대한 자세한 내용은 [`env` 섹션](#env)을 참조하세요.
 
 ### `globalPassThroughEnv`
 
@@ -65,25 +65,25 @@ For more on wildcard and negation syntax, [see the `env` section](#env).
 }
 ```
 
-A list of environment variables that you want to make available to tasks. Using this key opts all tasks into [Strict Environment Variable Mode](/docs/crafting-your-repository/using-environment-variables#strict-mode).
+작업에 사용할 수 있도록 하려는 환경 변수 목록입니다. 이 키를 사용하면 모든 작업이 [엄격한 환경 변수 모드](/docs/crafting-your-repository/using-environment-variables#strict-mode)에 선택됩니다.
 
-Additionally, Turborepo has a built-in set of global passthrough variables for common cases, like operating system environment variables. This includes variables like `HOME`, `PATH`, `APPDATA`, `SHELL`, `PWD`, and more. The full list can be found [in the source code](https://github.com/vercel/turborepo/blob/main/crates/turborepo-lib/src/task_hash.rs).
+또한 Turborepo에는 운영 체제 환경 변수와 같은 일반적인 경우를 위한 내장 전역 passthrough 변수 세트가 있습니다. 여기에는 `HOME`, `PATH`, `APPDATA`, `SHELL`, `PWD` 등과 같은 변수가 포함됩니다. 전체 목록은 [소스 코드](https://github.com/vercel/turborepo/blob/main/crates/turborepo-lib/src/task_hash.rs)에서 찾을 수 있습니다.
 
 <Callout
   type="warn"
-  title="Passthrough values do not contribute to hashes for caching"
+  title="Passthrough 값은 캐싱을 위한 해시에 기여하지 않습니다"
 >
-  If you want changes in these variables to cause cache misses, you will need to
-  include them in [`env`](#env) or [`globalEnv`](#globalenv).
+  이러한 변수의 변경 사항이 캐시 미스를 발생시키려면 [`env`](#env) 또는
+  [`globalEnv`](#globalenv)에 포함해야 합니다.
 </Callout>
 
 ### `ui`
 
-Default: `"stream"`
+기본값: `"stream"`
 
-Select a terminal UI for the repository.
+저장소의 터미널 UI를 선택합니다.
 
-`"tui"` allows for viewing each log at once and interacting with the task. `"stream"` outputs logs as they come in and is not interactive.
+`"tui"`는 각 로그를 한 번에 보고 작업과 상호 작용할 수 있습니다. `"stream"`은 로그가 들어오는 대로 출력하며 대화형이 아닙니다.
 
 ```json title="./turbo.json"
 {
@@ -93,9 +93,9 @@ Select a terminal UI for the repository.
 
 ### `noUpdateNotifier`
 
-Default: `false`
+기본값: `false`
 
-When set to `true`, disables the update notification that appears when a new version of `turbo` is available.
+`true`로 설정하면 새 버전의 `turbo`를 사용할 수 있을 때 나타나는 업데이트 알림을 비활성화합니다.
 
 ```json title="./turbo.json"
 {
@@ -105,13 +105,13 @@ When set to `true`, disables the update notification that appears when a new ver
 
 ### `concurrency`
 
-Default: `"10"`
+기본값: `"10"`
 
-Set/limit the maximum concurrency for task execution. Must be an integer greater than or equal to `1` or a percentage value like `50%`.
+작업 실행의 최대 동시성을 설정/제한합니다. `1` 이상의 정수 또는 `50%`와 같은 백분율 값이어야 합니다.
 
-- Use `1` to force serial execution (one task at a time).
-- Use `100%` to use all available logical processors.
-- This option is ignored if the [`--parallel`](/docs/reference/run#--parallel) flag is also passed.
+- 직렬 실행(한 번에 하나의 작업)을 강제하려면 `1`을 사용합니다.
+- 사용 가능한 모든 논리 프로세서를 사용하려면 `100%`를 사용합니다.
+- [`--parallel`](/docs/reference/run#--parallel) 플래그도 전달되면 이 옵션은 무시됩니다.
 
 ```jsonc title="./turbo.json"
 {
@@ -121,11 +121,11 @@ Set/limit the maximum concurrency for task execution. Must be an integer greater
 
 ### `dangerouslyDisablePackageManagerCheck`
 
-Default: `false`
+기본값: `false`
 
-Turborepo uses your repository's lockfile to determine caching behavior, [Package Graphs](https://turborepo.com/docs/core-concepts/internal-packages), and more. Because of this, we use [the `packageManager` field](https://nodejs.org/api/packages.html#packagemanager) to help you stabilize your Turborepo.
+Turborepo는 저장소의 lockfile을 사용하여 캐싱 동작, [패키지 그래프](https://turborepo.com/docs/core-concepts/internal-packages) 등을 결정합니다. 이 때문에 Turborepo를 안정화하는 데 도움이 되도록 [`packageManager` 필드](https://nodejs.org/api/packages.html#packagemanager)를 사용합니다.
 
-To help with incremental migration or in situations where you can't use the `packageManager` field, you may use `--dangerously-disable-package-manager-check` to opt out of this check and assume the risks of unstable lockfiles producing unpredictable behavior. When disabled, Turborepo will attempt a best-effort discovery of the intended package manager meant for the repository.
+점진적 마이그레이션을 돕거나 `packageManager` 필드를 사용할 수 없는 상황에서 `--dangerously-disable-package-manager-check`를 사용하여 이 검사를 선택 해제하고 불안정한 lockfile이 예측할 수 없는 동작을 생성할 위험을 감수할 수 있습니다. 비활성화되면 Turborepo는 저장소에 의도된 패키지 매니저를 최선의 노력으로 검색을 시도합니다.
 
 ```jsonc title="./turbo.json"
 {
@@ -134,18 +134,17 @@ To help with incremental migration or in situations where you can't use the `pac
 ```
 
 <Callout type="info">
-  You may also opt out of this check via
-  [`flag`](/docs/reference/run#--dangerously-disable-package-manager-check) or
-  the
+  [`플래그`](/docs/reference/run#--dangerously-disable-package-manager-check)
+  또는
   [`TURBO_DANGEROUSLY_DISABLE_PACKAGE_MANAGER_CHECK`](https://turborepo.com/docs/reference/system-environment-variables)
-  environment variable.
+  환경 변수를 통해 이 검사를 선택 해제할 수도 있습니다.
 </Callout>
 
 ### `cacheDir`
 
-Default: `".turbo/cache"`
+기본값: `".turbo/cache"`
 
-Specify the filesystem cache directory.
+파일 시스템 캐시 디렉토리를 지정합니다.
 
 ```jsonc title="./turbo.json"
 {
@@ -155,9 +154,9 @@ Specify the filesystem cache directory.
 
 ### `daemon`
 
-Default: `true`
+기본값: `true`
 
-Turborepo runs a background process to pre-calculate some expensive operations. This standalone process (daemon) is a performance optimization, and not required for proper functioning of `turbo`.
+Turborepo는 일부 비용이 많이 드는 작업을 사전 계산하기 위해 백그라운드 프로세스를 실행합니다. 이 독립 실행형 프로세스(daemon)는 성능 최적화이며 `turbo`의 적절한 기능에는 필요하지 않습니다.
 
 ```jsonc title="./turbo.json"
 {
@@ -166,18 +165,17 @@ Turborepo runs a background process to pre-calculate some expensive operations. 
 ```
 
 <Callout type="good-to-know">
-  When running in a CI environment the daemon is always disabled regardless of
-  this setting.
+  CI 환경에서 실행할 때 daemon은 이 설정에 관계없이 항상 비활성화됩니다.
 </Callout>
 
 ### `envMode`
 
-Default: `"strict"`
+기본값: `"strict"`
 
-Turborepo's Environment Modes allow you to control which environment variables are available to a task at runtime:
+Turborepo의 환경 모드를 사용하면 런타임에 작업에 사용할 수 있는 환경 변수를 제어할 수 있습니다:
 
-- `"strict"`: Filter environment variables to only those that are specified in the `env` and `globalEnv` keys in `turbo.json`.
-- `"loose"`: Allow all environment variables for the process to be available.
+- `"strict"`: `turbo.json`의 `env` 및 `globalEnv` 키에 지정된 환경 변수만 필터링합니다.
+- `"loose"`: 프로세스의 모든 환경 변수를 사용할 수 있도록 허용합니다.
 
 ```jsonc title="./turbo.json"
 {
@@ -185,9 +183,9 @@ Turborepo's Environment Modes allow you to control which environment variables a
 }
 ```
 
-Read more about [Environment Modes](/docs/crafting-your-repository/using-environment-variables#environment-modes).
+[환경 모드](/docs/crafting-your-repository/using-environment-variables#environment-modes)에 대해 자세히 알아보세요.
 
-### `tags` <ExperimentalBadge>Experimental</ExperimentalBadge>
+### `tags` <ExperimentalBadge>실험적 기능</ExperimentalBadge>
 
 ```jsonc title="./apps/web/turbo.json"
 {
@@ -195,19 +193,19 @@ Read more about [Environment Modes](/docs/crafting-your-repository/using-environ
 }
 ```
 
-Adds a tag to a package for use with [Boundaries](/docs/reference/boundaries).
+[Boundaries](/docs/reference/boundaries)와 함께 사용할 패키지에 태그를 추가합니다.
 
-This key only works in [Package Configurations](/docs/reference/package-configurations). Using this key in a root `turbo.json` will result in an error.
+이 키는 [패키지 설정](/docs/reference/package-configurations)에서만 작동합니다. 루트 `turbo.json`에서 이 키를 사용하면 오류가 발생합니다.
 
-## Defining tasks
+## 작업 정의하기
 
 ### `tasks`
 
-Each key in the `tasks` object is the name of a task that can be executed by [`turbo run`](/docs/reference/run). Turborepo will search the packages described in your [Workspace's configuration](/docs/crafting-your-repository/structuring-a-repository#specifying-packages-in-a-monorepo) for scripts in `package.json` with the name of the task.
+`tasks` 객체의 각 키는 [`turbo run`](/docs/reference/run)으로 실행할 수 있는 작업의 이름입니다. Turborepo는 [Workspace 설정](/docs/crafting-your-repository/structuring-a-repository#specifying-packages-in-a-monorepo)에 설명된 패키지에서 작업 이름을 가진 `package.json`의 스크립트를 검색합니다.
 
-Using the rest of the configuration described in the task, Turborepo will run the scripts in the described order, caching logs and file outputs in [the `outputs` key](#outputs) when provided.
+작업에 설명된 나머지 설정을 사용하여 Turborepo는 설명된 순서대로 스크립트를 실행하고, 제공된 경우 [the `outputs` 키](#outputs)에 로그와 파일 출력을 캐싱합니다.
 
-In the example below, we've defined three tasks under the `tasks` key: `build`, `test`, and `dev`.
+아래 예제에서는 `tasks` 키 아래에 `build`, `test`, `dev`의 세 가지 작업을 정의했습니다.
 
 ```jsonc title="./turbo.json"
 {
@@ -229,19 +227,19 @@ In the example below, we've defined three tasks under the `tasks` key: `build`, 
 }
 ```
 
-## Task options
+## 작업 옵션
 
-Using the options available in the tasks you define in `tasks`, you can describe how `turbo` will run your tasks.
+`tasks`에 정의한 작업에서 사용 가능한 옵션을 사용하여 `turbo`가 작업을 실행하는 방법을 설명할 수 있습니다.
 
 ### `dependsOn`
 
-A list of tasks that are required to complete before the task begins running.
+작업이 실행을 시작하기 전에 완료해야 하는 작업 목록입니다.
 
-There are three types of `dependsOn` relationships: [dependency relationships](#dependency-relationships), [same-package relationships](#same-package-relationships), and [arbitrary task relationships](#arbitrary-task-relationships).
+`dependsOn` 관계에는 세 가지 유형이 있습니다: [의존성 관계](#dependency-relationships), [동일 패키지 관계](#same-package-relationships), [임의 작업 관계](#arbitrary-task-relationships).
 
-#### Dependency relationships
+#### 의존성 관계
 
-Prefixing a string in `dependsOn` with a `^` tells `turbo` that the task must wait for tasks in the package's dependencies to complete first. For example, in the `turbo.json` below:
+`dependsOn`의 문자열 앞에 `^`를 붙이면 `turbo`에게 패키지의 의존성에 있는 작업이 먼저 완료될 때까지 작업이 기다려야 한다고 알려줍니다. 예를 들어, 아래 `turbo.json`에서:
 
 ```jsonc title="./turbo.json"
 {
@@ -253,11 +251,11 @@ Prefixing a string in `dependsOn` with a `^` tells `turbo` that the task must wa
 }
 ```
 
-`turbo` starts at the "bottom" of the package graph and recursively visits each package until it finds a package with no internal dependencies. It will then run the `build` task at the end of the dependency chain first, working its way back to the "top" until all `build` tasks are completed in order.
+`turbo`는 패키지 그래프의 "하단"에서 시작하여 내부 종속성이 없는 패키지를 찾을 때까지 각 패키지를 재귀적으로 방문합니다. 그런 다음 종속성 체인의 끝에 있는 `build` 작업을 먼저 실행하고 모든 `build` 작업이 순서대로 완료될 때까지 "상단"으로 되돌아갑니다.
 
-#### Same package relationships
+#### 동일 패키지 관계
 
-Task names without the `^` prefix describe a task that depends on a different task within the same package. For example, in the `turbo.json` below:
+`^` 접두사가 없는 작업 이름은 동일한 패키지 내의 다른 작업에 의존하는 작업을 설명합니다. 예를 들어, 아래 `turbo.json`에서:
 
 ```jsonc title="./turbo.json"
 {
@@ -269,11 +267,11 @@ Task names without the `^` prefix describe a task that depends on a different ta
 }
 ```
 
-The `test` task will only run after the `lint` and `build` tasks have completed **in the same package**.
+`test` 작업은 **동일한 패키지에서** `lint` 및 `build` 작업이 완료된 후에만 실행됩니다.
 
-#### Arbitrary task relationships
+#### 임의 작업 관계
 
-Specify a task dependency between specific package tasks.
+특정 패키지 작업 간의 작업 종속성을 지정합니다.
 
 ```json title="./turbo.json"
 {
@@ -285,37 +283,37 @@ Specify a task dependency between specific package tasks.
 }
 ```
 
-In this `turbo.json`, the `web#lint` task will wait for the `utils#build` task to complete.
+이 `turbo.json`에서 `web#lint` 작업은 `utils#build` 작업이 완료될 때까지 기다립니다.
 
 ### `env`
 
-The list of environment variables a task depends on.
+작업이 의존하는 환경 변수 목록입니다.
 
 ```jsonc title="./turbo.json"
 {
   "tasks": {
     "build": {
-      "env": ["DATABASE_URL"] // Impacts hash of all build tasks
+      "env": ["DATABASE_URL"] // 모든 build 작업의 해시에 영향을 미침
     },
     "web#build": {
-      "env": ["API_SERVICE_KEY"] // Impacts hash of web's build task
+      "env": ["API_SERVICE_KEY"] // web의 build 작업 해시에 영향을 미침
     }
   }
 }
 ```
 
 <Callout type="good-to-know">
-  Turborepo automatically includes environment variables prefixed by common
-  frameworks through [Framework
-  Inference](/docs/crafting-your-repository/using-environment-variables#framework-inference).
-  For example, if your package is a Next.js project, you do not need to specify
-  any environment variables that [start with
-  `NEXT_PUBLIC_`](https://nextjs.org/docs/basic-features/environment-variables#exposing-environment-variables-to-the-browser).
+  Turborepo는 [프레임워크
+  추론](/docs/crafting-your-repository/using-environment-variables#framework-inference)을
+  통해 일반적인 프레임워크의 접두사가 있는 환경 변수를 자동으로 포함합니다. 예를
+  들어, 패키지가 Next.js 프로젝트인 경우 [`NEXT_PUBLIC_`으로
+  시작](https://nextjs.org/docs/basic-features/environment-variables#exposing-environment-variables-to-the-browser)하는
+  환경 변수를 지정할 필요가 없습니다.
 </Callout>
 
-#### Wildcards
+#### 와일드카드
 
-Turborepo supports wildcards for environment variables so you can easily account for all environment variables with a given prefix. For example, the `turbo.json` below include all environment variables that start with `MY_API_` into the hash:
+Turborepo는 환경 변수에 대한 와일드카드를 지원하므로 주어진 접두사를 가진 모든 환경 변수를 쉽게 고려할 수 있습니다. 예를 들어, 아래 `turbo.json`은 `MY_API_`로 시작하는 모든 환경 변수를 해시에 포함합니다:
 
 ```json title="./turbo.json"
 {
@@ -327,9 +325,9 @@ Turborepo supports wildcards for environment variables so you can easily account
 }
 ```
 
-#### Negation
+#### 부정
 
-A leading `!` means that the entire pattern will be negated. For instance, the `turbo.json` below will ignore the `MY_API_URL` variable.
+선행 `!`는 전체 패턴이 부정됨을 의미합니다. 예를 들어, 아래 `turbo.json`은 `MY_API_URL` 변수를 무시합니다.
 
 ```json title="./turbo.json"
 {
@@ -341,29 +339,29 @@ A leading `!` means that the entire pattern will be negated. For instance, the `
 }
 ```
 
-#### Examples
+#### 예시
 
-| Pattern    | Description                                                                    |
-| ---------- | ------------------------------------------------------------------------------ |
-| `"*"`      | Matches every environment variable.                                            |
-| `"!*"`     | Excludes every environment variable.                                           |
-| `"FOO*"`   | Matches `FOO`, `FOOD`, `FOO_FIGHTERS`, etc.                                    |
-| `"FOO\*"`  | Resolves to `"FOO*"` and matches `FOO`, `FOOD`, and `FOO_FIGHTERS`.            |
-| `"FOO\\*"` | Matches a single environment variable named `FOO*`.                            |
-| `"!FOO*"`  | Excludes all environment variables that start with `FOO`.                      |
-| `"\!FOO"`  | Resolves to `"!FOO"`, and excludes a single environment variable named `!FOO`. |
-| `"\\!FOO"` | Matches a single environment variable named `!FOO`.                            |
-| `"FOO!"`   | Matches a single environment variable named `FOO!`.                            |
+| 패턴       | 설명                                                               |
+| ---------- | ------------------------------------------------------------------ |
+| `"*"`      | 모든 환경 변수와 일치합니다.                                       |
+| `"!*"`     | 모든 환경 변수를 제외합니다.                                       |
+| `"FOO*"`   | `FOO`, `FOOD`, `FOO_FIGHTERS` 등과 일치합니다.                     |
+| `"FOO\*"`  | `"FOO*"`로 해석되며 `FOO`, `FOOD`, `FOO_FIGHTERS`와 일치합니다.    |
+| `"FOO\\*"` | `FOO*`라는 이름의 단일 환경 변수와 일치합니다.                     |
+| `"!FOO*"`  | `FOO`로 시작하는 모든 환경 변수를 제외합니다.                      |
+| `"\!FOO"`  | `"!FOO"`로 해석되며 `!FOO`라는 이름의 단일 환경 변수를 제외합니다. |
+| `"\\!FOO"` | `!FOO`라는 이름의 단일 환경 변수와 일치합니다.                     |
+| `"FOO!"`   | `FOO!`라는 이름의 단일 환경 변수와 일치합니다.                     |
 
 ### `passThroughEnv`
 
-An allowlist of environment variables that should be made available to this task's runtime, even when in [Strict Environment Mode](/docs/crafting-your-repository/using-environment-variables#strict-mode).
+[엄격한 환경 모드](/docs/crafting-your-repository/using-environment-variables#strict-mode)에서도 이 작업의 런타임에서 사용할 수 있도록 해야 하는 환경 변수의 허용 목록입니다.
 
 ```jsonc title="./turbo.json"
 {
   "tasks": {
     "build": {
-      // Values will be available within `build` scripts
+      // 값은 `build` 스크립트 내에서 사용 가능합니다
       "passThroughEnv": ["AWS_SECRET_KEY", "GITHUB_TOKEN"]
     }
   }
@@ -371,44 +369,44 @@ An allowlist of environment variables that should be made available to this task
 ```
 
 <Callout type="warn">
-  Values provided in `passThroughEnv` do not contribute to the cache key for the
-  task. If you'd like changes to these variables to cause cache misses, you will
-  need to include them in [`env`](#env) or [`globalEnv`](#globalenv).
+  `passThroughEnv`에 제공된 값은 작업의 캐시 키에 기여하지 않습니다. 이러한
+  변수의 변경 사항이 캐시 미스를 발생시키려면 [`env`](#env) 또는
+  [`globalEnv`](#globalenv)에 포함해야 합니다.
 </Callout>
 
 ### `outputs`
 
-A list of file glob patterns relative to the package's `package.json` to cache when the task is successfully completed.
+작업이 성공적으로 완료될 때 캐시할 패키지의 `package.json`을 기준으로 한 파일 glob 패턴 목록입니다.
 
-See [`$TURBO_ROOT$`](#turbo_root) if output paths need to be relative to the repository root.
+출력 경로가 저장소 루트를 기준으로 해야 하는 경우 [`$TURBO_ROOT$`](#turbo_root)를 참조하세요.
 
 ```jsonc title="./turbo.json"
 {
   "tasks": {
     "build": {
-      // Cache all files emitted to the packages's `dist` directory
+      // 패키지의 `dist` 디렉토리로 출력된 모든 파일을 캐시
       "outputs": ["dist/**"]
     }
   }
 }
 ```
 
-Omitting this key or passing an empty array tells `turbo` to cache nothing (except logs, which are always cached when caching is enabled).
+이 키를 생략하거나 빈 배열을 전달하면 `turbo`는 아무것도 캐시하지 않습니다(캐싱이 활성화된 경우 항상 캐시되는 로그 제외).
 
 ### `cache`
 
-Default: `true`
+기본값: `true`
 
-Defines if task outputs should be cached. Setting `cache` to false is useful for long-running development tasks and ensuring that a task always runs when it is in the task's execution graph.
+작업 출력을 캐시할지 여부를 정의합니다. `cache`를 false로 설정하면 장기 실행 개발 작업에 유용하며 작업이 작업 실행 그래프에 있을 때 항상 실행되도록 합니다.
 
 ```jsonc title="./turbo.json"
 {
   "tasks": {
     "build": {
-      "outputs": [".svelte-kit/**", "dist/**"] // File outputs will be cached
+      "outputs": [".svelte-kit/**", "dist/**"] // 파일 출력이 캐시됩니다
     },
     "dev": {
-      "cache": false, // No outputs will be cached
+      "cache": false, // 출력이 캐시되지 않습니다
       "persistent": true
     }
   }
@@ -417,15 +415,15 @@ Defines if task outputs should be cached. Setting `cache` to false is useful for
 
 ### `inputs`
 
-Default: `[]`, all files in the package that are checked into source control
+기본값: `[]`, 소스 제어에 체크인된 패키지의 모든 파일
 
-A list of file glob patterns relative to the package's `package.json` to consider when determining if a package has changed. The following files are **always** considered inputs, even if you try to explicitly ignore them:
+패키지가 변경되었는지 확인할 때 고려할 패키지의 `package.json`을 기준으로 한 파일 glob 패턴 목록입니다. 명시적으로 무시하려고 해도 다음 파일은 **항상** 입력으로 간주됩니다:
 
 - `package.json`
 - `turbo.json`
-- Package manager lockfiles
+- 패키지 매니저 lockfile
 
-Visit the [file glob specification](/docs/reference/globs) for more information on globbing syntax.
+globbing 구문에 대한 자세한 내용은 [파일 glob 사양](/docs/reference/globs)을 참조하세요.
 
 ```jsonc title="./turbo.json"
 {
@@ -438,21 +436,20 @@ Visit the [file glob specification](/docs/reference/globs) for more information 
 ```
 
 <Callout type="warn">
-  Using the `inputs` key opts you out of `turbo`'s default behavior of
-  considering `.gitignore`. You must reconstruct the globs from `.gitignore` as
-  desired or use `$TURBO_DEFAULT$` to build off of the default behavior.
+  `inputs` 키를 사용하면 `.gitignore`를 고려하는 `turbo`의 기본 동작을 선택
+  해제합니다. 원하는 대로 `.gitignore`에서 glob을 재구성하거나
+  `$TURBO_DEFAULT$`를 사용하여 기본 동작을 기반으로 빌드해야 합니다.
 </Callout>
 
 #### `$TURBO_DEFAULT$`
 
-Because specifying an `inputs` key immediately opts out of the default behavior, you may use
-the special string `$TURBO_DEFAULT$` within the `inputs` array to restore `turbo`'s default behavior. This allows you to tweak the default behavior for more granularity.
+`inputs` 키를 지정하면 즉시 기본 동작을 선택 해제하므로 `inputs` 배열 내에서 특수 문자열 `$TURBO_DEFAULT$`를 사용하여 `turbo`의 기본 동작을 복원할 수 있습니다. 이를 통해 더 세밀하게 기본 동작을 조정할 수 있습니다.
 
 ```jsonc title="./turbo.json"
 {
   "tasks": {
     "check-types": {
-      // Consider all default inputs except the package's README
+      // 패키지의 README를 제외한 모든 기본 입력을 고려
       "inputs": ["$TURBO_DEFAULT$", "!README.md"]
     }
   }
@@ -461,15 +458,15 @@ the special string `$TURBO_DEFAULT$` within the `inputs` array to restore `turbo
 
 #### `$TURBO_ROOT$`
 
-Tasks might reference a file that lies outside of their directory.
+작업은 디렉토리 외부에 있는 파일을 참조할 수 있습니다.
 
-Starting a file glob with `$TURBO_ROOT$` will change the glob to be relative to the root of the repository instead of the package directory.
+파일 glob을 `$TURBO_ROOT$`로 시작하면 glob이 패키지 디렉토리 대신 저장소의 루트를 기준으로 변경됩니다.
 
 ```jsonc title="./turbo.json"
 {
   "tasks": {
     "check-types": {
-      // Consider all Typescript files in `src/` and the root tsconfig.json as inputs
+      // `src/`의 모든 Typescript 파일과 루트 tsconfig.json을 입력으로 고려
       "inputs": ["$TURBO_ROOT$/tsconfig.json", "src/**/*.ts"]
     }
   }
@@ -478,17 +475,17 @@ Starting a file glob with `$TURBO_ROOT$` will change the glob to be relative to 
 
 ### `outputLogs`
 
-Default: `full`
+기본값: `full`
 
-Set output logging verbosity. Can be overridden by the [`--output-logs`](/docs/reference/run#--output-logs-option) CLI option.
+출력 로깅 자세한 정도를 설정합니다. [`--output-logs`](/docs/reference/run#--output-logs-option) CLI 옵션으로 재정의할 수 있습니다.
 
-| Option        | Description                       |
-| ------------- | --------------------------------- |
-| `full`        | Displays all logs                 |
-| `hash-only`   | Only show the hashes of the tasks |
-| `new-only`    | Only show logs from cache misses  |
-| `errors-only` | Only show logs from task failures |
-| `none`        | Hides all task logs               |
+| 옵션          | 설명                          |
+| ------------- | ----------------------------- |
+| `full`        | 모든 로그를 표시합니다        |
+| `hash-only`   | 작업의 해시만 표시합니다      |
+| `new-only`    | 캐시 미스의 로그만 표시합니다 |
+| `errors-only` | 작업 실패의 로그만 표시합니다 |
+| `none`        | 모든 작업 로그를 숨깁니다     |
 
 ```jsonc title="./turbo.json"
 {
@@ -502,13 +499,13 @@ Set output logging verbosity. Can be overridden by the [`--output-logs`](/docs/r
 
 ### `persistent`
 
-Default: `false`
+기본값: `false`
 
-Label a task as `persistent` to prevent other tasks from depending on long-running processes. Persistent tasks are made [interactive](#interactive) by default.
+작업을 `persistent`로 레이블하여 다른 작업이 장기 실행 프로세스에 의존하지 못하도록 방지합니다. 지속적인 작업은 기본적으로 [interactive](#interactive)로 설정됩니다.
 
-Because a long-running process won't exit, tasks that would depend on it would never run. Once you've labeled the task as persistent, `turbo` will throw an error if other tasks depend on it.
+장기 실행 프로세스는 종료되지 않기 때문에 이에 의존하는 작업은 절대 실행되지 않습니다. 작업을 persistent로 레이블하면 다른 작업이 이에 의존하는 경우 `turbo`에서 오류를 발생시킵니다.
 
-This option is most useful for development servers or other "watch" tasks.
+이 옵션은 개발 서버나 다른 "watch" 작업에 가장 유용합니다.
 
 ```jsonc title="./turbo.json"
 {
@@ -520,15 +517,15 @@ This option is most useful for development servers or other "watch" tasks.
 }
 ```
 
-Tasks marked with `persistent` are also `interactive` by default.
+`persistent`로 표시된 작업은 기본적으로 `interactive`이기도 합니다.
 
 ### `interactive`
 
-Default: `false` (Defaults to `true` for tasks marked as `persistent`)
+기본값: `false` (`persistent`로 표시된 작업의 경우 기본값이 `true`)
 
-Label a task as `interactive` to make it accept inputs from `stdin` in the terminal UI. Must be used with `persistent`.
+작업을 `interactive`로 레이블하여 터미널 UI에서 `stdin`의 입력을 받을 수 있도록 합니다. `persistent`와 함께 사용해야 합니다.
 
-This option is most useful for scripts that can be manipulated while they are running, like Jest or Vitest.
+이 옵션은 Jest나 Vitest와 같이 실행 중에 조작할 수 있는 스크립트에 가장 유용합니다.
 
 ```jsonc title="./turbo.json"
 {
@@ -543,17 +540,15 @@ This option is most useful for scripts that can be manipulated while they are ru
 
 ### `interruptible`
 
-Default: `false`
+기본값: `false`
 
-Label a `persistent` task as `interruptible` to allow it to be restarted by `turbo watch`.
+`persistent` 작업을 `interruptible`로 레이블하여 `turbo watch`에서 다시 시작할 수 있도록 허용합니다.
 
-`turbo watch` watches for changes to your packages and automatically restarts tasks
-that are affected. However, if a task is persistent, it will not be restarted by default.
-To enable restarting persistent tasks, set `interruptible` to `true`.
+`turbo watch`는 패키지의 변경 사항을 감시하고 영향을 받는 작업을 자동으로 다시 시작합니다. 그러나 작업이 persistent인 경우 기본적으로 다시 시작되지 않습니다. persistent 작업을 다시 시작하려면 `interruptible`을 `true`로 설정하세요.
 
 ### `with`
 
-A list of tasks that will be ran alongside this task. This is most useful for long-running tasks that you want to ensure always run at the same time.
+이 작업과 함께 실행될 작업 목록입니다. 이는 항상 동시에 실행되도록 하려는 장기 실행 작업에 가장 유용합니다.
 
 ```json title="./apps/web/turbo.json"
 {

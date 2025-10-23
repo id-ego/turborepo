@@ -1,36 +1,36 @@
 ---
-title: You might not need TypeScript project references
-description: As it turns out, you might not even references or even an interim TypeScript build step with a pattern I am about to show you, which I dub "internal packages."
+title: TypeScript 프로젝트 참조가 필요하지 않을 수도 있습니다
+description: 제가 "내부 패키지"라고 부르는 패턴을 사용하면 참조나 중간 TypeScript 빌드 단계조차 필요하지 않을 수 있습니다.
 date: '2021/04/23'
 tag: 'web development'
 ogImage: '/images/blog/you-might-not-need-typescript-project-references/x-card.png'
 ---
 
-<h1>You might not need TypeScript project references</h1>
+<h1>TypeScript 프로젝트 참조가 필요하지 않을 수도 있습니다</h1>
 
 import { Authors } from '#components/authors';
 import { Callout } from '#components/callout';
 
 <Authors authors={['jaredpalmer']} />
 
-If you've worked in a larger TypeScript codebase or monorepo, you are likely familiar with [project references](https://www.typescriptlang.org/docs/handbook/project-references.html). They are indeed fairly powerful.
+대규모 TypeScript 코드베이스나 모노레포에서 작업한 적이 있다면 [프로젝트 참조](https://www.typescriptlang.org/docs/handbook/project-references.html)에 익숙할 것입니다. 실제로 매우 강력합니다.
 
-When you reference a project in your `tsconfig.json`, new things happen:
+`tsconfig.json`에서 프로젝트를 참조하면 새로운 일이 발생합니다:
 
-- Importing modules from a referenced project will instead load its output declaration file (`.d.ts`)
-- If the referenced project produces an `outFile`, the output file `.d.ts` file’s declarations will be visible in this project
-- Running build mode (`tsc -b`) will automatically build the referenced project if it hasn't been built but is needed
-- By separating into multiple projects, you can greatly improve the speed of typechecking and compiling, reduce memory usage when using an editor, and improve enforcement of the logical groupings of your program.
+- 참조된 프로젝트에서 모듈을 가져오면 대신 출력 선언 파일(`.d.ts`)이 로드됩니다
+- 참조된 프로젝트가 `outFile`을 생성하는 경우 출력 파일 `.d.ts` 파일의 선언이 이 프로젝트에 표시됩니다
+- 빌드 모드(`tsc -b`)를 실행하면 빌드되지 않았지만 필요한 경우 참조된 프로젝트가 자동으로 빌드됩니다
+- 여러 프로젝트로 분리하면 타입 검사 및 컴파일 속도를 크게 향상시키고, 편집기를 사용할 때 메모리 사용량을 줄이고, 프로그램의 논리적 그룹화 시행을 개선할 수 있습니다.
 
-Sounds awesome! Right?! Well...maybe. Once you add references to your project you now need to continuously update them whenever you add or remove packages. That kinda blows.
+멋지게 들리죠! 그렇죠?! 음...어쩌면요. 프로젝트에 참조를 추가하면 이제 패키지를 추가하거나 제거할 때마다 계속 업데이트해야 합니다. 좀 귀찮네요.
 
-Well...what if you didn't need to?
+음...필요하지 않다면 어떨까요?
 
-## "Internal" TypeScript Packages
+## "내부" TypeScript 패키지
 
-As it turns out, you might not even need references or even an interim TypeScript build step with a pattern I am about to show you, which I dub "internal packages."
+제가 "내부 패키지"라고 부르는 패턴을 사용하면 참조나 중간 TypeScript 빌드 단계조차 필요하지 않을 수 있습니다.
 
-**An "internal package" is a TypeScript package without a `tsconfig.json` with _both_ its `types` and `main` fields in its `package.json` pointing to the package's untranspiled entry point (e.g. `./src/index.tsx`).**
+**"내부 패키지"는 `tsconfig.json`이 없는 TypeScript 패키지로, `package.json`의 `types` 및 `main` 필드 _모두_ 패키지의 트랜스파일되지 않은 진입점(예: `./src/index.tsx`)을 가리킵니다.**
 
 ```json title="package.json"
 {
@@ -46,18 +46,18 @@ As it turns out, you might not even need references or even an interim TypeScrip
 }
 ```
 
-As it turns out, the TypeScript Language Server (in VSCode) and Type Checker can treat both a raw `.ts` or `.tsx` file as its own valid type declaration. This last sentence is obvious once you read it twice. What isn't so obvious, though, is that you can point the `types` field directly to raw source code.
+TypeScript 언어 서버(VSCode에서)와 타입 체커는 원시 `.ts` 또는 `.tsx` 파일을 자체 유효한 타입 선언으로 처리할 수 있습니다. 이 마지막 문장은 두 번 읽으면 명백합니다. 그러나 명백하지 않은 것은 `types` 필드를 원시 소스 코드에 직접 가리킬 수 있다는 것입니다.
 
-Once you do this, this package can then be used _without_ project references or a TypeScript build step (either via `tsc` or `esbuild` etc) as long as you adhere to 2 rules:
+이렇게 하면 2가지 규칙을 준수하는 한 이 패키지를 프로젝트 참조나 TypeScript 빌드 단계(`tsc` 또는 `esbuild` 등을 통해) _없이_ 사용할 수 있습니다:
 
-- **The consuming application of an internal package must transpile and typecheck it.**
-- **You should never publish an internal package to npm.**
+- **내부 패키지를 사용하는 애플리케이션은 이를 트랜스파일하고 타입 체크해야 합니다.**
+- **내부 패키지를 npm에 게시해서는 안 됩니다.**
 
-As far as I can tell, this internal package pattern works with all yarn/npm/pnpm workspace implementations regardless of whether you are using Turborepo or some other tool. I have personally tested this pattern with several different meta frameworks (see below), but I'm sure that it works with others as well.
+제가 알기로는 이 내부 패키지 패턴은 Turborepo를 사용하든 다른 도구를 사용하든 관계없이 모든 yarn/npm/pnpm 워크스페이스 구현에서 작동합니다. 여러 다른 메타 프레임워크(아래 참조)로 이 패턴을 개인적으로 테스트했지만 다른 프레임워크에서도 작동할 것으로 확신합니다.
 
 ### Next.js
 
-Next.js 13 can automatically transpile and bundle dependencies from local packages (like monorepos) or from external dependencies (`node_modules`).
+Next.js 13은 로컬 패키지(모노레포와 같은) 또는 외부 종속성(`node_modules`)의 종속성을 자동으로 트랜스파일하고 번들링할 수 있습니다.
 
 ```js title="next.config.js"
 /** @type {import('next').NextConfig} */
@@ -69,32 +69,32 @@ module.exports = nextConfig;
 ```
 
 <Callout type="info">
-  As of Next.js 13.1, you no longer need the `next-transpile-modules` package.
-  For more information, visit the Next.js [Built-in module
-  transpilation](https://nextjs.org/blog/next-13-1#built-in-module-transpilation-stable)
-  blog post.
+  Next.js 13.1부터 `next-transpile-modules` 패키지가 더 이상 필요하지 않습니다.
+  자세한 내용은 Next.js [내장 모듈
+  트랜스파일레이션](https://nextjs.org/blog/next-13-1#built-in-module-transpilation-stable)
+  블로그 게시물을 참조하세요.
 </Callout>
 
 ### Vite
 
-Internal packages just work. No extra config is needed.
+내부 패키지가 그냥 작동합니다. 추가 구성이 필요하지 않습니다.
 
 ### React Native
 
-If you use [Expo](https://expo.dev/) and use the [`expo-yarn-workspaces`](https://github.com/expo/expo/tree/master/packages/expo-yarn-workspaces) or [`@turborepo/adapter-expo`](https://www.npmjs.com/package/@turborepo/adapter-expo) package, you can use internal packages as long as you are targeting iOS or Android. When you run Expo for these platforms, all of `node_modules` are automatically transpiled with [Metro](https://facebook.github.io/metro/). However, if you are targeting Expo for web, internal packages will not work because `node_modules` are oddly not transpiled for web.
+[Expo](https://expo.dev/)를 사용하고 [`expo-yarn-workspaces`](https://github.com/expo/expo/tree/master/packages/expo-yarn-workspaces) 또는 [`@turborepo/adapter-expo`](https://www.npmjs.com/package/@turborepo/adapter-expo) 패키지를 사용하는 경우 iOS 또는 Android를 타겟팅하는 한 내부 패키지를 사용할 수 있습니다. 이러한 플랫폼에서 Expo를 실행하면 모든 `node_modules`가 [Metro](https://facebook.github.io/metro/)로 자동으로 트랜스파일됩니다. 그러나 웹용 Expo를 타겟팅하는 경우 `node_modules`가 웹용으로 트랜스파일되지 않기 때문에 내부 패키지가 작동하지 않습니다.
 
-_I reached out to the Expo team about this inconsistency. They are aware of it. It's a legacy wart I'm told._
+_Expo 팀에 이 불일치에 대해 연락했습니다. 그들은 이를 인지하고 있습니다. 레거시 문제라고 들었습니다._
 
-## The beauty of this pattern
+## 이 패턴의 아름다움
 
-This pattern rocks because it saves you from extra needless or duplicative build steps. It also gives you all the editor benefits of project references, but without any configuration.
+이 패턴은 불필요하거나 중복된 빌드 단계를 절약하기 때문에 훌륭합니다. 또한 구성 없이 프로젝트 참조의 모든 편집기 이점을 제공합니다.
 
-## Caveats
+## 주의사항
 
-When you use an internal package, it's kind of like telling the consuming application that you have another source directory—which has pros and cons. As your consuming application(s) grow, adding more internal packages is identical to adding more source code to that consuming application. Thus, when you add more source code, there is more code to transpile/bundle/typecheck...so this can result in slower builds of the consuming application (as there is just more work to do) but potentially faster (and less complicated) overall build time. When/if overall build time begins to suffer, you might decide to convert your larger internal packages back into "regular" packages with `.d.ts` files and with normal TypeScript build steps.
+내부 패키지를 사용하면 소비 애플리케이션에 또 다른 소스 디렉토리가 있다고 말하는 것과 같습니다. 장단점이 있습니다. 소비 애플리케이션이 커지면 더 많은 내부 패키지를 추가하는 것은 해당 소비 애플리케이션에 더 많은 소스 코드를 추가하는 것과 동일합니다. 따라서 더 많은 소스 코드를 추가하면 트랜스파일/번들/타입 체크할 코드가 더 많아지므로 소비 애플리케이션의 빌드가 느려질 수 있지만(수행할 작업이 더 많기 때문) 전체 빌드 시간은 잠재적으로 더 빠르고 덜 복잡할 수 있습니다. 전체 빌드 시간이 저하되기 시작하면 더 큰 내부 패키지를 `.d.ts` 파일과 일반 TypeScript 빌드 단계가 있는 "일반" 패키지로 다시 변환하기로 결정할 수 있습니다.
 
-As previously mentioned, this pattern actually has very little to do with Turborepo. It's just super duper awesome and I think you should be aware of it. As we are actively working on preset package build rules (i.e. "builders") for Turborepo, we'll using the internal package pattern to skip build steps.
+앞서 언급했듯이 이 패턴은 실제로 Turborepo와 거의 관련이 없습니다. 그냥 매우 훌륭하고 여러분이 알고 있어야 한다고 생각합니다. Turborepo용 프리셋 패키지 빌드 규칙(즉, "빌더")을 적극적으로 작업하고 있기 때문에 내부 패키지 패턴을 사용하여 빌드 단계를 건너뛸 것입니다.
 
-## Speaking of long build times...
+## 긴 빌드 시간에 대해 말하자면...
 
-Shameless plug here. If you are reading this post, and you're struggling with slow build and test times, I'd love to show you how Turborepo can help. I guarantee that Turborepo will cut your monorepo's build time by 50% or more. [You can request a live demo right here.](https://vercel.com/contact/sales?utm_source=turborepo.com&utm_medium=referral&utm_campaign=blog-project-references)
+부끄럽지만 홍보를 하겠습니다. 이 게시물을 읽고 있고 느린 빌드 및 테스트 시간으로 어려움을 겪고 있다면 Turborepo가 어떻게 도움이 될 수 있는지 보여드리고 싶습니다. Turborepo가 모노레포의 빌드 시간을 50% 이상 단축할 것을 보장합니다. [여기에서 라이브 데모를 요청할 수 있습니다.](https://vercel.com/contact/sales?utm_source=turborepo.com&utm_medium=referral&utm_campaign=blog-project-references)

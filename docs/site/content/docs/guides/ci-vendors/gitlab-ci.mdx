@@ -1,13 +1,13 @@
 ---
 title: GitLab CI
-description: Learn how to use GitLab CI with Turborepo.
+description: Turborepo와 함께 GitLab CI를 사용하는 방법을 알아봅니다.
 ---
 
 import { PackageManagerTabs, Tab } from '#components/tabs';
 
-The following example shows how to use Turborepo with [GitLab CI](https://docs.gitlab.com/ee/ci/).
+다음 예제는 Turborepo를 [GitLab CI](https://docs.gitlab.com/ee/ci/)와 함께 사용하는 방법을 보여줍니다.
 
-For a given root `package.json`:
+주어진 루트 `package.json`의 경우:
 
 ```json title="./package.json"
 {
@@ -39,7 +39,7 @@ And a `turbo.json`:
 }
 ```
 
-Create a file called `.gitlab-ci.yml` in your repository with the following contents:
+저장소에 다음 내용으로 `.gitlab-ci.yml` 파일을 생성합니다:
 
 <PackageManagerTabs>
     <Tab value="pnpm">
@@ -65,7 +65,7 @@ Create a file called `.gitlab-ci.yml` in your repository with the following cont
               - .pnpm-store
         ```
 
-        > For more information visit the pnpm documentation section on GitLab CI integration, view it [here](https://pnpm.io/continuous-integration#gitlab)
+        > 자세한 내용은 GitLab CI 통합에 대한 pnpm 문서 섹션을 [여기](https://pnpm.io/continuous-integration#gitlab)에서 확인하세요.
     </Tab>
 
     <Tab value="yarn">
@@ -131,24 +131,24 @@ Create a file called `.gitlab-ci.yml` in your repository with the following cont
 
 ## Remote Caching
 
-To use Remote Caching, retrieve the team and token for the Remote Cache for your provider. In this example, we'll use [Vercel Remote Cache](https://vercel.com/docs/monorepos/remote-caching):
+Remote Caching을 사용하려면 제공자의 Remote Cache에 대한 팀과 토큰을 검색합니다. 이 예제에서는 [Vercel Remote Cache](https://vercel.com/docs/monorepos/remote-caching)를 사용합니다:
 
-- `TURBO_TOKEN` - The Bearer token to access the Remote Cache
-- `TURBO_TEAM` - The slug of the Vercel team to share the artifacts with
+- `TURBO_TOKEN` - Remote Cache에 액세스하기 위한 Bearer 토큰
+- `TURBO_TEAM` - 아티팩트를 공유할 Vercel 팀의 슬러그
 
-To use Vercel Remote Caching, you can get the value of these variables in a few steps:
+Vercel Remote Caching을 사용하려면 몇 가지 단계로 이러한 변수의 값을 얻을 수 있습니다:
 
-1. Create a Scoped Access Token to your account in the [Vercel Dashboard](https://vercel.com/account/tokens)
+1. [Vercel Dashboard](https://vercel.com/account/tokens)에서 계정에 대한 Scoped Access Token을 생성합니다.
 
 ![Vercel Access Tokens](/images/docs/vercel-create-token.png)
 
-Copy the value to a safe place. You'll need it in a moment.
+값을 안전한 곳에 복사하세요. 잠시 후에 필요합니다.
 
-2. Go to your GitLab repository settings and click on the **Settings** and then **CI/CD** tab. Create a new variable called `TURBO_TOKEN` and enter the value of your Scoped Access Token.
+2. GitLab 저장소 설정으로 이동하여 **Settings**를 클릭한 다음 **CI/CD** 탭을 클릭합니다. `TURBO_TOKEN`이라는 새 변수를 생성하고 Scoped Access Token의 값을 입력합니다.
 
 ![GitLab CI Variables](/images/docs/gitlab-ci-variables.png)
 ![GitLab CI Create Variable](/images/docs/gitlab-ci-create-variable.png)
 
-3. Make a second secret called `TURBO_TEAM` and set it to your team slug - the part after `vercel.com/` in [your Team URL](https://vercel.com/d?to=%2F%5Bteam%5D%2F%7E%2Fsettings&title=Find+Team+URL). For example, the slug for `vercel.com/acme` is `acme`. 
+3. `TURBO_TEAM`이라는 두 번째 비밀을 만들고 [팀 URL](https://vercel.com/d?to=%2F%5Bteam%5D%2F%7E%2Fsettings&title=Find+Team+URL)에서 `vercel.com/` 뒤의 부분인 팀 슬러그로 설정합니다. 예를 들어, `vercel.com/acme`의 슬러그는 `acme`입니다.
 
-Remote Caching will now be operational in your GitLab workflows.
+이제 GitLab 워크플로에서 Remote Caching이 작동합니다.

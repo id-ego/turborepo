@@ -1,6 +1,6 @@
 ---
 title: Turborepo 1.4
-description: Turborepo 1.4 has new examples, automatically includes environment variables, and more!
+description: Turborepo 1.4에는 새로운 예제, 자동 환경 변수 포함 등이 있습니다!
 date: '2022/08/09'
 tag: 'web development'
 ---
@@ -24,17 +24,17 @@ import { Callout } from '#components/callout';
   ]}
 />
 
-Turborepo 1.4 brings:
+Turborepo 1.4의 새로운 기능:
 
-- [**Automatic environment variable inclusion:**](#automatic-environment-variable-inclusion) We'll automatically infer popular framework environment variables for you. No need to declare them yourself in `turbo.json`.
-- [**`eslint-config-turbo`:**](#eslint-config-turbo) Enhanced feedback with a new ESLint plugin.
-- [**New framework and library examples:**](#new-framework-and-library-examples) New starters and examples requested by the community.
+- [**자동 환경 변수 포함:**](#automatic-environment-variable-inclusion) 인기 있는 프레임워크 환경 변수를 자동으로 추론합니다. `turbo.json`에서 직접 선언할 필요가 없습니다.
+- [**`eslint-config-turbo`:**](#eslint-config-turbo) 새로운 ESLint 플러그인으로 향상된 피드백을 제공합니다.
+- [**새로운 프레임워크 및 라이브러리 예제:**](#new-framework-and-library-examples) 커뮤니티에서 요청한 새로운 스타터 및 예제입니다.
 
-Update today by running `npm install turbo@latest`.
+`npm install turbo@latest`를 실행하여 오늘 업데이트하세요.
 
-## Automatic environment variable inclusion
+## 자동 환경 변수 포함
 
-To help ensure correct caching across environments Turborepo will now automatically infer and include public environment variables when calculating cache keys for apps built with Astro, Create React App, Gatsby, Next.js, Nuxt, SvelteKit, Vite, Vue, and more. You can safely remove framework-specific public environment variables from `turbo.json` if you manually declared them.
+환경 전반에 걸쳐 올바른 캐싱을 보장하기 위해 Turborepo는 이제 Astro, Create React App, Gatsby, Next.js, Nuxt, SvelteKit, Vite, Vue 등으로 빌드된 앱의 캐시 키를 계산할 때 공개 환경 변수를 자동으로 추론하고 포함합니다. 수동으로 선언한 경우 `turbo.json`에서 프레임워크별 공개 환경 변수를 안전하게 제거할 수 있습니다.
 
 ```diff title="turbo.json"
 {
@@ -53,9 +53,9 @@ To help ensure correct caching across environments Turborepo will now automatica
 }
 ```
 
-Note that this automatic detection and inclusion only works if Turborepo successfully infers the framework your apps are built with. Additionally, the environment variables will only be included in the cache key for tasks in workspaces where that framework is used. In other words, environment variables inferred for Next.js apps, will only be included in the cache key for workspaces detected as Next.js apps. Tasks in other workspaces in the monorepo will not be impacted.
+이 자동 감지 및 포함은 Turborepo가 앱이 빌드된 프레임워크를 성공적으로 추론하는 경우에만 작동합니다. 또한 환경 변수는 해당 프레임워크가 사용되는 워크스페이스의 작업에 대한 캐시 키에만 포함됩니다. 즉, Next.js 앱에 대해 추론된 환경 변수는 Next.js 앱으로 감지된 워크스페이스의 캐시 키에만 포함됩니다. 모노레포의 다른 워크스페이스 작업은 영향을 받지 않습니다.
 
-For example, consider a monorepo with three workspaces: a Next.js project, a Create React App project, and a TypeScript package. Each has a `build` script, and both apps depend on the TypeScript project. Let's say that this Turborepo has a standard `turbo.json` pipeline that builds them all in order:
+예를 들어, Next.js 프로젝트, Create React App 프로젝트 및 TypeScript 패키지의 세 가지 워크스페이스가 있는 모노레포를 생각해봅시다. 각각 `build` 스크립트가 있고 두 앱 모두 TypeScript 프로젝트에 의존합니다. 이 Turborepo에 모두 순서대로 빌드하는 표준 `turbo.json` 파이프라인이 있다고 가정해봅시다:
 
 ```jsonc title="turbo.json"
 {
@@ -67,69 +67,69 @@ For example, consider a monorepo with three workspaces: a Next.js project, a Cre
 }
 ```
 
-As of 1.4, when you run `turbo run build`, Turborepo will not consider any build time environment variables relevant when building the TypeScript package. However, when building the Next.js app, Turborepo will infer that environment variables starting with `NEXT_PUBLIC_` could alter the output of the `.next` folder and should thus be included when calculating the hash. Similarly, when calculating the hash of the Create React App's `build` script, all build time environment variables starting with `REACT_APP_PUBLIC_` will be included.
+1.4부터 `turbo run build`를 실행하면 Turborepo는 TypeScript 패키지를 빌드할 때 빌드 타임 환경 변수를 고려하지 않습니다. 그러나 Next.js 앱을 빌드할 때 Turborepo는 `NEXT_PUBLIC_`으로 시작하는 환경 변수가 `.next` 폴더의 출력을 변경할 수 있다고 추론하여 해시 계산 시 포함합니다. 마찬가지로 Create React App의 `build` 스크립트의 해시를 계산할 때 `REACT_APP_PUBLIC_`으로 시작하는 모든 빌드 타임 환경 변수가 포함됩니다.
 
-This improvement in hash specificity by framework is a significant step toward optimal, safe, and correct caching.
+프레임워크별 해시 특정성의 이러한 개선은 최적이고 안전하며 정확한 캐싱을 향한 중요한 단계입니다.
 
 ## `eslint-config-turbo`
 
-We've also created a new ESLint config for further in-editor assistance to help ensure your Turborepo cache can be correctly shared across every environment. While our new hashing algorithm should cover most situations with most frameworks, this ESLint config will provide in-editor feedback for teams using other build time inlined environment variables that are not framework-prefixed but impact build outputs (i.e. caching), and teams using their own in-house frameworks that we cannot detect automatically.
+Turborepo 캐시가 모든 환경에서 올바르게 공유될 수 있도록 추가적인 편집기 내 지원을 제공하기 위해 새로운 ESLint 설정을 만들었습니다. 새로운 해싱 알고리즘이 대부분의 프레임워크에서 대부분의 상황을 다루어야 하지만, 이 ESLint 설정은 프레임워크 접두사가 없지만 빌드 출력에 영향을 미치는 다른 빌드 타임 인라인 환경 변수를 사용하는 팀과 자동으로 감지할 수 없는 자체 내부 프레임워크를 사용하는 팀에게 편집기 내 피드백을 제공합니다.
 
-To get started, extend from `eslint-config-turbo` in your root [`eslintrc`](https://eslint.org/docs/latest/user-guide/configuring/configuration-files#configuration-file-formats) file:
+시작하려면 루트 [`eslintrc`](https://eslint.org/docs/latest/user-guide/configuring/configuration-files#configuration-file-formats) 파일에서 `eslint-config-turbo`를 확장하세요:
 
 ```jsonc title=".eslint.config.js"
 {
-  // Automatically flag env vars missing from turbo.json
+  // turbo.json에서 누락된 환경 변수를 자동으로 플래그 지정
   "extends": ["next/core-web-vitals", "turbo"]
 }
 ```
 
-If you prefer more control over the rules - use can install and configure the `eslint-plugin-turbo` _plugin_ directly by first adding it to plugins and then configuring the desired rules:
+규칙에 대한 더 많은 제어를 원하는 경우 - 먼저 플러그인에 추가한 다음 원하는 규칙을 구성하여 `eslint-plugin-turbo` *플러그인*을 직접 설치하고 구성할 수 있습니다:
 
 ```jsonc title=".eslint.config.js"
 {
   "extends": ["next/core-web-vitals"],
   "plugins": ["turbo"],
   "rules": {
-    // Automatically flag env vars missing from turbo.json
+    // turbo.json에서 누락된 환경 변수를 자동으로 플래그 지정
     "turbo/no-undeclared-env-vars": "error"
   }
 }
 ```
 
-The plugin will warn you if you are using non-framework-related environment variables in your code that have not been declared in your `turbo.json`.
+이 플러그인은 `turbo.json`에 선언되지 않은 프레임워크와 관련되지 않은 환경 변수를 코드에서 사용하고 있는 경우 경고합니다.
 
-As of 1.4.x, we now include `eslint-config-turbo` in all of our examples and in new projects generated via `npx create-turbo`.
+1.4.x부터 모든 예제와 `npx create-turbo`를 통해 생성된 새 프로젝트에 `eslint-config-turbo`를 포함합니다.
 
-Learn more about ESLint configs and plugins in the [ESLint docs](https://eslint.org/docs/latest/).
+ESLint 설정 및 플러그인에 대한 자세한 내용은 [ESLint 문서](https://eslint.org/docs/latest/)를 참조하세요.
 
-## New framework and library examples
+## 새로운 프레임워크 및 라이브러리 예제
 
-Based on your feedback and suggestions, we've created new examples to integrate Turborepo into your workflow:
+여러분의 피드백과 제안을 바탕으로 Turborepo를 워크플로우에 통합하기 위한 새로운 예제를 만들었습니다:
 
 - [Svelte](https://github.com/vercel/turbo/tree/main/examples/with-svelte)
 - [Docker](https://github.com/vercel/turbo/tree/main/examples/with-docker)
 - [React Native](https://github.com/vercel/turbo/tree/main/examples/with-react-native-web)
 - [Prisma](https://github.com/vercel/turbo/tree/main/examples/with-prisma)
 - [Tailwind](https://github.com/vercel/turbo/tree/main/examples/with-tailwind)
-- … [and more!](https://github.com/vercel/turbo/tree/main/examples)
+- … [그 외 더 많은 예제!](https://github.com/vercel/turbo/tree/main/examples)
 
-## Other bug fixes and improvements
+## 기타 버그 수정 및 개선 사항
 
-- Allow both sides of git comparison ([#1442](https://github.com/vercel/turbo/pull/1442))
-- Properly rebuild packages that share a name prefix ([#1538](https://github.com/vercel/turbo/pull/1538))
-- Cache files with the correct file permissions ([#1429](https://github.com/vercel/turbo/pull/1429))
+- git 비교의 양쪽 허용 ([#1442](https://github.com/vercel/turbo/pull/1442))
+- 이름 접두사를 공유하는 패키지를 올바르게 재빌드 ([#1538](https://github.com/vercel/turbo/pull/1538))
+- 올바른 파일 권한으로 파일 캐시 ([#1429](https://github.com/vercel/turbo/pull/1429))
 
-## Community
+## 커뮤니티
 
-Since releasing [Turborepo v1.3 in June](https://turborepo.com/blog/turbo-1-3-0), we've seen incredible adoption and community growth:
+[6월에 Turborepo v1.3을 출시](https://turborepo.com/blog/turbo-1-3-0)한 이후 놀라운 채택률과 커뮤니티 성장을 보았습니다:
 
 - [8.65k+ GitHub Stars](https://github.com/vercel/turbo)
-- 365k weekly NPM downloads, up 2x since late April
-- 10 years of compute time saved through Remote Caching on Vercel, saving 10 months per week
+- 주간 NPM 다운로드 365k, 4월 말 이후 2배 증가
+- Vercel의 Remote Caching을 통해 10년의 컴퓨팅 시간 절약, 주당 10개월 절약
 
-Turborepo is the result of the combined work of all of our contributors including our core team.
+Turborepo는 핵심 팀을 포함한 모든 기여자들의 결합된 작업의 결과입니다.
 
-This release was brought to you by the contributions of: @B2o5T, @chitchu, @elis, @gsoltis, @harshcut, @jaredpalmer, @kocisov, @nathanhammond, @neolivz, @NuroDev, @oneezy, @samouri, @shayc, @StevenMatchett, @tknickman, @trevorr, @zsoldosp, and more!
+이 릴리스는 다음 분들의 기여로 제공되었습니다: @B2o5T, @chitchu, @elis, @gsoltis, @harshcut, @jaredpalmer, @kocisov, @nathanhammond, @neolivz, @NuroDev, @oneezy, @samouri, @shayc, @StevenMatchett, @tknickman, @trevorr, @zsoldosp 등 더 많은 분들!
 
-Thank you for your continued support, feedback, and collaboration to make Turborepo your build tool of choice.
+Turborepo를 여러분의 선택한 빌드 도구로 만들기 위한 지속적인 지원, 피드백 및 협력에 감사드립니다.

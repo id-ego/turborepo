@@ -1,26 +1,26 @@
 ---
-title: Developing applications
-description: Learn how to develop applications in your repository.
+title: 애플리케이션 개발
+description: 저장소에서 애플리케이션을 개발하는 방법을 알아봅니다.
 ---
 
 import { Tabs, Tab } from '#components/tabs';
 import { LinkToDocumentation } from '#components/link-to-documentation';
 
-Developing applications in a monorepo unlocks powerful workflows, enabling you to make atomic commits to source control with easy access to code.
+모노레포에서 애플리케이션을 개발하면 강력한 워크플로를 활용할 수 있으며, 소스 제어에 원자적 커밋을 만들고 코드에 쉽게 액세스할 수 있습니다.
 
-Most development tasks are long-running tasks that watch for changes to your code. Turborepo enhances this experience with a powerful terminal UI and other capabilities like:
+대부분의 개발 작업은 코드 변경 사항을 감시하는 장기 실행 작업입니다. Turborepo는 강력한 터미널 UI 및 다음과 같은 기능으로 이 경험을 향상시킵니다:
 
-- [Configuration for `dev` tasks](#configuring-development-tasks)
-- [Interacting with tasks](#interacting-with-tasks)
+- [`dev` 작업 구성](#configuring-development-tasks)
+- [작업과 상호작용](#interacting-with-tasks)
 - [Watch Mode](#watch-mode)
-- [Running setup scripts](#running-setup-tasks-before-dev)
-- [Filtering tasks to run a subset of your packages](#running-a-specific-application)
+- [설정 스크립트 실행](#running-setup-tasks-before-dev)
+- [작업 필터링하여 패키지 하위 집합 실행](#running-a-specific-application)
 
-## Configuring development tasks
+## 개발 작업 구성
 
-Defining a development task in `turbo.json` tells Turborepo that you'll be running a long-lived task. This is useful for things like running a development server, running tests, or building your application.
+`turbo.json`에서 개발 작업을 정의하면 Turborepo에 장기 실행 작업을 실행할 것임을 알립니다. 이는 개발 서버 실행, 테스트 실행 또는 애플리케이션 빌드와 같은 작업에 유용합니다.
 
-To register a `dev` task, add it to your `turbo.json` with two properties:
+`dev` 작업을 등록하려면 두 가지 속성과 함께 `turbo.json`에 추가합니다:
 
 ```json title="./turbo.json"
 {
@@ -33,18 +33,18 @@ To register a `dev` task, add it to your `turbo.json` with two properties:
 }
 ```
 
-- **"cache": false**: Tells Turborepo to not attempt to cache the results of the task. Since this is a development task, you're likely to be making frequent changes to your code, so caching the results is not useful.
-- **"persistent": true**: Tells Turborepo to keep the task running until you stop it. This key serves as a signal for your terminal UI to treat the task as long-running and interactive. Additionally, it prevents you from accidentally depending on a task that will not exit.
+- **"cache": false**: Turborepo에 작업 결과를 캐시하지 않도록 지시합니다. 이는 개발 작업이므로 코드를 자주 변경할 가능성이 높기 때문에 결과를 캐시하는 것은 유용하지 않습니다.
+- **"persistent": true**: Turborepo에 중지할 때까지 작업을 계속 실행하도록 지시합니다. 이 키는 터미널 UI가 작업을 장기 실행 및 대화형으로 처리하도록 신호 역할을 합니다. 또한 종료되지 않는 작업에 실수로 의존하는 것을 방지합니다.
 
-You can now run your `dev` task to start your development scripts in parallel:
+이제 `dev` 작업을 실행하여 개발 스크립트를 병렬로 시작할 수 있습니다:
 
 ```bash title="Terminal"
 turbo dev
 ```
 
-### Running setup tasks before `dev`
+### `dev` 전에 설정 작업 실행
 
-You may also want to run scripts that set up your development environment or pre-build packages. You can make sure those tasks run before the `dev` task with `dependsOn`:
+개발 환경을 설정하거나 패키지를 미리 빌드하는 스크립트를 실행할 수도 있습니다. `dependsOn`을 사용하여 `dev` 작업 전에 해당 작업이 실행되도록 할 수 있습니다:
 
 ```json title="./turbo.json"
 {
@@ -61,53 +61,52 @@ You may also want to run scripts that set up your development environment or pre
 }
 ```
 
-In this example, we're using a [Root Task](/docs/crafting-your-repository/configuring-tasks#registering-root-tasks) but you can use the same idea for [arbitrary tasks in packages](/docs/crafting-your-repository/configuring-tasks#depending-on-a-specific-task-in-a-specific-package).
+이 예에서는 [Root Task](/docs/crafting-your-repository/configuring-tasks#registering-root-tasks)를 사용하고 있지만 [패키지의 임의 작업](/docs/crafting-your-repository/configuring-tasks#depending-on-a-specific-task-in-a-specific-package)에 동일한 아이디어를 사용할 수 있습니다.
 
-### Running a specific application
+### 특정 애플리케이션 실행
 
-The `--filter` flag allows you to pick a subset of your [Package Graph](/docs/core-concepts/package-and-task-graph#package-graph) so you can run your `dev` task for a specific application and its dependencies:
+`--filter` 플래그를 사용하면 [Package Graph](/docs/core-concepts/package-and-task-graph#package-graph)의 하위 집합을 선택할 수 있으므로 특정 애플리케이션과 해당 종속성에 대한 `dev` 작업을 실행할 수 있습니다:
 
 ```bash title="Terminal"
 turbo dev --filter=web
 ```
 
-## Using the terminal UI
+## 터미널 UI 사용
 
-Turborepo's terminal UI enables a number of features that create a highly interactive experience around your tasks.
+Turborepo의 터미널 UI는 작업을 중심으로 고도로 대화형 경험을 만드는 여러 기능을 활성화합니다.
 
-### Customizing your view
+### 보기 사용자 지정
 
-You can quickly adjust the UI to your needs using keybinds.
+키바인드를 사용하여 필요에 맞게 UI를 빠르게 조정할 수 있습니다.
 
-| Keybind | Action                                                            |
-| ------- | ----------------------------------------------------------------- |
-| `m`     | Toggle popup listing keybinds                                     |
-| `↑`/`↓` | Select the next/previous task in the task list                    |
-| `j`/`k` | Select the next/previous task in the task list                    |
-| `p`     | Toggle selection pinning for selected task                        |
-| `h`     | Toggle visibility of the task list                                |
-| `c`     | When logs are highlighted, copy selection to the system clipboard |
-| `u`/`d` | Scroll logs `u`p and `d`own                                       |
+| 키바인드 | 작업                                                    |
+| -------- | ------------------------------------------------------- |
+| `m`      | 키바인드 목록 팝업 토글                                 |
+| `↑`/`↓`  | 작업 목록에서 다음/이전 작업 선택                       |
+| `j`/`k`  | 작업 목록에서 다음/이전 작업 선택                       |
+| `p`      | 선택한 작업에 대한 선택 고정 토글                       |
+| `h`      | 작업 목록 표시 토글                                     |
+| `c`      | 로그가 강조 표시되면 선택 항목을 시스템 클립보드에 복사 |
+| `u`/`d`  | 로그 위`u`/아래`d`로 스크롤                             |
 
-### Interacting with tasks
+### 작업과 상호작용
 
-Some of your tools may allow you to type input into them. Examples of this include Drizzle ORM's interactive migrations or Jest's filtering and re-running of test suites.
+일부 도구는 입력을 입력할 수 있습니다. 이에 대한 예로는 Drizzle ORM의 대화형 마이그레이션 또는 Jest의 테스트 스위트 필터링 및 재실행이 있습니다.
 
-You can interact with tasks that are [marked as interactive](/docs/reference/configuration#interactive) to give them input.
+[대화형으로 표시](/docs/reference/configuration#interactive)된 작업과 상호작용하여 입력을 제공할 수 있습니다.
 
-| Keybind  | Action            |
-| -------- | ----------------- |
-| `i`      | Begin interacting |
-| `Ctrl+z` | Stop interacting  |
+| 키바인드 | 작업          |
+| -------- | ------------- |
+| `i`      | 상호작용 시작 |
+| `Ctrl+z` | 상호작용 중지 |
 
 ## Watch Mode
 
-Many tools have a built-in watcher, like [`tsc --watch`](https://www.typescriptlang.org/docs/handbook/compiler-options.html#compiler-options),
-that will respond to changes in your source code. However, some don't.
+[`tsc --watch`](https://www.typescriptlang.org/docs/handbook/compiler-options.html#compiler-options)와 같이 많은 도구에는 소스 코드의 변경 사항에 응답하는 내장 감시자가 있습니다. 그러나 일부는 그렇지 않습니다.
 
-`turbo watch` adds a dependency-aware watcher to any tool. Changes to source code will follow [the Task Graph](/docs/core-concepts/package-and-task-graph#task-graph) that you've described in `turbo.json`, just like all your other tasks.
+`turbo watch`는 모든 도구에 종속성 인식 감시자를 추가합니다. 소스 코드 변경 사항은 다른 모든 작업과 마찬가지로 `turbo.json`에 설명한 [the Task Graph](/docs/core-concepts/package-and-task-graph#task-graph)를 따릅니다.
 
-For example, using a package structure like [`create-turbo`](/docs/reference/create-turbo) with the following tasks and scripts:
+예를 들어 다음 작업 및 스크립트와 함께 [`create-turbo`](/docs/reference/create-turbo)와 같은 패키지 구조를 사용합니다:
 
 <Tabs items={["turbo.json", "packages/ui", "apps/web"]}>
 <Tab value="turbo.json">
@@ -160,20 +159,20 @@ For example, using a package structure like [`create-turbo`](/docs/reference/cre
 </Tab>
 </Tabs>
 
-When you run `turbo watch dev lint`, you'll see the `lint` scripts are re-run whenever you make source code changes, despite ESLint not having a built-in watcher. `turbo watch` is also aware of internal dependencies, so a code change in `@repo/ui` will re-run the task in both `@repo/ui` and `web`.
+`turbo watch dev lint`를 실행하면 ESLint에 내장 감시자가 없음에도 불구하고 소스 코드를 변경할 때마다 `lint` 스크립트가 다시 실행됩니다. `turbo watch`는 내부 종속성도 인식하므로 `@repo/ui`의 코드 변경 사항은 `@repo/ui`와 `web` 모두에서 작업을 다시 실행합니다.
 
-The Next.js development server in `web` and the TypeScript Compiler's built-in watcher in `@repo/ui` will continue to work as usual, since they are marked with `persistent`.
+`web`의 Next.js 개발 서버와 `@repo/ui`의 TypeScript 컴파일러 내장 감시자는 `persistent`로 표시되어 있으므로 평소와 같이 계속 작동합니다.
 
-For more information, [visit the `turbo watch` reference](/docs/reference/watch).
+자세한 내용은 [`turbo watch` 참조](/docs/reference/watch)를 방문하세요.
 
-## Limitations
+## 제한 사항
 
-### Teardown tasks
+### Teardown 작업
 
-In some cases, you may want to run a script when the `dev` task is stopped. Turborepo is unable to run those teardown scripts when exiting because `turbo` exits when your `dev` tasks exit.
+경우에 따라 `dev` 작업이 중지될 때 스크립트를 실행할 수 있습니다. `dev` 작업이 종료될 때 `turbo`가 종료되기 때문에 Turborepo는 종료 시 해당 teardown 스크립트를 실행할 수 없습니다.
 
-Instead, create a `turbo dev:teardown` script that you run separately after you've exited your primary `turbo dev` task.
+대신 기본 `turbo dev` 작업을 종료한 후 별도로 실행하는 `turbo dev:teardown` 스크립트를 만듭니다.
 
-## Next steps
+## 다음 단계
 
-Once you have a version of your application that you'd like to deploy, it's time to learn how to configure environment variables in Turborepo.
+배포하려는 애플리케이션 버전이 있으면 Turborepo에서 환경 변수를 구성하는 방법을 알아볼 차례입니다.

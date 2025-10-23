@@ -1,51 +1,43 @@
 ---
-title: Package Configurations
-description: Learn how to use Package Configurations to bring greater task flexibility to your monorepo's package.
+title: 패키지 구성
+description: 패키지 구성을 사용하여 모노레포 패키지에 더 큰 태스크 유연성을 제공하는 방법을 알아봅니다.
 ---
 
 import { Callout } from '#components/callout';
 import { ExperimentalBadge } from '#components/experimental-badge';
 
-Many monorepos can declare a `turbo.json` in the root directory with a
-[task description](/docs/reference/configuration#tasks) that applies to all packages. But, sometimes, a monorepo can contain packages that need to configure their tasks differently.
+많은 모노레포는 모든 패키지에 적용되는 [태스크 설명](/docs/reference/configuration#tasks)과 함께 루트 디렉토리에 `turbo.json`을 선언할 수 있습니다. 그러나 때로는 모노레포에 태스크를 다르게 구성해야 하는 패키지가 포함될 수 있습니다.
 
-To accommodate this, Turborepo enables you to extend the root configuration with a `turbo.json` in any package. This flexibility enables a more diverse set of apps and packages to co-exist in a Workspace, and allows package owners to maintain specialized tasks and configuration without affecting other apps and packages of the monorepo.
+이를 수용하기 위해 Turborepo는 모든 패키지에서 `turbo.json`을 사용하여 루트 구성을 확장할 수 있도록 합니다. 이러한 유연성을 통해 더 다양한 앱과 패키지 세트가 워크스페이스에 공존할 수 있으며, 패키지 소유자가 모노레포의 다른 앱과 패키지에 영향을 주지 않고 전문화된 태스크와 구성을 유지할 수 있습니다.
 
-## How it works
+## 작동 방식
 
-To override the configuration for any task defined in the root `turbo.json`, add
-a `turbo.json` file in any package of your monorepo with a top-level `extends`
-key:
+루트 `turbo.json`에 정의된 태스크의 구성을 재정의하려면 모노레포의 모든 패키지에 최상위 `extends` 키를 사용하여 `turbo.json` 파일을 추가합니다:
 
 ```jsonc title="./apps/my-app/turbo.json"
 {
   "extends": ["//"],
   "tasks": {
     "build": {
-      // Custom configuration for the build task in this package
+      // 이 패키지의 build 태스크에 대한 사용자 정의 구성
     },
-    "special-task": {} // New task specific to this package
+    "special-task": {} // 이 패키지에 특정한 새로운 태스크
   }
 }
 ```
 
 <Callout>
-  For now, the only valid value for the `extends` key is `["//"]`. `//` is a
-  special name used to identify the root directory of the monorepo.
+  현재 `extends` 키의 유효한 값은 `["//"]`뿐입니다. `//`는 모노레포의 루트
+  디렉토리를 식별하는 데 사용되는 특수 이름입니다.
 </Callout>
 
-Configuration in a package can override any of [the configurations for a
-task](/docs/reference/configuration#defining-tasks). Any keys that are not included are inherited
-from the extended `turbo.json`.
+패키지의 구성은 [태스크 구성](/docs/reference/configuration#defining-tasks) 중 어느 것이라도 재정의할 수 있습니다. 포함되지 않은 키는 확장된 `turbo.json`에서 상속됩니다.
 
-## Examples
+## 예제
 
-### Different frameworks in one Workspace
+### 하나의 워크스페이스에 다른 프레임워크
 
-Let's say your monorepo has multiple [Next.js](https://nextjs.org) apps, and one [SvelteKit](https://kit.svelte.dev)
-app. Both frameworks create their build output with a `build` script in their
-respective `package.json`. You _could_ configure Turborepo to run these tasks
-with a single `turbo.json` at the root like this:
+모노레포에 여러 개의 [Next.js](https://nextjs.org) 앱과 하나의 [SvelteKit](https://kit.svelte.dev) 앱이 있다고 가정해 봅시다. 두 프레임워크 모두 각각의 `package.json`에서 `build` 스크립트로 빌드 출력을 생성합니다. 다음과 같이 루트에 단일 `turbo.json`으로 이러한 태스크를 실행하도록 Turborepo를 구성*할 수 있습니다*:
 
 ```jsonc title="./turbo.json"
 {
@@ -57,12 +49,9 @@ with a single `turbo.json` at the root like this:
 }
 ```
 
-Notice that both `.next/**` and `.svelte-kit/**` need to be specified as
-[`outputs`](/docs/reference/configuration#outputs), even though Next.js apps do not generate a `.svelte-kit` directory, and
-vice versa.
+Next.js 앱은 `.svelte-kit` 디렉토리를 생성하지 않고 그 반대도 마찬가지이지만 `.next/**`와 `.svelte-kit/**` 모두 [`outputs`](/docs/reference/configuration#outputs)로 지정해야 합니다.
 
-With Package Configurations, you can instead add custom
-configuration in the SvelteKit package in `apps/my-svelte-kit-app/turbo.json`:
+패키지 구성을 사용하면 `apps/my-svelte-kit-app/turbo.json`의 SvelteKit 패키지에 사용자 정의 구성을 추가할 수 있습니다:
 
 ```jsonc title="./apps/my-svelte-kit-app/turbo.json"
 {
@@ -75,7 +64,7 @@ configuration in the SvelteKit package in `apps/my-svelte-kit-app/turbo.json`:
 }
 ```
 
-and remove the SvelteKit-specific [`outputs`](/docs/reference/configuration#outputs) from the root configuration:
+그리고 루트 구성에서 SvelteKit 특정 [`outputs`](/docs/reference/configuration#outputs)를 제거합니다:
 
 ```diff title="./turbo.json"
 {
@@ -88,15 +77,12 @@ and remove the SvelteKit-specific [`outputs`](/docs/reference/configuration#outp
 }
 ```
 
-This not only makes each configuration easier to read, it puts the configuration
-closer to where it is used.
+이것은 각 구성을 더 쉽게 읽을 수 있게 할 뿐만 아니라 사용되는 위치에 더 가까이 구성을 배치합니다.
 
-### Specialized tasks
+### 전문화된 태스크
 
-In another example, say that the `build` task in one package `dependsOn` a
-`compile` task. You could universally declare it as `dependsOn: ["compile"]`.
-This means that your root `turbo.json` has to have an empty `compile` task
-entry:
+다른 예에서는 한 패키지의 `build` 태스크가 `compile` 태스크에 `dependsOn`한다고 가정해 봅시다. 이를 `dependsOn: ["compile"]`로 보편적으로 선언할 수 있습니다.
+이는 루트 `turbo.json`에 빈 `compile` 태스크 항목이 있어야 함을 의미합니다:
 
 ```json title="./turbo.json"
 {
@@ -109,8 +95,7 @@ entry:
 }
 ```
 
-With Package Configurations, you can move that `compile` task into the
-`apps/my-custom-app/turbo.json`,
+패키지 구성을 사용하면 해당 `compile` 태스크를 `apps/my-custom-app/turbo.json`으로 이동할 수 있습니다,
 
 ```json title="./apps/my-app/turbo.json"
 {
@@ -124,7 +109,7 @@ With Package Configurations, you can move that `compile` task into the
 }
 ```
 
-and remove it from the root:
+그리고 루트에서 제거합니다:
 
 ```diff title="./turbo.json"
 {
@@ -138,21 +123,13 @@ and remove it from the root:
 }
 ```
 
-Now, the owners of `my-app`, can have full ownership over their `build` task,
-but continue to inherit any other tasks defined at the root.
+이제 `my-app`의 소유자는 `build` 태스크에 대한 전체 소유권을 가질 수 있지만 루트에 정의된 다른 태스크는 계속 상속받습니다.
 
-## Comparison to package-specific tasks
+## 패키지별 태스크와의 비교
 
-At first glance, Package Configurations may sound a lot like the
-[`package#task` syntax](/docs/crafting-your-repository/configuring-tasks#depending-on-a-specific-task-in-a-specific-package) in the root `turbo.json`. The features are
-similar, but have one significant difference: when you declare a package-specific task
-in the root `turbo.json`, it _completely_ overwrites the baseline task
-configuration. With a Package Configuration, the task configuration is merged
-instead.
+첫눈에 패키지 구성은 루트 `turbo.json`의 [`package#task` 구문](/docs/crafting-your-repository/configuring-tasks#depending-on-a-specific-task-in-a-specific-package)과 많이 비슷해 보일 수 있습니다. 기능은 비슷하지만 한 가지 중요한 차이점이 있습니다: 루트 `turbo.json`에서 패키지별 태스크를 선언하면 기본 태스크 구성을 _완전히_ 덮어씁니다. 패키지 구성을 사용하면 태스크 구성이 대신 병합됩니다.
 
-Consider the example of the monorepo with multiple Next.js apps and a Sveltekit
-app again. With a package-specific task, you might configure your root
-`turbo.json` like this:
+여러 Next.js 앱과 Sveltekit 앱이 있는 모노레포의 예를 다시 생각해 봅시다. 패키지별 태스크를 사용하면 다음과 같이 루트 `turbo.json`을 구성할 수 있습니다:
 
 ```jsonc title="./turbo.json"
 {
@@ -171,21 +148,18 @@ app again. With a package-specific task, you might configure your root
 }
 ```
 
-In this example, `my-sveltekit-app#build` completely overwrites `build` for the
-Sveltekit app, so `outputLogs` and `inputs` also need to be duplicated.
+이 예에서 `my-sveltekit-app#build`는 Sveltekit 앱의 `build`를 완전히 덮어쓰므로 `outputLogs`와 `inputs`도 복제해야 합니다.
 
-With Package Configurations, `outputLogs` and `inputs` are inherited, so
-you don't need to duplicate them. You only need to override `outputs` in
-`my-sveltekit-app` config.
+패키지 구성을 사용하면 `outputLogs`와 `inputs`가 상속되므로 이를 복제할 필요가 없습니다. `my-sveltekit-app` 구성에서 `outputs`만 재정의하면 됩니다.
 
 <Callout type="info">
-  Although there are no plans to remove package-specific task configurations, we
-  expect that Package Configurations can be used for most use cases instead.
+  패키지별 태스크 구성을 제거할 계획은 없지만 대부분의 사용 사례에는 패키지
+  구성을 대신 사용할 수 있을 것으로 예상합니다.
 </Callout>
 
-## Boundaries Tags <ExperimentalBadge>Experimental</ExperimentalBadge>
+## Boundaries 태그 <ExperimentalBadge>실험적</ExperimentalBadge>
 
-Package Configurations are also used to declare Tags for Boundaries. To do so, add a `tags` field to your `turbo.json`:
+패키지 구성은 Boundaries에 대한 태그를 선언하는 데에도 사용됩니다. 이를 위해 `turbo.json`에 `tags` 필드를 추가합니다:
 
 ```diff title="./apps/my-app/turbo.json"
 {
@@ -200,42 +174,37 @@ Package Configurations are also used to declare Tags for Boundaries. To do so, a
 }
 ```
 
-From there, you can define rules for which dependencies or dependents a tag can have. Check out the [Boundaries documentation](/docs/reference/boundaries#tags) for more details.
+여기에서 태그가 가질 수 있는 의존성 또는 종속 항목에 대한 규칙을 정의할 수 있습니다. 자세한 내용은 [Boundaries 문서](/docs/reference/boundaries#tags)를 참조하세요.
 
-## Limitations
+## 제한 사항
 
-Although the general idea is the same as the root `turbo.json`, Package
-Configurations come with a set of guardrails that can prevent packages from creating
-potentially confusing situations.
+일반적인 아이디어는 루트 `turbo.json`과 동일하지만 패키지 구성에는 패키지가 잠재적으로 혼란스러운 상황을 만드는 것을 방지할 수 있는 가드레일 세트가 함께 제공됩니다.
 
-### Package Configurations cannot use [the `workspace#task` syntax](/docs/crafting-your-repository/running-tasks) as task entries
+### 패키지 구성은 태스크 항목으로 [the `workspace#task` 구문](/docs/crafting-your-repository/running-tasks)을 사용할 수 없습니다
 
-The `package` is inferred based on the location of the configuration, and it is
-not possible to change configuration for another package. For example, in a
-Package Configuration for `my-nextjs-app`:
+`package`는 구성 위치를 기반으로 추론되며 다른 패키지의 구성을 변경할 수 없습니다. 예를 들어 `my-nextjs-app`에 대한 패키지 구성에서:
 
 ```jsonc title="./apps/my-nextjs-app/turbo.json"
 {
   "tasks": {
     "my-nextjs-app#build": {
-      // ❌ This is not allowed. Even though it's
-      // referencing the correct package, "my-nextjs-app"
-      // is inferred, and we don't need to specify it again.
-      // This syntax also has different behavior, so we do not want to allow it.
-      // (see "Comparison to package-specific tasks" section)
+      // ❌ 허용되지 않습니다. 올바른 패키지를 참조하더라도
+      // "my-nextjs-app"이 추론되므로 다시 지정할 필요가 없습니다.
+      // 이 구문은 동작이 다르므로 허용하지 않습니다.
+      // ("패키지별 태스크와의 비교" 섹션 참조)
     },
     "my-sveltekit-app#build": {
-      // ❌ Changing configuration for the "my-sveltekit-app" package
-      // from Package Configuration in "my-nextjs-app" is not allowed.
+      // ❌ "my-nextjs-app"의 패키지 구성에서
+      // "my-sveltekit-app" 패키지의 구성을 변경하는 것은 허용되지 않습니다.
     },
     "build": {
-      // ✅ just use the task name!
+      // ✅ 태스크 이름만 사용하세요!
     }
   }
 }
 ```
 
-Note that the `build` task can still depend on a package-specific task:
+`build` 태스크는 여전히 패키지별 태스크에 의존할 수 있습니다:
 
 ```jsonc title="./apps/my-nextjs-app/turbo.json"
 {
@@ -247,19 +216,14 @@ Note that the `build` task can still depend on a package-specific task:
 }
 ```
 
-### Package Configurations can only override values in the `tasks` key
+### 패키지 구성은 `tasks` 키의 값만 재정의할 수 있습니다
 
-It is not possible to override [global configuration](/docs/reference/configuration#global-options) like `globalEnv` or `globalDependencies` in a Package Configuration. Configuration that would need to be altered in a Package Configuration is not truly global and should be configured differently.
+패키지 구성에서 `globalEnv` 또는 `globalDependencies`와 같은 [전역 구성](/docs/reference/configuration#global-options)을 재정의할 수 없습니다. 패키지 구성에서 변경해야 하는 구성은 진정으로 전역이 아니며 다르게 구성해야 합니다.
 
-### Root turbo.json cannot use the `extends` key
+### 루트 turbo.json은 `extends` 키를 사용할 수 없습니다
 
-To avoid creating circular dependencies on packages, the root `turbo.json`
-cannot extend from anything. The `extends` key will be ignored.
+패키지에 대한 순환 의존성 생성을 방지하기 위해 루트 `turbo.json`은 어떤 것도 확장할 수 없습니다. `extends` 키는 무시됩니다.
 
-## Troubleshooting
+## 문제 해결
 
-In large monorepos, it can sometimes be difficult to understand how Turborepo is
-interpreting your configuration. To help, we've added a `resolvedTaskDefinition`
-to the [Dry Run](/docs/reference/run#--dry----dry-run) output. If you run `turbo run build --dry-run`, for example, the
-output will include the combination of all `turbo.json` configurations that were
-considered before running the `build` task.
+대규모 모노레포에서는 Turborepo가 구성을 어떻게 해석하는지 이해하기 어려울 수 있습니다. 이를 돕기 위해 [Dry Run](/docs/reference/run#--dry----dry-run) 출력에 `resolvedTaskDefinition`을 추가했습니다. 예를 들어 `turbo run build --dry-run`을 실행하면 출력에 `build` 태스크를 실행하기 전에 고려된 모든 `turbo.json` 구성의 조합이 포함됩니다.

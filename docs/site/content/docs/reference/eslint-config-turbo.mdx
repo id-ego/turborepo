@@ -1,15 +1,15 @@
 ---
 title: eslint-config-turbo
-description: Learn more about eslint-config-turbo.
+description: eslint-config-turbo에 대해 자세히 알아봅니다.
 ---
 
 import { PackageManagerTabs, Tab } from '#components/tabs';
 
-[The `eslint-config-turbo` package](https://www.npmjs.com/package/eslint-config-turbo) helps you find environment variables that are used in your code that are not a part of Turborepo's hashing. Environment variables used in your source code that are not accounted for in `turbo.json` will be highlighted in your editor and errors will show as ESLint output.
+[`eslint-config-turbo` 패키지](https://www.npmjs.com/package/eslint-config-turbo)는 Turborepo의 해싱에 포함되지 않은 코드에서 사용되는 환경 변수를 찾는 데 도움이 됩니다. `turbo.json`에 고려되지 않은 소스 코드에서 사용된 환경 변수는 편집기에서 강조 표시되고 오류가 ESLint 출력으로 표시됩니다.
 
-## Installation
+## 설치
 
-Install `eslint-config-turbo` into the location where your ESLint configuration is held:
+ESLint 설정이 있는 위치에 `eslint-config-turbo`를 설치합니다:
 
 <PackageManagerTabs>
 
@@ -46,25 +46,25 @@ Install `eslint-config-turbo` into the location where your ESLint configuration 
   </Tab>
 </PackageManagerTabs>
 
-## Usage (Flat Config `eslint.config.js`)
+## 사용법 (Flat Config `eslint.config.js`)
 
 ```js title="./packages/eslint-config/base.js"
 import turboConfig from 'eslint-config-turbo/flat';
 
 export default [
   ...turboConfig,
-  // Other configuration
+  // 기타 설정
 ];
 ```
 
-You can also configure rules available in the configuration:
+설정에서 사용 가능한 규칙을 구성할 수도 있습니다:
 
 ```js title="./packages/eslint-config/base.js"
 import turboConfig from 'eslint-config-turbo/flat';
 
 export default [
   ...turboConfig,
-  // Other configuration
+  // 기타 설정
   {
     rules: {
       'turbo/no-undeclared-env-vars': [
@@ -78,9 +78,9 @@ export default [
 ];
 ```
 
-## Usage (Legacy `eslintrc*`)
+## 사용법 (레거시 `eslintrc*`)
 
-Add `turbo` to the extends section of your eslint configuration file. You can omit the `eslint-config-` prefix:
+eslint 설정 파일의 extends 섹션에 `turbo`를 추가합니다. `eslint-config-` 접두사는 생략할 수 있습니다:
 
 ```json title="./packages/eslint-config/base.json"
 {
@@ -88,7 +88,7 @@ Add `turbo` to the extends section of your eslint configuration file. You can om
 }
 ```
 
-You can also configure rules available in the configuration:
+설정에서 사용 가능한 규칙을 구성할 수도 있습니다:
 
 ```json title="./packages/eslint-config/base.json"
 {

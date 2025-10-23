@@ -1,14 +1,14 @@
 ---
-title: Managing dependencies
-description: Learn how to manage dependencies in your monorepo's workspace.
+title: 종속성 관리
+description: 모노레포의 Workspace에서 종속성을 관리하는 방법을 알아봅니다.
 ---
 
 import { PackageManagerTabs, Tab } from '#components/tabs';
 import { Callout } from '#components/callout';
 import { LinkToDocumentation } from '#components/link-to-documentation';
 
-- **External dependencies** come from [the npm registry](https://www.npmjs.com/), allowing you to leverage valuable code from the ecosystem to build your applications and libraries faster.
-- **Internal dependencies** let you share functionality within your repository, dramatically improving discoverability and usability of shared code. We will discuss how to build an Internal Package in [the next guide](/docs/crafting-your-repository/creating-an-internal-package).
+- **외부 종속성**은 [npm 레지스트리](https://www.npmjs.com/)에서 제공되며, 생태계의 귀중한 코드를 활용하여 애플리케이션과 라이브러리를 더 빠르게 빌드할 수 있습니다.
+- **내부 종속성**을 사용하면 저장소 내에서 기능을 공유할 수 있어 공유 코드의 검색 가능성과 사용성이 크게 향상됩니다. 내부 패키지를 빌드하는 방법에 대해서는 [다음 가이드](/docs/crafting-your-repository/creating-an-internal-package)에서 논의하겠습니다.
 
 <PackageManagerTabs>
 
@@ -16,8 +16,8 @@ import { LinkToDocumentation } from '#components/link-to-documentation';
 ```json title="./apps/web/package.json"
 {
   "dependencies": {
-    "next": "latest", // External dependency
-    "@repo/ui": "workspace:*" // Internal dependency
+    "next": "latest", // 외부 종속성
+    "@repo/ui": "workspace:*" // 내부 종속성
   }
 }
 ```
@@ -27,8 +27,8 @@ import { LinkToDocumentation } from '#components/link-to-documentation';
 ```json title="./apps/web/package.json"
 {
   "dependencies": {
-    "next": "latest", // External dependency
-    "@repo/ui": "*" // Internal dependency
+    "next": "latest", // 외부 종속성
+    "@repo/ui": "*" // 내부 종속성
   }
 }
 ```
@@ -38,8 +38,8 @@ import { LinkToDocumentation } from '#components/link-to-documentation';
 ```json title="./apps/web/package.json"
 {
   "dependencies": {
-    "next": "latest", // External dependency
-    "@repo/ui": "*" // Internal dependency
+    "next": "latest", // 외부 종속성
+    "@repo/ui": "*" // 내부 종속성
   }
 }
 ```
@@ -49,26 +49,26 @@ import { LinkToDocumentation } from '#components/link-to-documentation';
 ```json title="./apps/web/package.json"
 {
   "dependencies": {
-    "next": "latest", // External dependency
-    "@repo/ui": "workspace:*" // Internal dependency
+    "next": "latest", // 외부 종속성
+    "@repo/ui": "workspace:*" // 내부 종속성
   }
 }
 ```
 </Tab>
 </PackageManagerTabs>
 
-## Best practices for dependency installation
+## 종속성 설치 모범 사례
 
-### Install dependencies where they're used
+### 사용되는 곳에 종속성 설치
 
-When you install a dependency in your repository, you should install it directly in the package that uses it. The package's `package.json` will have every dependency that the package needs. This is true for both external and internal dependencies.
+저장소에 종속성을 설치할 때 해당 종속성을 사용하는 패키지에 직접 설치해야 합니다. 패키지의 `package.json`에는 패키지에 필요한 모든 종속성이 있습니다. 이는 외부 및 내부 종속성 모두에 적용됩니다.
 
 <Callout type="good-to-know">
-  Note that your package manager may choose to [use a different node_modules
-  location than the package](#node_modules-locations).
+  패키지 관리자가 [패키지와 다른 node_modules 위치를
+  사용](#node_modules-locations)하도록 선택할 수 있습니다.
 </Callout>
 
-To quickly install dependencies in multiple packages, you can use your package manager:
+여러 패키지에 빠르게 종속성을 설치하려면 패키지 관리자를 사용할 수 있습니다:
 
 <PackageManagerTabs>
 
@@ -78,7 +78,7 @@ To quickly install dependencies in multiple packages, you can use your package m
 pnpm add jest --save-dev --recursive --filter=web --filter=@repo/ui --filter=docs
 ```
 
-<LinkToDocumentation href="https://pnpm.io/cli/recursive">pnpm documentation</LinkToDocumentation>
+<LinkToDocumentation href="https://pnpm.io/cli/recursive">pnpm 문서</LinkToDocumentation>
 </Tab>
 
 <Tab value="yarn">
@@ -90,7 +90,7 @@ yarn workspace @repo/ui add jest --dev
 ```
 
 <LinkToDocumentation href="https://classic.yarnpkg.com/en/docs/cli/add">
-  Yarn 1 documentation
+  Yarn 1 문서
 </LinkToDocumentation>
 
 Yarn 2+:
@@ -100,7 +100,7 @@ yarn workspaces foreach -R --from '{web,@repo/ui}' add jest --dev
 ```
 
 <LinkToDocumentation href="https://yarnpkg.com/cli/workspaces/foreach#usage">
-  Yarn 2+ documentation
+  Yarn 2+ 문서
 </LinkToDocumentation>
 </Tab>
 
@@ -110,7 +110,7 @@ yarn workspaces foreach -R --from '{web,@repo/ui}' add jest --dev
 npm install jest --workspace=web --workspace=@repo/ui --save-dev
 ```
 
-<LinkToDocumentation href="https://docs.npmjs.com/cli/v7/using-npm/config#workspace">npm documentation</LinkToDocumentation>
+<LinkToDocumentation href="https://docs.npmjs.com/cli/v7/using-npm/config#workspace">npm 문서</LinkToDocumentation>
 </Tab>
 
 <Tab value="bun (Beta)">
@@ -119,63 +119,63 @@ npm install jest --workspace=web --workspace=@repo/ui --save-dev
 bun install jest --filter=web --filter=@repo/ui --dev
 ```
 
-<LinkToDocumentation href="https://bun.sh/docs/install/workspaces">bun documentation</LinkToDocumentation>
+<LinkToDocumentation href="https://bun.sh/docs/install/workspaces">bun 문서</LinkToDocumentation>
 </Tab>
 </PackageManagerTabs>
 
-This practice has several benefits:
+이 관행에는 여러 가지 이점이 있습니다:
 
-- **Improved clarity**: It's easier to understand what a package depends on when its dependencies are listed in its `package.json`. Developers working in the repository can see at a glance what dependencies are used within the package.
-- **Enhanced flexibility**: In a monorepo at scale, it can be unrealistic to expect each package to use the same version of an external dependency. When there are many teams working in the same codebase, there will be differing priorities, timelines, and needs due to the realities of [operating at scale](https://vercel.com/blog/how-to-scale-a-large-codebase). By installing dependencies in the package that uses them, you can enable your `ui` team to bump to the latest version of TypeScript, while your `web` team can prioritize shipping new features and bumping TypeScript later. Additionally, if you still want to keep dependency versions in sync, [you can do that, too](/docs/crafting-your-repository/managing-dependencies#keeping-dependencies-on-the-same-version).
-- **Better caching ability**: If you install too many dependencies in the root of your repository, you'll be changing the workspace root whenever you add, update, or delete a dependency, leading to unnecessary cache misses.
-- **Pruning unused dependencies**: For Docker users, [Turborepo's pruning feature](/docs/reference/prune) can remove unused dependencies from Docker images to create lighter images. When dependencies are installed in the packages that they are meant for, Turborepo can read your lockfile and remove dependencies that aren't used in the packages you need.
+- **명확성 향상**: 패키지의 종속성이 `package.json`에 나열되어 있으면 패키지가 의존하는 것을 이해하기가 더 쉽습니다. 저장소에서 작업하는 개발자는 패키지 내에서 사용되는 종속성을 한눈에 볼 수 있습니다.
+- **유연성 향상**: 대규모 모노레포에서는 각 패키지가 외부 종속성의 동일한 버전을 사용할 것으로 기대하는 것이 비현실적일 수 있습니다. 동일한 코드베이스에서 작업하는 많은 팀이 있을 때 [대규모 운영](https://vercel.com/blog/how-to-scale-a-large-codebase)의 현실로 인해 우선순위, 일정 및 요구 사항이 달라집니다. 사용되는 패키지에 종속성을 설치하면 `ui` 팀이 TypeScript의 최신 버전으로 업데이트할 수 있고 `web` 팀은 새로운 기능을 제공하는 데 우선순위를 두고 나중에 TypeScript를 업데이트할 수 있습니다. 또한 여전히 종속성 버전을 동기화하려면 [그렇게 할 수도 있습니다](/docs/crafting-your-repository/managing-dependencies#keeping-dependencies-on-the-same-version).
+- **더 나은 캐싱 능력**: 저장소 루트에 너무 많은 종속성을 설치하면 종속성을 추가, 업데이트 또는 삭제할 때마다 Workspace 루트를 변경하여 불필요한 캐시 미스가 발생합니다.
+- **사용되지 않는 종속성 정리**: Docker 사용자의 경우 [Turborepo의 정리 기능](/docs/reference/prune)을 사용하여 Docker 이미지에서 사용되지 않는 종속성을 제거하여 더 가벼운 이미지를 만들 수 있습니다. 종속성이 의도된 패키지에 설치되면 Turborepo는 lockfile을 읽고 필요한 패키지에서 사용되지 않는 종속성을 제거할 수 있습니다.
 
-### Few dependencies in the root
+### 루트에 종속성 적게
 
-Following the first principle above to [install dependencies in the package where they're used](#install-dependencies-where-theyre-used), you'll find that you naturally end up with few dependencies in the root of your workspace.
+위의 첫 번째 원칙에 따라 [사용되는 곳에 종속성 설치](#install-dependencies-where-theyre-used)하면 자연스럽게 Workspace 루트에 종속성이 거의 없게 됩니다.
 
-The only dependencies that belong in the workspace root are **tools for managing the repository** whereas dependencies for building applications and libraries are installed in their respective packages. Some examples of dependencies that make sense to install in the root are [`turbo`](https://www.npmjs.com/package/turbo), [`husky`](https://www.npmjs.com/package/husky), or [`lint-staged`](https://www.npmjs.com/package/lint-staged).
+Workspace 루트에 속하는 유일한 종속성은 **저장소 관리를 위한 도구**이며, 애플리케이션과 라이브러리를 빌드하기 위한 종속성은 해당 패키지에 설치됩니다. 루트에 설치하는 것이 합리적인 종속성의 몇 가지 예는 [`turbo`](https://www.npmjs.com/package/turbo), [`husky`](https://www.npmjs.com/package/husky) 또는 [`lint-staged`](https://www.npmjs.com/package/lint-staged)입니다.
 
-## Managing dependencies
+## 종속성 관리
 
-### Turborepo does not manage dependencies
+### Turborepo는 종속성을 관리하지 않음
 
-Note that Turborepo does not play a role in managing your dependencies, leaving that work up to your package manager of choice.
+Turborepo는 종속성 관리에서 역할을 하지 않으며, 해당 작업을 선택한 패키지 관리자에 맡깁니다.
 
-It's up to the package manager to handle things like downloading the right external dependency version, symlinking, and resolving modules. The recommendations on this page are best practices for managing dependencies in a Workspace, and are not enforced by Turborepo.
+올바른 외부 종속성 버전 다운로드, 심볼릭 링크 생성 및 모듈 해결과 같은 작업을 처리하는 것은 패키지 관리자의 몫입니다. 이 페이지의 권장 사항은 Workspace에서 종속성을 관리하기 위한 모범 사례이며 Turborepo에서 강제하지 않습니다.
 
-### Module resolution differs amongst package managers
+### 패키지 관리자 간 모듈 해결 차이
 
-Package managers have different module resolution algorithms, which leads to differences in behavior that can be difficult to predict.
+패키지 관리자에는 서로 다른 모듈 해결 알고리즘이 있어 예측하기 어려운 동작 차이가 발생합니다.
 
-In the Turborepo documentation, we make many recommendations according to the expected behaviors of the package managers. Our coverage of how to handle dependencies is best effort and you may need to adapt the documented behavior for your package manager or repository's needs.
+Turborepo 문서에서는 패키지 관리자의 예상 동작에 따라 많은 권장 사항을 제공합니다. 종속성 처리 방법에 대한 범위는 최선의 노력이며 패키지 관리자 또는 저장소의 요구 사항에 맞게 문서화된 동작을 조정해야 할 수 있습니다.
 
-However, if you find an issue with the documentation that appears to be universally incorrect for all package managers or a specific one, please let us know with a GitHub Issue so we can improve.
+그러나 모든 패키지 관리자 또는 특정 패키지 관리자에 대해 보편적으로 잘못된 것으로 보이는 문서 문제를 발견하면 GitHub Issue를 통해 알려주시면 개선할 수 있습니다.
 
-### node_modules locations
+### node_modules 위치
 
-Depending on your choice of package manager, version, settings, and where your dependencies are installed in your Workspace, you may see `node_modules` and the dependencies inside it in various locations within the Workspace. Dependencies could be found in the root `node_modules`, in packages' `node_modules`, or both.
+패키지 관리자 선택, 버전, 설정 및 Workspace에서 종속성이 설치된 위치에 따라 Workspace 내의 다양한 위치에서 `node_modules`와 그 안의 종속성을 볼 수 있습니다. 종속성은 루트 `node_modules`, 패키지의 `node_modules` 또는 둘 다에서 찾을 수 있습니다.
 
-As long as your scripts and tasks are able to find the dependencies they need, your package manager is working correctly.
+스크립트와 작업이 필요한 종속성을 찾을 수 있는 한 패키지 관리자가 올바르게 작동하고 있는 것입니다.
 
-<Callout type="info" title="Referencing `node_modules` in your code">
-The specific locations for `node_modules` within the Workspace are not a part of the public API of package managers. This means that referencing `node_modules` directly (like `node ./node_modules/a-package/dist/index.js`) can be brittle, since the location of the dependency on disk can change with other dependency changes around the Workspace.
+<Callout type="info" title="코드에서 `node_modules` 참조">
+Workspace 내 `node_modules`의 특정 위치는 패키지 관리자의 공개 API의 일부가 아닙니다. 즉, `node_modules`를 직접 참조하는 것(예: `node ./node_modules/a-package/dist/index.js`)은 Workspace 주변의 다른 종속성 변경으로 인해 디스크의 종속성 위치가 변경될 수 있으므로 취약할 수 있습니다.
 
-Instead, rely on conventions of the Node.js ecosystem for accessing dependency modules whenever possible.
+대신 가능한 한 Node.js 생태계의 규칙을 사용하여 종속성 모듈에 액세스하세요.
 
 </Callout>
 
-### Keeping dependencies on the same version
+### 동일한 버전의 종속성 유지
 
-Some monorepo maintainers prefer to keep dependencies on the same version across all packages by rule. There are several ways to achieve this:
+일부 모노레포 유지 관리자는 규칙에 따라 모든 패키지에서 종속성을 동일한 버전으로 유지하는 것을 선호합니다. 이를 달성하는 방법에는 여러 가지가 있습니다:
 
-#### Using purpose-built tooling
+#### 전용 도구 사용
 
-Tools like [`syncpack`](https://www.npmjs.com/package/syncpack), [`manypkg`](https://www.npmjs.com/package/@manypkg/cli), and [`sherif`](https://www.npmjs.com/package/sherif) can be used for this specific purpose.
+이 특정 목적을 위해 [`syncpack`](https://www.npmjs.com/package/syncpack), [`manypkg`](https://www.npmjs.com/package/@manypkg/cli) 및 [`sherif`](https://www.npmjs.com/package/sherif)와 같은 도구를 사용할 수 있습니다.
 
-#### Using your package manager
+#### 패키지 관리자 사용
 
-You can use your package manager to update dependency versions in one command.
+패키지 관리자를 사용하여 하나의 명령으로 종속성 버전을 업데이트할 수 있습니다.
 
 <PackageManagerTabs>
 
@@ -185,7 +185,7 @@ You can use your package manager to update dependency versions in one command.
 pnpm up --recursive typescript@latest
 ```
 
-<small>[→ pnpm documentation](https://pnpm.io/cli/update#--recursive--r)</small>
+<small>[→ pnpm 문서](https://pnpm.io/cli/update#--recursive--r)</small>
 
 </Tab>
 
@@ -194,7 +194,7 @@ Yarn 1:
 ```bash title="Terminal"
 yarn upgrade-interactive --latest
 ```
-<small>[→ Yarn 1 documentation](https://classic.yarnpkg.com/en/docs/cli/upgrade-interactive)</small>
+<small>[→ Yarn 1 문서](https://classic.yarnpkg.com/en/docs/cli/upgrade-interactive)</small>
 
 Yarn 2+:
 
@@ -202,7 +202,7 @@ Yarn 2+:
 yarn upgrade typescript@latest --upgrade
 ```
 
-<small>[→ Yarn 2+ documentation](https://yarnpkg.com/cli/up)</small>
+<small>[→ Yarn 2+ 문서](https://yarnpkg.com/cli/up)</small>
 
 </Tab>
 
@@ -210,28 +210,28 @@ yarn upgrade typescript@latest --upgrade
 ```bash title="Terminal"
 npm install typescript@latest --workspaces
 ```
-  <small>[→ npm documentation](https://docs.npmjs.com/cli/v7/using-npm/config#workspaces)</small>
+  <small>[→ npm 문서](https://docs.npmjs.com/cli/v7/using-npm/config#workspaces)</small>
 
 </Tab>
 
 <Tab value="bun (Beta)">
-No equivalent
+동등한 명령 없음
 
-<small>[→ Bun documentation](https://bun.sh/docs/install/workspaces)</small>
+<small>[→ Bun 문서](https://bun.sh/docs/install/workspaces)</small>
 
 </Tab>
 </PackageManagerTabs>
 
-#### pnpm catalogs
+#### pnpm 카탈로그
 
-In pnpm v9.5+, you can use catalogs to define dependency version ranges as reusable constants. This will keep dependencies on the same version since you're referencing the same value across the workspace.
+pnpm v9.5+에서는 카탈로그를 사용하여 종속성 버전 범위를 재사용 가능한 상수로 정의할 수 있습니다. Workspace 전체에서 동일한 값을 참조하므로 종속성을 동일한 버전으로 유지합니다.
 
-To learn more, [visit the pnpm catalogs documentation](https://pnpm.io/catalogs).
+자세한 내용은 [pnpm 카탈로그 문서](https://pnpm.io/catalogs)를 방문하세요.
 
-#### Using an IDE
+#### IDE 사용
 
-Your IDE's refactoring tooling can find and replace the version of a dependency across all `package.json` files in your repository at once. Try using a regex like `"next": ".*"` on `package.json` files to find all instances of the `next` package and replace them with the version you want. When you're done, make sure to run your package manager's install command to update your lockfile.
+IDE의 리팩토링 도구를 사용하여 저장소의 모든 `package.json` 파일에서 종속성 버전을 한 번에 찾고 바꿀 수 있습니다. `package.json` 파일에서 `next` 패키지의 모든 인스턴스를 찾고 원하는 버전으로 바꾸려면 `"next": ".*"`와 같은 정규식을 사용해 보세요. 완료되면 패키지 관리자의 install 명령을 실행하여 lockfile을 업데이트해야 합니다.
 
-## Next steps
+## 다음 단계
 
-Now that you know how to manage dependencies effectively in a workspace, let's [create an Internal Package](/docs/crafting-your-repository/creating-an-internal-package) to be used as a dependency in your monorepo.
+이제 Workspace에서 효과적으로 종속성을 관리하는 방법을 알았으므로 모노레포에서 종속성으로 사용할 [Internal Package를 생성](/docs/crafting-your-repository/creating-an-internal-package)해 보겠습니다.

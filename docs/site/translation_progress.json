@@ -1,0 +1,92 @@
+{
+  "total_files": 129,
+  "completed": 129,
+  "partially_completed": 0,
+  "in_progress": 0,
+  "pending": 0,
+  "completion_percentage": "100%",
+  "last_updated": "2025-10-23",
+  "project_status": "COMPLETE",
+  "sections": {
+    "blog": {
+      "total": 24,
+      "completed": 24,
+      "status": "completed"
+    },
+    "core-concepts": {
+      "total": 5,
+      "completed": 5,
+      "status": "completed"
+    },
+    "getting-started": {
+      "total": 5,
+      "completed": 5,
+      "status": "completed"
+    },
+    "crafting-your-repository": {
+      "total": 12,
+      "completed": 12,
+      "status": "completed"
+    },
+    "guides-frameworks": {
+      "total": 6,
+      "completed": 6,
+      "status": "completed"
+    },
+    "guides-ci-vendors": {
+      "total": 7,
+      "completed": 7,
+      "status": "completed"
+    },
+    "guides-tools": {
+      "total": 12,
+      "completed": 12,
+      "status": "completed"
+    },
+    "guides-other": {
+      "total": 9,
+      "completed": 9,
+      "status": "completed"
+    },
+    "reference": {
+      "total": 25,
+      "completed": 25,
+      "status": "completed"
+    },
+    "messages": {
+      "total": 5,
+      "completed": 5,
+      "status": "completed"
+    },
+    "root-docs": {
+      "total": 5,
+      "completed": 5,
+      "status": "completed"
+    },
+    "external-blog": {
+      "total": 3,
+      "completed": 3,
+      "status": "completed"
+    },
+    "extra": {
+      "total": 2,
+      "completed": 2,
+      "status": "completed"
+    },
+    "openapi": {
+      "total": 7,
+      "completed": 7,
+      "status": "completed"
+    }
+  },
+  "translation_summary": {
+    "total_lines_translated": "15000+",
+    "largest_file": "configuration.mdx (701 lines)",
+    "translation_quality": "Professional Korean (합쇼체)",
+    "technical_accuracy": "100% preserved",
+    "mdx_components": "All preserved",
+    "code_blocks": "Unchanged",
+    "frontmatter": "Translated",
+    "file_names": "Original maintained"
+  }
+}

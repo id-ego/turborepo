@@ -1,6 +1,6 @@
 ---
 title: Turborepo 1.9
-description: Turborepo 1.9 focuses on improving observability for your task runs to better understand your caching behavior.
+description: Turborepo 1.9는 캐싱 동작을 더 잘 이해할 수 있도록 작업 실행에 대한 관찰 가능성을 개선하는 데 중점을 둡니다.
 date: '2023/04/11'
 tag: 'web development'
 ---
@@ -27,23 +27,23 @@ import { Date } from '#components/blog/date';
   ]}
 />
 
-Turborepo 1.9 focuses on improving observability for your task runs to better understand your caching behavior:
+Turborepo 1.9는 캐싱 동작을 더 잘 이해할 수 있도록 작업 실행에 대한 관찰 가능성을 개선하는 데 중점을 둡니다:
 
-- [**Run Summaries**](#view-and-compare-task-runs): Use the `--summarize` flag to generate a summary of your task to compare against previous runs.
-- [**Easier Starters**](#bring-your-own-starter): Use the `--example` flag with `npx create-turbo` to start from official Turborepo examples or custom repositories.
-- [**Strict Environments** <ExperimentalBadge isLink={false} />](#strict-environments-experimental): Try enabling strict mode to restrict the environment variables your tasks have access to.
+- [**실행 요약**](#view-and-compare-task-runs): `--summarize` 플래그를 사용하여 작업 요약을 생성하고 이전 실행과 비교할 수 있습니다.
+- [**간편한 스타터**](#bring-your-own-starter): `npx create-turbo`와 함께 `--example` 플래그를 사용하여 공식 Turborepo 예제 또는 커스텀 저장소에서 시작할 수 있습니다.
+- [**엄격한 환경** <ExperimentalBadge isLink={false} />](#strict-environments-experimental): 엄격 모드를 활성화하여 작업이 액세스할 수 있는 환경 변수를 제한해 보세요.
 
-Update today by running `npx @turbo/codemod migrate`.
+`npx @turbo/codemod migrate`를 실행하여 오늘 업데이트하세요.
 
-## View and compare task runs
+## 작업 실행 보기 및 비교
 
-You can now produce a JSON summary of your task run using the `--summarize` flag:
+이제 `--summarize` 플래그를 사용하여 작업 실행의 JSON 요약을 생성할 수 있습니다:
 
 ```bash title="Terminal"
 turbo build --summarize
 ```
 
-When this flag is enabled, Turborepo will generate a summary in `.turbo/runs/` that contains all the information necessary to understand how `turbo` interpreted your your task's configuration and code.
+이 플래그가 활성화되면 Turborepo는 `.turbo/runs/`에 `turbo`가 작업의 구성과 코드를 어떻게 해석했는지 이해하는 데 필요한 모든 정보가 포함된 요약을 생성합니다.
 
 ```bash title="Terminal"
 Tasks:    3 successful, 3 total
@@ -52,69 +52,69 @@ Time:     1.707s
 Summary:  /Users/acme/projects/acme/.turbo/runs/2Nn3X6nWDhP9ag8BnmivWRxHpHC.json
 ```
 
-You can then compare summaries using your favorite JSON diffing tool to understand why you got a cache hit or a cache miss.
+그런 다음 선호하는 JSON 비교 도구를 사용하여 요약을 비교하여 캐시 히트 또는 캐시 미스가 발생한 이유를 이해할 수 있습니다.
 
-Learn more in the [docs](/docs/reference/run#--summarize).
+자세한 내용은 [문서](/docs/reference/run#--summarize)를 참조하세요.
 
-## Bring your own starter
+## 나만의 스타터 가져오기
 
-`create-turbo` now supports starting a new project from any of the official [Turborepo examples](https://github.com/vercel/turbo/tree/main/examples). Get started with an example using a single command:
+`create-turbo`는 이제 공식 [Turborepo 예제](https://github.com/vercel/turbo/tree/main/examples) 중 하나에서 새 프로젝트를 시작할 수 있도록 지원합니다. 단일 명령으로 예제를 시작하세요:
 
 ```bash title="Terminal"
 npx create-turbo@latest -e kitchen-sink
 ```
 
-In your terminal UI, choose your preferred package manager and `create-turbo` will automatically convert the chosen example to your package manager of choice.
+터미널 UI에서 선호하는 패키지 매니저를 선택하면 `create-turbo`가 선택한 예제를 선택한 패키지 매니저로 자동 변환합니다.
 
-Additionally, you can use `create-turbo` with custom repository sources, allowing you to re-use your own custom starter or another starter from around the community:
+또한 커스텀 저장소 소스와 함께 `create-turbo`를 사용하여 자신의 커스텀 스타터 또는 커뮤니티의 다른 스타터를 재사용할 수 있습니다:
 
 ```bash title="Terminal"
 npx create-turbo -e https://github.com/your-org/turbo-starter
 ```
 
-## Strict Environments <ExperimentalBadge>Experimental</ExperimentalBadge>
+## 엄격한 환경 <ExperimentalBadge>Experimental</ExperimentalBadge>
 
-You can now use the `--env-mode=strict` flag to restrict the environment variables your tasks have access to. Your tasks will only be aware of the variables you explicitly state, creating a safer caching environment.
+이제 `--env-mode=strict` 플래그를 사용하여 작업이 액세스할 수 있는 환경 변수를 제한할 수 있습니다. 작업은 명시적으로 선언한 변수만 인식하여 더 안전한 캐싱 환경을 만듭니다.
 
-In `strict` mode, Turborepo will pass environment variables declared in:
+`strict` 모드에서 Turborepo는 다음에 선언된 환경 변수를 전달합니다:
 
-- `globalEnv` and `globalPassThroughEnv` to all tasks
-- `env` and `passThroughEnv` for each task
+- 모든 작업에 `globalEnv` 및 `globalPassThroughEnv`
+- 각 작업에 `env` 및 `passThroughEnv`
 
 ```json title="./turbo.json"
 {
-  // Available to all tasks
+  // 모든 작업에서 사용 가능
   "globalPassThroughEnv": ["GLOBAL_VAR_1"],
 
-  // Available to all tasks and invalidates caches
+  // 모든 작업에서 사용 가능하며 캐시 무효화
   "globalEnv": ["GLOBAL_VAR_2"],
 
   "pipeline": {
     "build": {
-      // Only available to `build` tasks
+      // `build` 작업에만 사용 가능
       "passThroughEnv": ["VAR_1"],
 
-      // Available to `build` task and invalidates caches
+      // `build` 작업에서 사용 가능하며 캐시 무효화
       "env": ["VAR_2"]
     }
   }
 }
 ```
 
-In `strict` mode, this configuration will only expose four environment variables to your `build` tasks, helping you catch missing variables earlier in the development process.
+`strict` 모드에서 이 구성은 `build` 작업에 4개의 환경 변수만 노출하여 개발 프로세스 초기에 누락된 변수를 더 쉽게 찾을 수 있도록 도와줍니다.
 
-`--env-mode` also supports `loose` and `infer`.
+`--env-mode`는 `loose` 및 `infer`도 지원합니다.
 
-Learn more in the [docs](/docs/reference/run#--env-mode-option).
+자세한 내용은 [문서](/docs/reference/run#--env-mode-option)를 참조하세요.
 
-## Community
+## 커뮤니티
 
-Since releasing [Turborepo v1.8](/blog/turbo-1-8-0) we've seen incredible adoption and community growth:
+[Turborepo v1.8](/blog/turbo-1-8-0) 출시 이후 놀라운 채택률과 커뮤니티 성장을 보았습니다:
 
 - [20.5k+ GitHub Stars](https://github.com/vercel/turbo)
-- [1.1M weekly NPM downloads](https://www.npmjs.com/package/turbo)
-- 64 years of compute time saved through [Remote Caching on Vercel](https://vercel.com/docs/concepts/monorepos/remote-caching)
+- [주간 NPM 다운로드 1.1M회](https://www.npmjs.com/package/turbo)
+- [Vercel의 Remote Caching](https://vercel.com/docs/concepts/monorepos/remote-caching)을 통해 64년의 컴퓨팅 시간 절약
 
-Turborepo is the result of the combined work of all of its contributors, including our core team.
+Turborepo는 핵심 팀을 포함한 모든 기여자들의 노력이 결합된 결과입니다.
 
-Thank you for your continued support, feedback, and collaboration to make Turborepo your build tool of choice.
+Turborepo를 여러분의 빌드 도구로 선택하기 위해 지속적인 지원, 피드백, 협업에 감사드립니다.

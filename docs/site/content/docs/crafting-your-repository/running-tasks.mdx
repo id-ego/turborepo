@@ -1,6 +1,6 @@
 ---
-title: Running tasks
-description: Learn how to run tasks in your repository through the `turbo` CLI.
+title: 작업 실행
+description: `turbo` CLI를 통해 저장소에서 작업을 실행하는 방법을 알아봅니다.
 ---
 
 import { Callout } from '#components/callout';
@@ -8,17 +8,17 @@ import { PackageManagerTabs, Tab } from '#components/tabs';
 import { LinkToDocumentation } from '#components/link-to-documentation';
 import { InVersion } from '#components/in-version';
 
-Turborepo optimizes the developer workflows in your repository by automatically parallelizing and caching tasks. Once a task is [registered in `turbo.json`](/docs/crafting-your-repository/configuring-tasks), you have a powerful new toolset for running the scripts in your repository:
+Turborepo는 자동으로 작업을 병렬화하고 캐시하여 저장소의 개발자 워크플로를 최적화합니다. 작업이 [`turbo.json`에 등록](/docs/crafting-your-repository/configuring-tasks)되면 저장소에서 스크립트를 실행하기 위한 강력한 새 도구 세트를 사용할 수 있습니다:
 
-- [Use `scripts` in `package.json` for tasks you need to run often](#using-scripts-in-packagejson)
-- [Use global `turbo` to quickly run custom tasks on-demand](#using-global-turbo)
-- [Filter tasks by directories, package names, source control changes, and more](#using-filters)
+- [자주 실행해야 하는 작업에 `package.json`의 `scripts` 사용](#using-scripts-in-packagejson)
+- [전역 `turbo`를 사용하여 주문형 사용자 정의 작업을 빠르게 실행](#using-global-turbo)
+- [디렉토리, 패키지 이름, 소스 제어 변경 사항 등으로 작업 필터링](#using-filters)
 
-Running tasks through `turbo` is powerful because you get one model for executing workflows throughout your repository in development and in your CI pipelines.
+`turbo`를 통해 작업을 실행하는 것은 개발 및 CI 파이프라인에서 저장소 전체에 걸쳐 워크플로를 실행하기 위한 하나의 모델을 얻기 때문에 강력합니다.
 
-## Using `scripts` in `package.json`
+## `package.json`에서 `scripts` 사용
 
-For tasks that you run frequently, you can write your `turbo` commands directly into your root `package.json`.
+자주 실행하는 작업의 경우 루트 `package.json`에 `turbo` 명령을 직접 작성할 수 있습니다.
 
 ```jsonc title="./package.json"
 {
@@ -32,12 +32,12 @@ For tasks that you run frequently, you can write your `turbo` commands directly 
 ```
 
 <Callout type="good-to-know">
-  `turbo` is an alias for `turbo run` - but we recommend using `turbo run` in
-  `package.json` and CI workflows to avoid potential collisions with possible
-  `turbo` subcommands that could be added in the future.
+  `turbo`는 `turbo run`의 별칭입니다. 하지만 향후 추가될 수 있는 `turbo` 하위
+  명령과의 충돌을 피하기 위해 `package.json` 및 CI 워크플로에서는 `turbo run`을
+  사용하는 것이 좋습니다.
 </Callout>
 
-These scripts can then be run using your package manager.
+그런 다음 패키지 관리자를 사용하여 이러한 스크립트를 실행할 수 있습니다.
 
 <PackageManagerTabs>
 
@@ -74,66 +74,65 @@ bun run dev
 </PackageManagerTabs>
 
 <Callout type="warn">
-You only want to write `turbo` commands in your root `package.json`. Writing `turbo` commands into the `package.json` of packages can lead to recursively
-calling `turbo`.
+루트 `package.json`에만 `turbo` 명령을 작성하세요. 패키지의 `package.json`에 `turbo` 명령을 작성하면 `turbo`를 재귀적으로 호출할 수 있습니다.
 
 </Callout>
 
-## Using global `turbo`
+## 전역 `turbo` 사용
 
-[Installing `turbo` globally](/docs/getting-started/installation#global-installation) lets you run commands directly from your terminal. This improves your local development experience since it makes it easier to run exactly what you need, when you need it.
+[`turbo`를 전역으로 설치](/docs/getting-started/installation#global-installation)하면 터미널에서 직접 명령을 실행할 수 있습니다. 이는 필요한 것을 정확히 실행하기가 더 쉬워지므로 로컬 개발 경험을 향상시킵니다.
 
-Additionally, global `turbo` is useful in your CI pipelines, giving you maximum control of exactly which tasks to run at each point in your pipeline.
+또한 전역 `turbo`는 CI 파이프라인에서 유용하며 파이프라인의 각 지점에서 실행할 작업을 최대한 제어할 수 있습니다.
 
 ### Automatic Package Scoping
 
-When you're in a package's directory, `turbo` will automatically scope commands to the [Package Graph](/docs/core-concepts/package-and-task-graph#package-graph) for that package. This means you can quickly write commands without having to [write filters](/docs/reference/run#--filter-string) for the package.
+패키지의 디렉토리에 있을 때 `turbo`는 자동으로 해당 패키지의 [Package Graph](/docs/core-concepts/package-and-task-graph#package-graph)로 명령을 스코핑합니다. 즉, 패키지에 대한 [필터를 작성](/docs/reference/run#--filter-string)하지 않고도 빠르게 명령을 작성할 수 있습니다.
 
 ```bash title="Terminal"
 cd apps/docs
 turbo build
 ```
 
-In the example above, the `turbo build` command will run the `build` task for the `docs` package using the `build` task registered in `turbo.json`.
+위의 예에서 `turbo build` 명령은 `turbo.json`에 등록된 `build` 작업을 사용하여 `docs` 패키지에 대한 `build` 작업을 실행합니다.
 
 <Callout type="good-to-know">
-  [Using a filter](#using-filters) will override Automatic Package Scoping.
+  [필터 사용](#using-filters)은 Automatic Package Scoping을 재정의합니다.
 </Callout>
 
-### Customizing behavior
+### 동작 사용자 지정
 
-In [the documentation for the `run` subcommand](/docs/reference/run), you'll find many useful flags to tailor the behavior of `turbo run` for what you need. When running global `turbo`, you can go faster using workflows like:
+[`run` 하위 명령 문서](/docs/reference/run)에서 필요한 것에 맞게 `turbo run`의 동작을 조정하는 데 유용한 많은 플래그를 찾을 수 있습니다. 전역 `turbo`를 실행할 때 다음과 같은 워크플로를 사용하여 더 빠르게 진행할 수 있습니다:
 
-- **Variations of your most common commands**: The `build` script in `package.json` has the most utility when it is `turbo build` - but you might only be interested in a specific package at the moment. You can quickly filter for the specific package you're interested in using `turbo build --filter=@repo/ui`.
-- **One-off commands**: Commands like `turbo build --dry` aren't needed often so you likely won't create a script in your `package.json` for it. Instead, you can run it directly in your terminal whenever you need it.
-- **Overriding `turbo.json` configuration**: Some CLI flags have an equivalent in `turbo.json` that you can override. For instance, you may have a `turbo build` command configured to use [`"outputLogs": "full"` in `turbo.json`](/docs/reference/configuration#outputlogs) - but you're only interested in seeing errors at the moment. Using global `turbo`, you can use `turbo lint --output-logs=errors-only` to only show errors.
+- **가장 일반적인 명령의 변형**: `package.json`의 `build` 스크립트는 `turbo build`일 때 가장 유용하지만 현재 특정 패키지에만 관심이 있을 수 있습니다. `turbo build --filter=@repo/ui`를 사용하여 관심 있는 특정 패키지를 빠르게 필터링할 수 있습니다.
+- **일회성 명령**: `turbo build --dry`와 같은 명령은 자주 필요하지 않으므로 `package.json`에 스크립트를 만들지 않을 것입니다. 대신 필요할 때마다 터미널에서 직접 실행할 수 있습니다.
+- **`turbo.json` 구성 재정의**: 일부 CLI 플래그에는 재정의할 수 있는 `turbo.json`의 동등한 플래그가 있습니다. 예를 들어 [`turbo.json`에서 `"outputLogs": "full"`을 사용](/docs/reference/configuration#outputlogs)하도록 구성된 `turbo build` 명령이 있지만 현재 오류만 보고 싶을 수 있습니다. 전역 `turbo`를 사용하여 `turbo lint --output-logs=errors-only`를 사용하여 오류만 표시할 수 있습니다.
 
-## Running multiple tasks
+## 여러 작업 실행
 
-`turbo` is able to run multiple tasks, parallelizing whenever possible.
+`turbo`는 여러 작업을 실행할 수 있으며 가능한 한 병렬화합니다.
 
 ```bash title="Terminal"
 turbo run build test lint check-types
 ```
 
-This command will run all of the tasks, automatically detecting where it can run a script as early as possible, according to your task definitions.
+이 명령은 모든 작업을 실행하며 작업 정의에 따라 스크립트를 가능한 한 빨리 실행할 수 있는 위치를 자동으로 감지합니다.
 
-<Callout type="info" title="Ordering of tasks">
-`turbo test lint` will run tasks exactly the same as `turbo lint test`.
+<Callout type="info" title="작업 순서">
+`turbo test lint`는 `turbo lint test`와 정확히 동일한 작업을 실행합니다.
 
-If you want to ensure that one task blocks the execution of another, express that relationship in your [task configurations](/docs/crafting-your-repository/configuring-tasks#defining-tasks).
+한 작업이 다른 작업의 실행을 차단하도록 하려면 [작업 구성](/docs/crafting-your-repository/configuring-tasks#defining-tasks)에서 해당 관계를 표현하세요.
 
 </Callout>
 
-## Using filters
+## 필터 사용
 
-While [caching](/docs/crafting-your-repository/running-tasks) ensures you stay fast by never doing the same work twice, you can also filter tasks to run only a subset of [the Task Graph](/docs/core-concepts/package-and-task-graph#task-graph).
+[캐싱](/docs/crafting-your-repository/running-tasks)은 동일한 작업을 두 번 수행하지 않도록 하여 빠르게 유지하지만 [the Task Graph](/docs/core-concepts/package-and-task-graph#task-graph)의 하위 집합만 실행하도록 작업을 필터링할 수도 있습니다.
 
-There are many advanced use cases for filtering in [the `--filter` API reference](/docs/reference/run#--filter-string) but the most common use cases are discussed below.
+[`--filter` API 참조](/docs/reference/run#--filter-string)에는 필터링에 대한 많은 고급 사용 사례가 있지만 가장 일반적인 사용 사례는 아래에서 설명합니다.
 
-### Filtering by package
+### 패키지별 필터링
 
-Filtering by package is a simple way to only run tasks for the packages you're currently working on.
+패키지별 필터링은 현재 작업 중인 패키지에 대해서만 작업을 실행하는 간단한 방법입니다.
 
 ```bash title="Terminal"
 turbo build --filter=@acme/web
@@ -141,67 +140,67 @@ turbo build --filter=@acme/web
 
 <InVersion version="2.2.4">
 
-You can also filter to a specific task for the package directly in your CLI command without needing to use `--filter`:
+`--filter`를 사용하지 않고도 CLI 명령에서 패키지에 대한 특정 작업으로 직접 필터링할 수도 있습니다:
 
 ```bash title="Terminal"
-# Run the `build` task for the `web` package
+# `web` 패키지에 대한 `build` 작업 실행
 turbo run web#build
 
-# Run the `build` task for the `web` package, and the `lint` task for the `docs` package
+# `web` 패키지에 대한 `build` 작업과 `docs` 패키지에 대한 `lint` 작업 실행
 turbo run web#build docs#lint
 ```
 
 </InVersion>
 
-### Filtering by directory
+### 디렉토리별 필터링
 
-Your repository might have a directory structure where related packages are grouped together. In this case, you can capture the glob for that directory to focus `turbo` on those packages.
+저장소에는 관련 패키지가 함께 그룹화된 디렉토리 구조가 있을 수 있습니다. 이 경우 해당 디렉토리에 대한 glob을 캡처하여 `turbo`를 해당 패키지에 집중할 수 있습니다.
 
 ```bash title="Terminal"
 turbo lint --filter="./packages/utilities/*"
 ```
 
-### Filtering to include dependents
+### 종속자를 포함하도록 필터링
 
-When you're working on a specific package, you might want to run tasks for the package and its dependents. The `...` microsyntax is useful when you're making changes to a package and want to ensure that the changes don't break any of its dependents.
+특정 패키지에서 작업할 때 패키지와 해당 종속자에 대한 작업을 실행할 수 있습니다. `...` 마이크로 구문은 패키지를 변경하고 해당 변경 사항이 종속자를 손상시키지 않도록 할 때 유용합니다.
 
 ```bash title="Terminal"
 turbo build --filter=...ui
 ```
 
-### Filtering to include dependencies
+### 종속성을 포함하도록 필터링
 
-To limit the scope to a package and its dependencies, append `...` to the package name. This runs the task for the specified package and all packages it depends on.
+범위를 패키지 및 해당 종속성으로 제한하려면 패키지 이름에 `...`를 추가합니다. 이는 지정된 패키지와 해당 패키지가 의존하는 모든 패키지에 대해 작업을 실행합니다.
 
 ```bash title="Terminal"
 turbo dev --filter=web...
 ```
 
-### Filtering by source control changes
+### 소스 제어 변경 사항별 필터링
 
-Using filters to run tasks based on changes in source control is a great way to run tasks only for the packages that are affected by your changes. **Source control filters must be wrapped in `[]`**.
+필터를 사용하여 소스 제어의 변경 사항을 기반으로 작업을 실행하는 것은 변경 사항의 영향을 받는 패키지에 대해서만 작업을 실행하는 좋은 방법입니다. **소스 제어 필터는 `[]`로 래핑해야 합니다**.
 
-- **Comparing to the previous commit**: `turbo build --filter=[HEAD^1]`
-- **Comparing to the main branch**: `turbo build --filter=[main...my-feature]`
-- **Comparing specific commits using SHAs**: `turbo build --filter=[a1b2c3d...e4f5g6h]`
-- **Comparing specific commits using branch names**: `turbo build --filter=[your-feature...my-feature]`
+- **이전 커밋과 비교**: `turbo build --filter=[HEAD^1]`
+- **메인 브랜치와 비교**: `turbo build --filter=[main...my-feature]`
+- **SHA를 사용하여 특정 커밋 비교**: `turbo build --filter=[a1b2c3d...e4f5g6h]`
+- **브랜치 이름을 사용하여 특정 커밋 비교**: `turbo build --filter=[your-feature...my-feature]`
 
 <Callout type="info">
-  In general, you can rely on caching to keep your repository fast. When you're
-  using [Remote Caching](/docs/core-concepts/remote-caching), you can count on
-  hitting cache for unchanged packages.
+  일반적으로 캐싱에 의존하여 저장소를 빠르게 유지할 수 있습니다. [Remote
+  Caching](/docs/core-concepts/remote-caching)을 사용하는 경우 변경되지 않은
+  패키지에 대해 캐시를 히트할 수 있습니다.
 </Callout>
 
-### Combining filters
+### 필터 결합
 
-For even more specificity, you can combine filters to further refine the entrypoints into your [Task Graph](/docs/core-concepts/package-and-task-graph#task-graph).
+더욱 구체적으로 하려면 필터를 결합하여 [Task Graph](/docs/core-concepts/package-and-task-graph#task-graph)의 진입점을 더욱 세분화할 수 있습니다.
 
 ```bash title="Terminal"
 turbo build --filter=...ui --filter={./packages/*} --filter=[HEAD^1]
 ```
 
-Multiple filters are combined as a **union**, meaning that the [Task Graph](/docs/core-concepts/package-and-task-graph#task-graph) will include tasks that match any of the filters. For more information on advanced usage of filters, see [the `--filter` API reference](/docs/reference/run#--filter-string).
+여러 필터는 **합집합**으로 결합됩니다. 즉, [Task Graph](/docs/core-concepts/package-and-task-graph#task-graph)에는 필터 중 하나와 일치하는 작업이 포함됩니다. 필터의 고급 사용에 대한 자세한 내용은 [`--filter` API 참조](/docs/reference/run#--filter-string)를 참조하세요.
 
-## Next steps
+## 다음 단계
 
-When you start running tasks in your repository, you might start noticing that your tasks get faster. Next, you'll explore [caching](/docs/crafting-your-repository/caching) and how `turbo` makes it so you never do the same work twice.
+저장소에서 작업을 실행하기 시작하면 작업이 더 빠르게 실행되는 것을 알 수 있습니다. 다음으로 [캐싱](/docs/crafting-your-repository/caching)과 `turbo`가 동일한 작업을 두 번 수행하지 않도록 하는 방법을 탐색합니다.

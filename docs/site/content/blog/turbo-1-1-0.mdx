@@ -1,6 +1,6 @@
 ---
 title: Turborepo 1.1
-description: Turborepo 1.1 introduces automatic migrations, turbo.json configuration, environment variable dependencies, partial Yarn v2 support, and more!
+description: Turborepo 1.1에서는 자동 마이그레이션, turbo.json 구성, 환경 변수 종속성, 부분적인 Yarn v2 지원 등이 도입되었습니다!
 date: '2022/01/31'
 tag: 'web development'
 ---
@@ -11,76 +11,76 @@ import { Authors } from '#components/authors';
 
 <Authors authors={['jaredpalmer', 'becca__z', 'gaspargarcia', 'gregsoltis']} />
 
-Since releasing Turborepo v1.0 in mid-December, we've seen incredible adoption:
+12월 중순 Turborepo v1.0을 출시한 이후 놀라운 도입률을 보였습니다:
 
 - 5.5k+ GitHub Stars
-- 70k+ weekly npm downloads
-- 65+ OSS contributors
-- In production at [Vercel](https://github.com/vercel/next.js), [AWS](https://github.com/aws-amplify/amplify-ui), [PayPal](https://x.com/jaredpalmer/status/1485617973477978121), [Twilio](https://github.com/twilio-labs/function-templates), [Contentful](https://github.com/contentful/forma-36), [Miro](https://github.com/miroapp/app-examples), [Framer](https://github.com/framer/motion), [Discord.js](https://github.com/discordjs/discord.js), [Rocket.chat](https://github.com/RocketChat/fuselage), [Astro.build](https://github.com/withastro/astro)
-- 585+ members of the [Turborepo Community Discord](https://turborepo.com/discord)
+- 주간 npm 다운로드 70k+
+- 65+ OSS 기여자
+- [Vercel](https://github.com/vercel/next.js), [AWS](https://github.com/aws-amplify/amplify-ui), [PayPal](https://x.com/jaredpalmer/status/1485617973477978121), [Twilio](https://github.com/twilio-labs/function-templates), [Contentful](https://github.com/contentful/forma-36), [Miro](https://github.com/miroapp/app-examples), [Framer](https://github.com/framer/motion), [Discord.js](https://github.com/discordjs/discord.js), [Rocket.chat](https://github.com/RocketChat/fuselage), [Astro.build](https://github.com/withastro/astro)에서 프로덕션 사용 중
+- [Turborepo Community Discord](https://turborepo.com/discord) 회원 585명+
 
 ![Weekly npm downloads of `turbo`](/images/blog/turbo-1-1-0/turborepo-weekly-npm-downloads.png)
 
-We're further improving build performance and caching with Turborepo v1.1, featuring:
+Turborepo v1.1에서는 빌드 성능과 캐싱을 더욱 개선하고 다음 기능을 제공합니다:
 
-- [**Automatic Migrations:**](#automatic-migrations) Official idempotent migration scripts to assist with upgrading.
-- [**`turbo.json` Support:**](#turbojson-support) Turborepo configuration now lives in its own file.
-- [**Faster Package Manager Detection:**](#faster-package-manager-detection) Turborepo now respects the `packageManager` key in the root `package.json`.
-- [**Environment Variable Dependencies:**](#environment-variable-dependencies) Define how environment variables impact global and task-specific caching.
-- [**Partial Support for Yarn v2+:**](#partial-yarn-v2v3-support) Support for yarn v2+ with `nodeLinker: "node-modules"`.
+- [**자동 마이그레이션:**](#automatic-migrations) 업그레이드를 지원하는 공식 멱등성 마이그레이션 스크립트입니다.
+- [**`turbo.json` 지원:**](#turbojson-support) Turborepo 구성이 이제 자체 파일에 저장됩니다.
+- [**더 빠른 패키지 매니저 감지:**](#faster-package-manager-detection) Turborepo가 이제 루트 `package.json`의 `packageManager` 키를 준수합니다.
+- [**환경 변수 종속성:**](#environment-variable-dependencies) 환경 변수가 전역 및 작업별 캐싱에 미치는 영향을 정의합니다.
+- [**Yarn v2+ 부분 지원:**](#partial-yarn-v2v3-support) `nodeLinker: "node-modules"`를 사용하는 yarn v2+ 지원입니다.
 
-Update today by running `npm install turbo@latest`. After running `turbo`, you'll see instructions about how to use `@turbo/codemod` to run automatic migrations for `v1.1`.
+`npm install turbo@latest`를 실행하여 오늘 업데이트하세요. `turbo`를 실행한 후 `@turbo/codemod`를 사용하여 `v1.1`에 대한 자동 마이그레이션을 실행하는 방법에 대한 지침이 표시됩니다.
 
-## Automatic Migrations
+## 자동 마이그레이션
 
-Turborepo now provides idempotent code transformations and automatic migration scripts (a.k.a "codemods") to help upgrade your Turborepo codebase when a feature is deprecated or will be deprecated in the future.
+Turborepo는 이제 기능이 더 이상 사용되지 않거나 향후 사용 중단될 때 Turborepo 코드베이스를 업그레이드하는 데 도움이 되는 멱등성 코드 변환 및 자동 마이그레이션 스크립트(일명 "codemod")를 제공합니다.
 
-Codemods are transformations that run on your codebase programmatically. This saves you time by applying a large number of changes to your code automatically, without having to manually go through and edit every file.
+Codemod는 프로그래밍 방식으로 코드베이스에서 실행되는 변환입니다. 이를 통해 모든 파일을 수동으로 검토하고 편집하지 않고도 코드에 대량의 변경 사항을 자동으로 적용하여 시간을 절약할 수 있습니다.
 
-### Usage
+### 사용법
 
 ```bash title="Terminal"
 npx @turbo/codemod <transform> <path>
 ```
 
-- `transform` - the name of transform, [see available transforms in the docs](/docs/reference/turbo-codemod#turborepo-1x).
-- `path` - files or directory to transform.
-- `--dry` - Do a dry run, no code will be edited.
-- `--print` - Prints the changed output for comparison.
+- `transform` - 변환 이름입니다. [문서에서 사용 가능한 변환 확인](/docs/reference/turbo-codemod#turborepo-1x).
+- `path` - 변환할 파일 또는 디렉터리입니다.
+- `--dry` - 드라이 런을 수행하며 코드가 편집되지 않습니다.
+- `--print` - 비교를 위해 변경된 출력을 인쇄합니다.
 
-For more information about specific transforms, check out the [new Codemods documentation](/docs/reference/turbo-codemod#turborepo-1x).
+특정 변환에 대한 자세한 내용은 [새로운 Codemod 문서](/docs/reference/turbo-codemod#turborepo-1x)를 확인하세요.
 
-## `turbo.json` Support
+## `turbo.json` 지원
 
-Turborepo configuration is now defined in a `turbo.json` file in the root of your monorepo. This is an improvement over having a `turbo` key in `package.json` for those who want to quickly jump straight to their Turborepo configuration in their code editors.
+Turborepo 구성이 이제 모노레포 루트의 `turbo.json` 파일에 정의됩니다. 이는 코드 편집기에서 Turborepo 구성으로 빠르게 이동하려는 사용자를 위해 `package.json`에 `turbo` 키를 포함하는 것보다 개선된 방식입니다.
 
-To automatically migrate from your current configuration in `package.json`, check out a new branch, navigate to the root of your monorepo and run the following codemod:
+`package.json`의 현재 구성에서 자동으로 마이그레이션하려면 새 브랜치를 체크아웃하고 모노레포 루트로 이동한 다음 다음 codemod를 실행하세요:
 
 ```bash title="Terminal"
 npx @turbo/codemod create-turbo-config .
 ```
 
-For more information on this transformation, [check out the documentation](/docs/reference/turbo-codemod#create-turbo-config).
+이 변환에 대한 자세한 내용은 [문서를 확인](/docs/reference/turbo-codemod#create-turbo-config)하세요.
 
-## Faster Package Manager Detection
+## 더 빠른 패키지 매니저 감지
 
-Turborepo now supports the recently established `packageManager` field in `package.json` for faster package manager detection. Previously, `turbo` would check for specific files to infer this information. To automatically set this field, check out a new branch, navigate to the root of your monorepo and run:
+Turborepo는 이제 더 빠른 패키지 매니저 감지를 위해 최근 설정된 `package.json`의 `packageManager` 필드를 지원합니다. 이전에는 `turbo`가 특정 파일을 확인하여 이 정보를 추론했습니다. 이 필드를 자동으로 설정하려면 새 브랜치를 체크아웃하고 모노레포 루트로 이동한 다음 다음을 실행하세요:
 
 ```bash title="Terminal"
 npx @turbo/codemod add-package-manager .
 ```
 
-For more information on this transformation, [check out the documentation](/docs/reference/turbo-codemod#add-package-manager).
+이 변환에 대한 자세한 내용은 [문서를 확인](/docs/reference/turbo-codemod#add-package-manager)하세요.
 
-## Environment Variable Dependencies
+## 환경 변수 종속성
 
-When you use `turbo` with tools that inline environment variables at build time (e.g. Next.js or Create React App), it is important you tell `turbo` about it to avoid shipping a cached artifact with the wrong environment variables.
+빌드 시 환경 변수를 인라인하는 도구(예: Next.js 또는 Create React App)와 함께 `turbo`를 사용하는 경우, 잘못된 환경 변수로 캐시된 아티팩트를 배포하지 않도록 `turbo`에 이를 알리는 것이 중요합니다.
 
-You can now control `turbo`'s [cache fingerprinting (a.k.a. hashing)](/docs/crafting-your-repository/caching#task-inputs) behavior based on the values of both environment variables and the contents of files:
+이제 환경 변수 값과 파일 내용을 기반으로 `turbo`의 [캐시 지문(일명 해싱)](/docs/crafting-your-repository/caching#task-inputs) 동작을 제어할 수 있습니다:
 
-- Including environment variables in a `dependsOn` in your `pipeline` definition prefixed by a `$` will impact the cache fingerprint on a per-task or per-package-task basis.
-- Including environment variables in `globalDependencies` list prefixed by a `$` will impact the cache fingerprint of _all_ tasks.
-- Including files or globs of files in `globalDependencies` will impact the cache fingerprint of _all_ tasks.
+- `$` 접두사가 붙은 `pipeline` 정의의 `dependsOn`에 환경 변수를 포함하면 작업별 또는 패키지-작업별로 캐시 지문에 영향을 줍니다.
+- `$` 접두사가 붙은 `globalDependencies` 목록에 환경 변수를 포함하면 _모든_ 작업의 캐시 지문에 영향을 줍니다.
+- `globalDependencies`에 파일 또는 파일 glob을 포함하면 _모든_ 작업의 캐시 지문에 영향을 줍니다.
 
 ```jsonc title="./turbo.json"
 {
@@ -122,18 +122,18 @@ You can now control `turbo`'s [cache fingerprinting (a.k.a. hashing)](/docs/craf
 }
 ```
 
-Note: In most monorepos, you don't often use environment variables in shared packages, but mostly in applications. Thus, to get higher cache hit rates, you should only include environment variables in the app-specific tasks where they are used/inlined.
+참고: 대부분의 모노레포에서는 공유 패키지에서 환경 변수를 자주 사용하지 않고 주로 애플리케이션에서 사용합니다. 따라서 더 높은 캐시 적중률을 얻으려면 환경 변수가 사용/인라인되는 앱별 작업에만 환경 변수를 포함해야 합니다.
 
-For more information, read the [caching and hashing documentation](/docs/crafting-your-repository/caching#task-inputs).
+자세한 내용은 [캐싱 및 해싱 문서](/docs/crafting-your-repository/caching#task-inputs)를 읽어보세요.
 
-## Partial Yarn v2/v3 support
+## Yarn v2/v3 부분 지원
 
-In addition to Yarn v1, npm, and pnpm package managers, Turborepo now supports Yarn v2+ with [`nodeLinker: "node-modules"` set in `.yarnrc.yml`](https://yarnpkg.com/configuration/yarnrc#nodeLinker). This key tells Yarn v2+ to mimic Yarn v1's `node_modules` installation behavior. Yarn v2+ Plug'n'Play (a.k.a. "PnP") is not currently supported.
+Yarn v1, npm 및 pnpm 패키지 매니저 외에도 Turborepo는 이제 [`.yarnrc.yml`에 `nodeLinker: "node-modules"` 설정](https://yarnpkg.com/configuration/yarnrc#nodeLinker)을 사용하는 Yarn v2+를 지원합니다. 이 키는 Yarn v2+에게 Yarn v1의 `node_modules` 설치 동작을 모방하도록 지시합니다. Yarn v2+ Plug'n'Play(일명 "PnP")는 현재 지원되지 않습니다.
 
-## What's next?
+## 다음은 무엇입니까?
 
-[Since our launch](/blog/joining-vercel), Turborepo has focused on seamless incremental adoption/migration and speeding up CI/CD. We are committed to both of those values, but now we'll also be focusing on improving Turborepo's day-to-day ergonomics for local development and observability. We're really excited about this next chapter and will be sharing more details soon.
+[출시 이후](/blog/joining-vercel) Turborepo는 원활한 점진적 도입/마이그레이션과 CI/CD 속도 향상에 중점을 두었습니다. 우리는 이 두 가지 가치에 계속 전념하지만 이제는 로컬 개발 및 관찰 가능성을 위한 Turborepo의 일상적인 인체공학 개선에도 중점을 둘 것입니다. 우리는 이 다음 장에 대해 정말 기대하고 있으며 곧 더 많은 세부 정보를 공유할 것입니다.
 
-## We're hiring!
+## 인재 채용 중!
 
-The Turborepo team at [Vercel](https://vercel.com/) is hiring! We're specifically looking for full time [Senior Full Stack Software Engineers](https://vercel.com/careers) and [Senior DevOps/Infrastructure Engineers](https://vercel.com/careers) to help us make Turborepo even better.
+[Vercel](https://vercel.com/)의 Turborepo 팀이 채용 중입니다! Turborepo를 더욱 개선하는 데 도움을 줄 풀타임 [Senior Full Stack Software Engineers](https://vercel.com/careers) 및 [Senior DevOps/Infrastructure Engineers](https://vercel.com/careers)를 구체적으로 찾고 있습니다.

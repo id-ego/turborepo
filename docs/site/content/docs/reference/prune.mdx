@@ -1,23 +1,23 @@
 ---
 title: prune
-description: API reference for the `turbo prune` command
+description: '`turbo prune` 명령어에 대한 API 레퍼런스'
 ---
 
 import { File, Folder, Files } from '#components/files';
 
-Generate a partial monorepo for a target package. The output will be placed into a directory named `out` containing the following:
+대상 패키지에 대한 부분 모노레포를 생성합니다. 출력은 다음을 포함하는 `out`이라는 디렉토리에 배치됩니다:
 
-- The full source code of all internal packages needed to build the target.
-- A pruned lockfile containing the subset of the original lockfile needed to build the target.
-- A copy of the root `package.json`.
+- 대상을 빌드하는 데 필요한 모든 내부 패키지의 전체 소스 코드.
+- 대상을 빌드하는 데 필요한 원본 lockfile의 하위 집합을 포함하는 정리된 lockfile.
+- 루트 `package.json`의 복사본.
 
 ```bash title="Terminal"
 turbo prune [package]
 ```
 
-### Example
+### 예제
 
-Starting with a repository with the following structure:
+다음 구조의 저장소로 시작합니다:
 
 <Files>
   <File name="package.json" />
@@ -83,7 +83,7 @@ Starting with a repository with the following structure:
   </Folder>
 </Files>
 
-Run `turbo prune frontend` to generate a pruned workspace for the `frontend` application in an `out` directory:
+`turbo prune frontend`를 실행하여 `out` 디렉토리에 `frontend` 애플리케이션에 대한 정리된 워크스페이스를 생성합니다:
 
 <Files>
   <File name="package.json" />
@@ -124,19 +124,19 @@ Run `turbo prune frontend` to generate a pruned workspace for the `frontend` app
   </Folder>
 </Files>
 
-### Options
+### 옵션
 
 #### `--docker`
 
-Defaults to `false`.
+기본값: `false`.
 
-Alter the output directory to make it easier to use with [Docker best practices and layer caching](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/). The directory will contain:
+[Docker 모범 사례 및 레이어 캐싱](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)과 함께 사용하기 쉽도록 출력 디렉토리를 변경합니다. 디렉토리에는 다음이 포함됩니다:
 
-- A folder named `json` with the pruned workspace's `package.json` files.
-- A folder named `full` with the pruned workspace's full source code for the internal packages needed to build the target.
-- A pruned lockfile containing the subset of the original lockfile needed to build the target.
+- 정리된 워크스페이스의 `package.json` 파일이 있는 `json`이라는 폴더.
+- 대상을 빌드하는 데 필요한 내부 패키지의 정리된 워크스페이스 전체 소스 코드가 있는 `full`이라는 폴더.
+- 대상을 빌드하는 데 필요한 원본 lockfile의 하위 집합을 포함하는 정리된 lockfile.
 
-Using the same example from above, running `turbo prune frontend --docker` will generate the following:
+위의 동일한 예제를 사용하여 `turbo prune frontend --docker`를 실행하면 다음이 생성됩니다:
 
 <Files>
   <File name="pnpm-lock.yaml (partial)" />
@@ -198,22 +198,22 @@ Using the same example from above, running `turbo prune frontend --docker` will 
 
 #### `--out-dir <path>`
 
-Defaults to `./out`.
+기본값: `./out`.
 
-Customize the directory the pruned output is generated in.
+정리된 출력이 생성되는 디렉토리를 사용자 정의합니다.
 
 #### `--use-gitignore[=<bool>]`
 
-Default: `true`
+기본값: `true`
 
-Respect `.gitignore` file(s) when copying files to the output directory.
+출력 디렉토리로 파일을 복사할 때 `.gitignore` 파일을 준수합니다.
 
-### Comparison to `pnpm deploy`
+### `pnpm deploy`와의 비교
 
-While both `turbo prune` and [`pnpm deploy`](https://pnpm.io/cli/deploy) are used to isolate packages in a monorepo, they serve different purposes and produce different outputs.
+`turbo prune`와 [`pnpm deploy`](https://pnpm.io/cli/deploy) 모두 모노레포의 패키지를 격리하는 데 사용되지만 서로 다른 목적을 제공하고 다른 출력을 생성합니다.
 
-Where `turbo prune` generates a partial monorepo, `pnpm deploy` generates a directory that only contains the contents of the target package.
+`turbo prune`이 부분 모노레포를 생성하는 반면, `pnpm deploy`는 대상 패키지의 내용만 포함하는 디렉토리를 생성합니다.
 
-The `pnpm deploy` generated directory has a self-contained `node_modules` with hard linked internal dependencies.
-This results in a portable package that can be directly copied to a server and used without additional steps.
-The repository structure is not retained, as the focus is on producing a standalone deployable package.
+`pnpm deploy`가 생성한 디렉토리에는 하드 링크된 내부 의존성이 있는 자체 포함된 `node_modules`가 있습니다.
+이로 인해 서버에 직접 복사하여 추가 단계 없이 사용할 수 있는 이식 가능한 패키지가 생성됩니다.
+저장소 구조는 유지되지 않는데, 이는 독립 실행형 배포 가능 패키지를 생성하는 데 중점을 두기 때문입니다.

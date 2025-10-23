@@ -1,15 +1,15 @@
 ---
 title: GitHub Actions
-description: Learn how to use GitHub Actions with Turborepo.
+description: Turborepo와 함께 GitHub Actions를 사용하는 방법을 알아봅니다.
 ---
 
 import { PackageManagerTabs, Tab } from '#components/tabs';
 import { Steps, Step } from '#components/steps';
 import { Callout } from '#components/callout';
 
-The following example shows how to use Turborepo with [GitHub Actions](https://github.com/features/actions).
+다음 예제는 Turborepo를 [GitHub Actions](https://github.com/features/actions)와 함께 사용하는 방법을 보여줍니다.
 
-For a given root `package.json`:
+주어진 루트 `package.json`의 경우:
 
 ```json title="./package.json"
 {
@@ -41,7 +41,7 @@ And a `turbo.json`:
 }
 ```
 
-Create a file called `.github/workflows/ci.yml` in your repository with the following contents:
+저장소에 다음 내용으로 `.github/workflows/ci.yml` 파일을 생성합니다:
 
 <PackageManagerTabs>
   <Tab value="pnpm">
@@ -229,27 +229,26 @@ Create a file called `.github/workflows/ci.yml` in your repository with the foll
 
 </PackageManagerTabs>
 
-## Remote Caching with Vercel Remote Cache
+## Vercel Remote Cache를 사용한 Remote Caching
 
-To use Remote Caching with GitHub Actions, add the following environment variables to your GitHub Actions workflow
-to make them available to your `turbo` commands.
+GitHub Actions와 함께 Remote Caching을 사용하려면 `turbo` 명령에서 사용할 수 있도록 GitHub Actions 워크플로에 다음 환경 변수를 추가합니다.
 
-- `TURBO_TOKEN` - The Bearer token to access the Remote Cache
-- `TURBO_TEAM` - The slug of the Vercel team to share the artifacts with
+- `TURBO_TOKEN` - Remote Cache에 액세스하기 위한 Bearer 토큰
+- `TURBO_TEAM` - 아티팩트를 공유할 Vercel 팀의 슬러그
 
-To use Remote Caching, retrieve the team and token for the Remote Cache for your provider. In this example, we'll use [Vercel Remote Cache](https://vercel.com/docs/monorepos/remote-caching).
+Remote Caching을 사용하려면 제공자의 Remote Cache에 대한 팀과 토큰을 검색합니다. 이 예제에서는 [Vercel Remote Cache](https://vercel.com/docs/monorepos/remote-caching)를 사용합니다.
 
 <Steps>
 <Step>
-Create a Scoped Access Token to your account in the [Vercel Dashboard](https://vercel.com/account/tokens)
+[Vercel Dashboard](https://vercel.com/account/tokens)에서 계정에 대한 Scoped Access Token을 생성합니다.
 
 ![Vercel Access Tokens](/images/docs/vercel-create-token.png)
 
-Copy the value to a safe place. You'll need it in a moment.
+값을 안전한 곳에 복사하세요. 잠시 후에 필요합니다.
 
 </Step>
 <Step>
-Go to your GitHub repository settings and click on the **Secrets** and then **Actions** tab. Create a new secret called `TURBO_TOKEN` and enter the value of your Scoped Access Token.
+GitHub 저장소 설정으로 이동하여 **Secrets**를 클릭한 다음 **Actions** 탭을 클릭합니다. `TURBO_TOKEN`이라는 새 비밀을 생성하고 Scoped Access Token의 값을 입력합니다.
 
 ![GitHub Secrets](/images/docs/github-actions-secrets.png)
 ![GitHub Secrets Create](/images/docs/github-actions-create-secret.png)
@@ -257,18 +256,18 @@ Go to your GitHub repository settings and click on the **Secrets** and then **Ac
 </Step>
 
 <Step>
-Create a new repository variable (click the **Variables** tab) called `TURBO_TEAM` and set it to your team slug - the part after `vercel.com/` in [your Team URL](https://vercel.com/d?to=%2F%5Bteam%5D%2F%7E%2Fsettings&title=Find+Team+URL). For example, the slug for `vercel.com/acme` is `acme`.
+(**Variables** 탭을 클릭하여) `TURBO_TEAM`이라는 새 저장소 변수를 생성하고 [팀 URL](https://vercel.com/d?to=%2F%5Bteam%5D%2F%7E%2Fsettings&title=Find+Team+URL)에서 `vercel.com/` 뒤의 부분인 팀 슬러그로 설정합니다. 예를 들어, `vercel.com/acme`의 슬러그는 `acme`입니다.
 
 <Callout type="good-to-know">
-  Using a repository variable rather than a secret will keep GitHub Actions from
-  censoring your team name in log output.
+  비밀 대신 저장소 변수를 사용하면 GitHub Actions가 로그 출력에서 팀 이름을
+  검열하지 않습니다.
 </Callout>
 
 ![GitHub Repository Variables](/images/docs/vercel-team-repo-var.png)
 
 </Step>
 <Step>
-At the top of your GitHub Actions workflow, provide the following environment variables to jobs that use `turbo`:
+GitHub Actions 워크플로 상단에서 `turbo`를 사용하는 작업에 다음 환경 변수를 제공합니다:
 
 ```yaml title=".github/workflows/ci.yml"
 # ...
@@ -294,19 +293,19 @@ jobs:
 </Step>
 </Steps>
 
-## Using Remote Caching with Reusable Workflows
+## 재사용 가능한 워크플로와 함께 Remote Caching 사용
 
-For information on passing secrets to reusable workflows, see [GitHub's documentation on passing secrets to nested workflows](https://docs.github.com/en/actions/how-tos/reuse-automations/reuse-workflows#passing-secrets-to-nested-workflows).
+재사용 가능한 워크플로에 비밀을 전달하는 방법에 대한 자세한 내용은 [중첩된 워크플로에 비밀 전달에 대한 GitHub 문서](https://docs.github.com/en/actions/how-tos/reuse-automations/reuse-workflows#passing-secrets-to-nested-workflows)를 참조하세요.
 
-## Remote Caching with GitHub actions/cache
+## GitHub actions/cache를 사용한 Remote Caching
 
-The following steps show how you could use [actions/cache](https://github.com/actions/cache) to cache your monorepo artifacts on GitHub.
+다음 단계는 [actions/cache](https://github.com/actions/cache)를 사용하여 GitHub에서 모노레포 아티팩트를 캐시하는 방법을 보여줍니다.
 
 <Steps>
 <Step>
-Supply a package.json script that will run tasks using Turborepo.
+Turborepo를 사용하여 작업을 실행할 package.json 스크립트를 제공합니다.
 
-Example `package.json` with a `build` script:
+`build` 스크립트가 있는 `package.json` 예제:
 
 ```json title="./package.json"
 {
@@ -322,13 +321,13 @@ Example `package.json` with a `build` script:
 
 </Step>
 <Step>
-Configure your GitHub pipeline with a step which uses the `actions/cache@v4` action before the build steps of your CI file.
+CI 파일의 빌드 단계 전에 `actions/cache@v4` 액션을 사용하는 단계로 GitHub 파이프라인을 구성합니다.
 
-- Make sure that the `path` attribute set within the `actions/cache` action matches the output location above. In the example below, `path` was set to `.turbo`.
-- State the cache key for the current run under the `key` attribute. In the example below, we used a combination of the runner os and GitHub sha as the cache key.
-- State the desired cache prefix pattern under the `restore-keys` attribute. Make sure this pattern will remain valid for future ci runs. In the example below, we used the `${{ runner.os }}-turbo-` as the cache key prefix pattern to search against. This allows us to hit the cache on any subsequent ci runs despite `github.sha` changing.
+- `actions/cache` 액션 내에 설정된 `path` 속성이 위의 출력 위치와 일치하는지 확인하세요. 아래 예제에서는 `path`가 `.turbo`로 설정되었습니다.
+- `key` 속성 아래에 현재 실행에 대한 캐시 키를 명시하세요. 아래 예제에서는 러너 os와 GitHub sha의 조합을 캐시 키로 사용했습니다.
+- `restore-keys` 속성 아래에 원하는 캐시 접두사 패턴을 명시하세요. 이 패턴이 향후 CI 실행에 대해 유효하게 유지되는지 확인하세요. 아래 예제에서는 `${{ runner.os }}-turbo-`를 검색할 캐시 키 접두사 패턴으로 사용했습니다. 이렇게 하면 `github.sha`가 변경되더라도 이후 CI 실행에서 캐시에 접근할 수 있습니다.
 
-Example `ci` yaml with `.turbo` as chosen cache folder:
+선택한 캐시 폴더로 `.turbo`를 사용하는 `ci` yaml 예제:
 
 ```yaml title=".github/workflows/ci.yml"
 jobs:

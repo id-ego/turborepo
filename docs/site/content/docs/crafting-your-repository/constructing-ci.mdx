@@ -1,113 +1,112 @@
 ---
-title: Constructing CI
-description: Learn how Turborepo can help you efficiently complete all the necessary tasks and accelerate your development workflow.
+title: CI 구성하기
+description: Turborepo가 필요한 모든 task를 효율적으로 완료하고 개발 워크플로우를 가속화하는 방법을 알아봅니다.
 ---
 
 import { Callout } from '#components/callout';
 import { Tabs, Tab } from '#components/tabs';
 import { Step, Steps } from '#components/steps';
 
-Turborepo speeds up builds, lints, tests, and any other tasks that you need to do in your Continuous Integration pipelines. Through parallelization and [Remote Caching](/docs/core-concepts/remote-caching), Turborepo makes your CI dramatically faster.
+Turborepo는 Continuous Integration 파이프라인에서 수행해야 하는 빌드, 린트, 테스트 및 기타 모든 task를 가속화합니다. 병렬화와 [Remote Caching](/docs/core-concepts/remote-caching)을 통해 Turborepo는 CI를 극적으로 빠르게 만듭니다.
 
-For examples of how to connect your CI vendor to Remote Cache and run tasks, visit our [CI guides](/docs/guides/ci-vendors).
+CI 벤더를 Remote Cache에 연결하고 task를 실행하는 방법의 예제는 [CI 가이드](/docs/guides/ci-vendors)를 참조하세요.
 
-## Enabling Remote Caching
+## Remote Caching 활성화하기
 
-To enable Remote Caching for your CI, setup the environment variables for Turborepo to access your Remote Cache.
+CI에 대해 Remote Caching을 활성화하려면 Turborepo가 Remote Cache에 액세스할 수 있도록 환경 변수를 설정합니다.
 
-| Environment Variable | Description                                                                                                                                                                                                                                                                                                                  |
-| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `TURBO_TOKEN`        | The Bearer token to access the Remote Cache                                                                                                                                                                                                                                                                                  |
-| `TURBO_TEAM`         | The account name associated with your repository. When using{' '} <a href="https://vercel.com/docs/monorepos/remote-caching#vercel-remote-cache" rel="noreferrer noopener" target="_blank" >Vercel Remote Cache</a>, this is [your team's slug](https://vercel.com/d?to=%2F%5Bteam%5D%2F%7E%2Fsettings&title=Get+team+slug). |
+| 환경 변수     | 설명                                                                                                                                                                                                                                                                                            |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `TURBO_TOKEN` | Remote Cache에 액세스하기 위한 Bearer 토큰                                                                                                                                                                                                                                                      |
+| `TURBO_TEAM`  | 리포지토리와 연결된 계정 이름. <a href="https://vercel.com/docs/monorepos/remote-caching#vercel-remote-cache" rel="noreferrer noopener" target="_blank" >Vercel Remote Cache</a>를 사용하는 경우 [팀의 slug](https://vercel.com/d?to=%2F%5Bteam%5D%2F%7E%2Fsettings&title=Get+team+slug)입니다. |
 
-When you run tasks through `turbo`, your CI will be able to hit cache, speeding up your pipelines.
+`turbo`를 통해 task를 실행하면 CI가 캐시를 적중하여 파이프라인을 가속화할 수 있습니다.
 
-<Callout type="info" title="Remote Cache hosting">
-Vercel's built-in CI/CD is automatically connected to your managed Vercel Remote Cache with zero configuration. To retrieve a token for connecting your other CI vendors to Vercel Remote Cache, visit the [Vercel Remote Cache documentation](https://vercel.com/docs/monorepos/remote-caching#use-remote-caching-from-external-ci/cd).
+<Callout type="info" title="Remote Cache 호스팅">
+Vercel의 내장 CI/CD는 설정 없이 관리되는 Vercel Remote Cache에 자동으로 연결됩니다. 다른 CI 벤더를 Vercel Remote Cache에 연결하기 위한 토큰을 가져오려면 [Vercel Remote Cache 문서](https://vercel.com/docs/monorepos/remote-caching#use-remote-caching-from-external-ci/cd)를 참조하세요.
 
-For self-hosted Remote Cache options, visit [Turborepo's Remote Cache documentation](/docs/core-concepts/remote-caching#remote-cache-api).
+자체 호스팅 Remote Cache 옵션은 [Turborepo의 Remote Cache 문서](/docs/core-concepts/remote-caching#remote-cache-api)를 참조하세요.
 
 </Callout>
 
-## Running tasks in CI
+## CI에서 task 실행하기
 
-By [installing `turbo` globally](/docs/getting-started/installation#global-installation) onto your development and CI machines, you can use one mental model to run your entire repository, from development to ship. The tasks that you've registered in your `turbo.json` will work exactly the same in CI.
+개발 및 CI 머신에 [`turbo`를 전역으로 설치](/docs/getting-started/installation#global-installation)하면 개발부터 배포까지 전체 리포지토리를 실행하는 데 하나의 멘탈 모델을 사용할 수 있습니다. `turbo.json`에 등록한 task는 CI에서 정확히 동일하게 작동합니다.
 
-- For more information on how to set up tasks, visit the [Configuring Tasks](/docs/crafting-your-repository/configuring-tasks) page.
-- For examples of running tasks in CI, visit our [CI guides](/docs/guides/ci-vendors).
+- task 설정 방법에 대한 자세한 내용은 [Task 구성하기](/docs/crafting-your-repository/configuring-tasks) 페이지를 참조하세요.
+- CI에서 task를 실행하는 예제는 [CI 가이드](/docs/guides/ci-vendors)를 참조하세요.
 
-### Filtering for entry points
+### 진입점 필터링하기
 
-You can filter your tasks using [the `--filter` flag](/docs/reference/run#--filter-string) exactly the same as when you're working with `turbo` locally. Filtering by packages, directories, and Git history are all supported in CI.
+로컬에서 `turbo`로 작업할 때와 정확히 동일하게 [`--filter` 플래그](/docs/reference/run#--filter-string)를 사용하여 task를 필터링할 수 있습니다. 패키지, 디렉토리 및 Git 기록별 필터링이 모두 CI에서 지원됩니다.
 
-<Callout type="info" title="Using Git history in CI">
-  Filtering using source control changes is only possible when history is
-  available on the machine. If you are using shallow clones, history will not be
-  available.
+<Callout type="info" title="CI에서 Git 기록 사용하기">
+  소스 제어 변경 사항을 사용한 필터링은 머신에서 기록을 사용할 수 있는 경우에만
+  가능합니다. shallow clone을 사용하는 경우 기록을 사용할 수 없습니다.
 </Callout>
 
-You can also use [the `--affected` flag](#running-only-affected-tasks) to only run tasks in packages that have changes.
+또한 [`--affected` 플래그](#running-only-affected-tasks)를 사용하여 변경 사항이 있는 패키지의 task만 실행할 수 있습니다.
 
 ## Docker
 
-Docker is an important part of many deployment pipelines. [Turborepo's `prune` subcommand](/docs/reference/prune) helps you ship lightweight images by removing unnecessary dependencies and code from your images.
+Docker는 많은 배포 파이프라인의 중요한 부분입니다. [Turborepo의 `prune` 하위 명령](/docs/reference/prune)은 이미지에서 불필요한 종속성과 코드를 제거하여 경량 이미지를 배포하는 데 도움이 됩니다.
 
-For more on how to deploy from a Turborepo with Docker, visit [the dedicated Docker guide](/docs/guides/tools/docker).
+Docker를 사용하여 Turborepo에서 배포하는 방법에 대한 자세한 내용은 [전용 Docker 가이드](/docs/guides/tools/docker)를 참조하세요.
 
-## Skipping tasks and other unnecessary work
+## Task 및 기타 불필요한 작업 건너뛰기
 
-### Running only affected tasks
+### 영향을 받은 task만 실행하기
 
-You can use the `--affected` flag to only run tasks that have changes.
+`--affected` 플래그를 사용하여 변경 사항이 있는 task만 실행할 수 있습니다.
 
 ```bash title="Terminal"
 turbo run build --affected
 ```
 
-You'll want to use this flag in situations like:
+다음과 같은 상황에서 이 플래그를 사용하려고 할 것입니다:
 
-- You're running many tasks across packages in your monorepo, and only want to run those tasks in packages with code changes.
-- You’re _not_ using a Remote Cache, but still want to do as little work as possible in CI.
-- You _are_ using a Remote Cache, and you’re in a large repository. By minimizing the amount of tasks that will be restored from cache, there will be less data to send across the network, resulting in faster cache restoration.
-- You’re already using [advanced filtering techniques](/docs/reference/run#advanced-filtering-examples) or [`turbo-ignore`](/docs/reference/turbo-ignore) to create the same or similar behavior as `--affected`. You likely have the opportunity to simplify your scripting using this new flag.
-  - `--affected` will can handle shallow clones more gracefully than bespoke filtering because it falls back to running all tasks.
+- monorepo의 패키지 전체에서 많은 task를 실행하고 있으며 코드 변경 사항이 있는 패키지의 task만 실행하려는 경우.
+- Remote Cache를 사용하지 _않지만_ CI에서 가능한 한 적은 작업을 수행하려는 경우.
+- Remote Cache를 _사용하고_ 있으며 대규모 리포지토리에 있는 경우. 캐시에서 복원될 task의 양을 최소화하면 네트워크를 통해 전송할 데이터가 줄어들어 캐시 복원이 더 빨라집니다.
+- 이미 [고급 필터링 기술](/docs/reference/run#advanced-filtering-examples) 또는 [`turbo-ignore`](/docs/reference/turbo-ignore)를 사용하여 `--affected`와 동일하거나 유사한 동작을 생성하고 있는 경우. 이 새 플래그를 사용하여 스크립팅을 단순화할 기회가 있을 것입니다.
+  - `--affected`는 모든 task를 실행하는 것으로 폴백하기 때문에 맞춤형 필터링보다 shallow clone을 더 우아하게 처리할 수 있습니다.
 
-#### Using `--affected` in GitHub Actions
+#### GitHub Actions에서 `--affected` 사용하기
 
-CI/CD pipelines are a perfect place to use `--affected`. With `--affected`, Turborepo can automatically detect that you're running in GitHub Actions by inspecting environment variables set by GitHub, like `GITHUB_BASE_REF`.
+CI/CD 파이프라인은 `--affected`를 사용하기에 완벽한 곳입니다. `--affected`를 사용하면 Turborepo는 `GITHUB_BASE_REF`와 같이 GitHub에서 설정한 환경 변수를 검사하여 GitHub Actions에서 실행 중임을 자동으로 감지할 수 있습니다.
 
-In the context of a PR, this means that Turborepo can determine which packages have changed between the PR's base branch and the PR's head branch. This allows you to run tasks only for the packages that are affected by the changes in the PR.
+PR의 컨텍스트에서 이는 Turborepo가 PR의 기본 브랜치와 PR의 헤드 브랜치 간에 변경된 패키지를 결정할 수 있음을 의미합니다. 이를 통해 PR의 변경 사항에 영향을 받는 패키지에 대해서만 task를 실행할 수 있습니다.
 
-While `GITHUB_BASE_REF` works well in `pull_request` and `pull_request_target` events, it is not available during regular push events. In those cases, we use `GITHUB_EVENT_PATH` to determine the base branch to compare your commit to. In force pushes and pushing branch with no additional commits, we compare to the parent of the first commit on the branch.
+`GITHUB_BASE_REF`는 `pull_request` 및 `pull_request_target` 이벤트에서 잘 작동하지만 일반 push 이벤트에서는 사용할 수 없습니다. 이러한 경우 `GITHUB_EVENT_PATH`를 사용하여 커밋과 비교할 기본 브랜치를 결정합니다. force push 및 추가 커밋이 없는 브랜치 푸시에서는 브랜치의 첫 번째 커밋의 부모와 비교합니다.
 
-### Using `turbo-ignore`
+### `turbo-ignore` 사용하기
 
-As your codebase and CI grow, you may start to look for more ways to get even faster. While hitting cache is useful, you also may be able to skip work entirely. Using `turbo-ignore`, you can skip lengthy container preparation steps like dependency installation that will end up resulting in a cache hit, anyway.
+코드베이스와 CI가 성장함에 따라 더 빠르게 만드는 더 많은 방법을 찾기 시작할 수 있습니다. 캐시를 적중하는 것이 유용하지만 작업을 완전히 건너뛸 수도 있습니다. `turbo-ignore`를 사용하면 어쨌든 캐시 적중으로 끝날 종속성 설치와 같은 긴 컨테이너 준비 단계를 건너뛸 수 있습니다.
 
 <Steps>
 <Step>
-### Checkout the repository
+### 리포지토리 체크아웃하기
 
-Start by cloning your repository. Note that a clone with history to the cloning depth you plan on using is necessary for comparisons.
+리포지토리를 복제하는 것으로 시작합니다. 사용할 복제 깊이에 대한 기록이 있는 복제가 비교에 필요합니다.
 
 <Callout type="good-to-know">
-  By default, `turbo-ignore` uses the parent commit. To customize for more
-  depth, see [the turbo-ignore reference](/docs/reference/turbo-ignore).
+  기본적으로 `turbo-ignore`는 부모 커밋을 사용합니다. 더 깊이를 사용자
+  지정하려면 [turbo-ignore 참조](/docs/reference/turbo-ignore)를 참조하세요.
 </Callout>
 
 </Step>
 <Step>
-### Run `turbo-ignore` for the package and task
+### 패키지 및 task에 대해 `turbo-ignore` 실행하기
 
-By default, `turbo-ignore` will use the `build` task in the current working directory.
+기본적으로 `turbo-ignore`는 현재 작업 디렉토리의 `build` task를 사용합니다.
 
-- To check for changes to a different task, use the `--task` flag.
-- To check for changes for a specific package and its dependencies, add the package's name as an argument.
+- 다른 task의 변경 사항을 확인하려면 `--task` 플래그를 사용합니다.
+- 특정 패키지 및 해당 종속성의 변경 사항을 확인하려면 패키지 이름을 인수로 추가합니다.
 
 <Tabs items={["web#build (Named)", "web#build (Inferred)", "docs#test (--task flag)"]}>
 <Tab value="web#build (Named)">
 
-Check for changes for the `build` task for the `web` package and its dependencies by adding the `web` package as an argument:
+`web` 패키지를 인수로 추가하여 `web` 패키지 및 해당 종속성에 대한 `build` task의 변경 사항을 확인합니다:
 
 ```bash title="Terminal"
 npx turbo-ignore web
@@ -117,7 +116,7 @@ npx turbo-ignore web
 
 <Tab value="web#build (Inferred)">
 
-Check for changes for the `build` task for the `web` package and its dependencies using [Automatic Package Scoping](/docs/crafting-your-repository/running-tasks#automatic-package-scoping):
+[자동 패키지 범위 지정](/docs/crafting-your-repository/running-tasks#automatic-package-scoping)을 사용하여 `web` 패키지 및 해당 종속성에 대한 `build` task의 변경 사항을 확인합니다:
 
 ```bash title="Terminal"
 cd apps/web
@@ -128,7 +127,7 @@ npx turbo-ignore
 
 <Tab value="docs#test (--task flag)">
 
-Check for changes for the `test` task for the `docs` package and its dependencies using [Automatic Package Scoping](/docs/crafting-your-repository/running-tasks#automatic-package-scoping) and the `--task` flag:
+[자동 패키지 범위 지정](/docs/crafting-your-repository/running-tasks#automatic-package-scoping) 및 `--task` 플래그를 사용하여 `docs` 패키지 및 해당 종속성에 대한 `test` task의 변경 사항을 확인합니다:
 
 ```bash title="Terminal"
 cd apps/docs
@@ -140,57 +139,57 @@ npx turbo-ignore --task=test
 </Step>
 
 <Step>
-### Handle the result
+### 결과 처리하기
 
-If changes are detected in the package or its [Internal Dependencies](/docs/core-concepts/internal-packages), `turbo` will exit with a `1` status code. If no changes are detected, it will exit with `0`.
+패키지 또는 해당 [내부 종속성](/docs/core-concepts/internal-packages)에서 변경 사항이 감지되면 `turbo`는 `1` 상태 코드로 종료됩니다. 변경 사항이 감지되지 않으면 `0`으로 종료됩니다.
 
-Using this status code, you can choose what the rest of your CI pipeline should do. For instance, a `1` exit code likely means that you should move forward with installing dependencies and running tasks.
+이 상태 코드를 사용하여 CI 파이프라인의 나머지 부분이 수행해야 할 작업을 선택할 수 있습니다. 예를 들어, `1` 종료 코드는 종속성을 설치하고 task를 실행하는 것으로 진행해야 함을 의미할 것입니다.
 
 </Step>
 </Steps>
-For more advanced use cases, see the [`turbo-ignore` reference](/docs/reference/turbo-ignore).
+더 고급 사용 사례는 [`turbo-ignore` 참조](/docs/reference/turbo-ignore)를 참조하세요.
 
-## Best practices
+## 모범 사례
 
-### Rely on caching
+### 캐싱에 의존하기
 
-Turborepo's caching abilities allow you to create fast CI pipelines with minimal complexity. Through [Remote Caching](/docs/core-concepts/remote-caching) and using the `--filter` flag to target packages for builds, Turborepo will handle change detection for large monorepos with little overhead.
+Turborepo의 캐싱 기능을 사용하면 최소한의 복잡성으로 빠른 CI 파이프라인을 생성할 수 있습니다. [Remote Caching](/docs/core-concepts/remote-caching) 및 `--filter` 플래그를 사용하여 빌드할 패키지를 대상으로 지정하면 Turborepo는 오버헤드가 거의 없이 대규모 monorepo에 대한 변경 감지를 처리합니다.
 
-For example, your CI could run these two commands to quickly handle quality checks and build your target application:
+예를 들어, CI는 다음 두 명령을 실행하여 품질 검사를 빠르게 처리하고 대상 애플리케이션을 빌드할 수 있습니다:
 
-- `turbo run lint check-types test`: Run quality checks for your entire repository. Any packages that haven't changed will hit cache.
-- `turbo build --filter=web`: Build the `web` package using the `build` task you've registered in `turbo.json`. If the `web` package or its dependencies haven't changed, the build will also hit cache.
+- `turbo run lint check-types test`: 전체 리포지토리에 대한 품질 검사를 실행합니다. 변경되지 않은 패키지는 캐시를 적중합니다.
+- `turbo build --filter=web`: `turbo.json`에 등록한 `build` task를 사용하여 `web` 패키지를 빌드합니다. `web` 패키지 또는 해당 종속성이 변경되지 않은 경우 빌드도 캐시를 적중합니다.
 
-As your codebase scales, you may find more specific opportunities to optimize your CI - but relying on caching is a great place to start.
+코드베이스가 확장됨에 따라 CI를 최적화할 더 구체적인 기회를 찾을 수 있지만 캐싱에 의존하는 것이 시작하기에 좋은 곳입니다.
 
-### Global `turbo` in CI
+### CI에서 전역 `turbo`
 
-Using global `turbo` is convenient in CI workflows, allowing you to easily run commands specific to your CI and take advantage of [Automatic Workspace Scoping](/docs/crafting-your-repository/running-tasks#automatic-package-scoping).
+전역 `turbo`를 사용하면 CI 워크플로우에서 편리하며 CI에 특정한 명령을 쉽게 실행하고 [자동 Workspace 범위 지정](/docs/crafting-your-repository/running-tasks#automatic-package-scoping)을 활용할 수 있습니다.
 
-However, in some cases, you may be running `turbo` commands or scripts that use `turbo` **before installing packages with your package manager**. One example of this is [using `turbo prune` to create a Docker image](/docs/guides/tools/docker#example). In this situation, global `turbo` will not be able to use the version from `package.json` because the binary for that version hasn't been installed yet.
+그러나 일부 경우에는 **패키지 관리자로 패키지를 설치하기 전에** `turbo` 명령 또는 `turbo`를 사용하는 스크립트를 실행할 수 있습니다. 이에 대한 한 가지 예는 [`turbo prune`을 사용하여 Docker 이미지를 생성](/docs/guides/tools/docker#example)하는 것입니다. 이 상황에서 전역 `turbo`는 해당 버전의 바이너리가 아직 설치되지 않았기 때문에 `package.json`의 버전을 사용할 수 없습니다.
 
-For this reason, we encourage you to **pin your global installation of `turbo` in CI to the major version in `package.json`** since breaking changes will not be introduced within a major version. You could additionally opt for added stability by pinning an exact version, trading off for maintenance burden to receive bug fixes in patch releases.
+이러한 이유로 주요 버전 내에서 중단 변경이 도입되지 않으므로 **CI에서 `turbo`의 전역 설치를 `package.json`의 주요 버전에 고정**하는 것을 권장합니다. 또한 정확한 버전을 고정하여 안정성을 추가로 선택할 수 있지만 패치 릴리스에서 버그 수정을 받기 위해 유지 관리 부담을 감수해야 합니다.
 
-### Use `turbo run` in CI
+### CI에서 `turbo run` 사용하기
 
-`turbo run` is the most common command you will use when working in your Turborepo so it is aliased to `turbo` for convenience. While this is great for working locally, there are other subcommands for `turbo` like [`turbo prune`](/docs/reference/prune) and [`turbo generate`](/docs/reference/generate).
+`turbo run`은 Turborepo에서 작업할 때 가장 일반적으로 사용하는 명령이므로 편의를 위해 `turbo`로 별칭이 지정됩니다. 이는 로컬에서 작업하기에 좋지만 [`turbo prune`](/docs/reference/prune) 및 [`turbo generate`](/docs/reference/generate)와 같은 `turbo`에 대한 다른 하위 명령이 있습니다.
 
-We're always working to make `turbo` better so we may add more subcommands in the future. For this reason, you can prevent naming collisions by using `turbo run` in your CI.
+우리는 항상 `turbo`를 개선하기 위해 노력하고 있으므로 향후 더 많은 하위 명령을 추가할 수 있습니다. 이러한 이유로 CI에서 `turbo run`을 사용하여 이름 충돌을 방지할 수 있습니다.
 
-As an example, if you have a `turbo deploy` command in your CI pipelines, it may conflict with a potential `deploy` subcommand built directly into the `turbo` CLI. To avoid this, use `turbo run deploy` in your CI pipeline instead.
+예를 들어, CI 파이프라인에 `turbo deploy` 명령이 있는 경우 `turbo` CLI에 직접 빌드된 잠재적인 `deploy` 하위 명령과 충돌할 수 있습니다. 이를 피하려면 CI 파이프라인에서 대신 `turbo run deploy`를 사용하세요.
 
-## Troubleshooting
+## 문제 해결
 
-### Hitting cache results in broken builds
+### 캐시 적중으로 인한 빌드 손상
 
-If your task is **passing when you miss cache but failing when you hit cache**, you likely haven't configured [the `outputs` key](/docs/reference/configuration#outputs) for your task correctly.
+task가 **캐시를 미스할 때 통과하지만 캐시를 적중할 때 실패**하는 경우, task에 대한 [`outputs` 키](/docs/reference/configuration#outputs)를 올바르게 구성하지 않았을 가능성이 높습니다.
 
-### Deployment using the wrong environment variables
+### 잘못된 환경 변수를 사용한 배포
 
-If you haven't defined the `env` or `globalEnv` keys for your task, Turborepo will not be able to use them when creating hashes. This means your task can hit cache despite being in a different environment.
+task에 대해 `env` 또는 `globalEnv` 키를 정의하지 않은 경우 Turborepo는 해시를 생성할 때 이를 사용할 수 없습니다. 이는 다른 환경에 있음에도 불구하고 task가 캐시를 적중할 수 있음을 의미합니다.
 
-Check your configuration for the `env` and `globalEnv` keys.
+`env` 및 `globalEnv` 키에 대한 구성을 확인하세요.
 
-## Next steps
+## 다음 단계
 
-You now have everything you need to ship applications with Turborepo. To learn more about specific use cases, [check the Guides](/docs/guides) or [dive deeper into core concepts](/docs/core-concepts).
+이제 Turborepo로 애플리케이션을 배포하는 데 필요한 모든 것이 있습니다. 특정 사용 사례에 대해 자세히 알아보려면 [가이드 확인](/docs/guides) 또는 [핵심 개념 자세히 알아보기](/docs/core-concepts)를 참조하세요.

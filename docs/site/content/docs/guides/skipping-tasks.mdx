@@ -1,72 +1,71 @@
 ---
-title: Skipping tasks
-description: Never do the same work twice.
+title: 작업 건너뛰기
+description: 동일한 작업을 두 번 수행하지 마세요.
 ---
 
 import { Callout } from '#components/callout';
 
-[Caching](/docs/crafting-your-repository/caching) dramatically speeds up your tasks - but you may be able to go even faster by using `npx turbo-ignore`. If a workspace is unaffected by your code changes, you can completely skip executing a task altogether.
+[캐싱](/docs/crafting-your-repository/caching)은 작업 속도를 극적으로 높이지만 `npx turbo-ignore`를 사용하면 더 빠르게 진행할 수 있습니다. 워크스페이스가 코드 변경의 영향을 받지 않는 경우 작업 실행을 완전히 건너뛸 수 있습니다.
 
-Let's say you want to skip the unit tests for your `web` workspace when there aren't any changes to your `web` application (or its package dependencies). If you are already using [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching), you will probably get a cache hit - but you would still spend time provisioning the CI container, installing `npm` dependencies, and other things that can take a while.
+`web` 애플리케이션(또는 그 패키지 종속성)에 변경 사항이 없을 때 `web` 워크스페이스의 단위 테스트를 건너뛰고 싶다고 가정해 봅시다. [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)을 이미 사용하고 있다면 캐시 히트를 얻을 가능성이 높지만 CI 컨테이너 프로비저닝, `npm` 종속성 설치 및 기타 시간이 걸릴 수 있는 작업에 여전히 시간을 소비하게 됩니다.
 
-Ideally, you would do a quick check to see if any of that work needs to happen in the first place.
+이상적으로는 그러한 작업이 처음부터 필요한지 빠르게 확인할 수 있습니다.
 
 ---
 
-After you've checked out the repo, but **before** any other work, you can take a few seconds to check that your `web` tests have changed since the parent commit.
+리포지토리를 체크아웃한 후 다른 작업을 수행하기 **전에** 몇 초를 들여 `web` 테스트가 상위 커밋 이후 변경되었는지 확인할 수 있습니다.
 
 ```bash title="Terminal"
 npx turbo-ignore web --task=test
 ```
 
-This command will:
+이 명령은 다음을 수행합니다:
 
-1. Filter for the `web` workspace.
-2. Create the `dry` output for your `test` task compared to your parent commit.
-3. Parse the output to determine which packages have changed.
-4. Exit with a `1` code if changes are detected. Otherwise, exits with a `0`.
+1. `web` 워크스페이스를 필터링합니다.
+2. 상위 커밋과 비교하여 `test` 작업에 대한 `dry` 출력을 생성합니다.
+3. 출력을 파싱하여 변경된 패키지를 확인합니다.
+4. 변경 사항이 감지되면 `1` 코드로 종료합니다. 그렇지 않으면 `0`으로 종료합니다.
 
-While you may have been able to hit a `>>> FULL TURBO` cache for this task, you just saved time with all of the other setup tasks required to run your CI.
+이 작업에 대해 `>>> FULL TURBO` 캐시를 히트할 수 있었지만 CI를 실행하는 데 필요한 다른 모든 설정 작업으로 시간을 절약했습니다.
 
-## Using `turbo-ignore`
+## `turbo-ignore` 사용
 
-To skip unaffected work, first ensure that your Git history is available on the machine. Then, run `npx turbo-ignore`.
+영향을 받지 않는 작업을 건너뛰려면 먼저 머신에서 Git 기록을 사용할 수 있는지 확인하세요. 그런 다음 `npx turbo-ignore`를 실행합니다.
 
-`turbo-ignore` uses a combination of the `--filter` and `--dry=json` flags to find changes from the parent commit to the current commit to identify affected packages. By default, `turbo-ignore` finds the difference for the **build task in the current working directory**, but you can [customize this behavior with flags](#customizing-behavior).
+`turbo-ignore`는 `--filter` 및 `--dry=json` 플래그의 조합을 사용하여 상위 커밋에서 현재 커밋까지의 변경 사항을 찾아 영향을 받는 패키지를 식별합니다. 기본적으로 `turbo-ignore`는 **현재 작업 디렉토리의 build 작업**에 대한 차이를 찾지만 [플래그로 이 동작을 사용자 정의](#customizing-behavior)할 수 있습니다.
 
-Here's an example of the command that will be built and run:
+다음은 빌드되고 실행될 명령의 예입니다:
 
 ```bash title="Terminal"
 npx turbo run build --filter=@example/web...3c8387ffd98b751305fe3f0284befdd00cbd4610 --dry=json
 ```
 
-Note that a dry run does not _execute_ the build task. Instead, it checks your packages to see if your code changes will affect your build (or other task) in only a few seconds.
+dry run은 build 작업을 _실행하지 않습니다_. 대신 코드 변경이 몇 초 안에 빌드(또는 다른 작업)에 영향을 미치는지 패키지를 확인합니다.
 
-If `turbo-ignore` finds that the task can be skipped, it will exit the process with a `0` code. If changes have been found, the process will exit with `1`.
+`turbo-ignore`가 작업을 건너뛸 수 있음을 발견하면 `0` 코드로 프로세스를 종료합니다. 변경 사항이 발견되면 프로세스는 `1`로 종료됩니다.
 
 <Callout type="info">
-  On Vercel, the previously deployed SHA will be used instead of the parent
-  commit.
+  Vercel에서는 상위 커밋 대신 이전에 배포된 SHA가 사용됩니다.
 </Callout>
 
-## Customizing behavior
+## 동작 사용자 정의
 
-To specify a workspace, you can add it to your command like:
+워크스페이스를 지정하려면 다음과 같이 명령에 추가할 수 있습니다:
 
 ```bash title="Terminal"
 npx turbo-ignore web
 ```
 
-where `web` is your workspace's name running the default `build` task.
+여기서 `web`은 기본 `build` 작업을 실행하는 워크스페이스의 이름입니다.
 
-If you'd like to change the task, use the `--task` flag to specify the task for the command that `turbo-ignore` will invoke.
+작업을 변경하려면 `--task` 플래그를 사용하여 `turbo-ignore`가 호출할 명령의 작업을 지정하세요.
 
-## Using `turbo-ignore` on Vercel
+## Vercel에서 `turbo-ignore` 사용
 
-To use `npx turbo-ignore` on Vercel, you can use the [Ignored Build Step](https://vercel.com/docs/concepts/projects/overview#ignored-build-step) feature. Vercel will automatically infer the correct arguments to successfully run `turbo-ignore`.
+Vercel에서 `npx turbo-ignore`를 사용하려면 [Ignored Build Step](https://vercel.com/docs/concepts/projects/overview#ignored-build-step) 기능을 사용할 수 있습니다. Vercel은 `turbo-ignore`를 성공적으로 실행하기 위한 올바른 인수를 자동으로 추론합니다.
 
-## Customizing behavior
+## 동작 사용자 정의
 
-When not on Vercel, specify a commit for comparison using the `--fallback` flag.
+Vercel이 아닌 경우 `--fallback` 플래그를 사용하여 비교할 커밋을 지정하세요.
 
-On Vercel, you can specify the `--fallback` flag to give Vercel a git ref to compare against when the default comparison is not available. By default, Vercel compares to the most recently deployed SHA so this is useful for use cases like avoiding a deploy for the first commit to a branch.
+Vercel에서는 `--fallback` 플래그를 지정하여 기본 비교를 사용할 수 없을 때 비교할 git ref를 Vercel에 제공할 수 있습니다. 기본적으로 Vercel은 가장 최근에 배포된 SHA와 비교하므로 이는 브랜치의 첫 번째 커밋에 대한 배포를 피하는 것과 같은 사용 사례에 유용합니다.

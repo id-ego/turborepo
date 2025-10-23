@@ -1,93 +1,88 @@
 ---
-title: Generating code
-description: Learn how to generate code using Turborepo.
+title: 코드 생성
+description: Turborepo를 사용하여 코드를 생성하는 방법을 알아봅니다.
 ---
 
 import { Callout } from '#components/callout';
 import { File, Folder, Files } from '#components/files';
 import { PackageManagerTabs, Tab } from '#components/tabs';
 
-Splitting your monorepo into packages is a great way to organize your code, speed up tasks, and improve the local development
-experience. With Turborepo's code generation, it's easy to generate new source code for packages, modules,
-and even individual UI components in a structured way that integrates with the rest of your repository.
+모노레포를 패키지로 분할하는 것은 코드를 구조화하고, 작업 속도를 높이며, 로컬 개발 경험을 개선하는 훌륭한 방법입니다. Turborepo의 코드 생성 기능을 사용하면 패키지, 모듈, 심지어 개별 UI 컴포넌트를 위한 새로운 소스 코드를 리포지토리의 나머지 부분과 통합되는 구조화된 방식으로 쉽게 생성할 수 있습니다.
 
-## Add an empty package
+## 빈 패키지 추가
 
-Add a new, empty app or package to your monorepo.
+모노레포에 새로운 빈 앱 또는 패키지를 추가합니다.
 
 ```sh title="Terminal"
 turbo gen workspace
 ```
 
-View all available [options](/docs/reference/generate#workspace) for `gen workspace`.
+`gen workspace`의 사용 가능한 모든 [옵션](/docs/reference/generate#workspace)을 확인하세요.
 
-## Copy an existing package
+## 기존 패키지 복사
 
-You can use an existing workspace as a template for your new app or package. This works for both workspaces within your existing monorepo,
-and remote workspaces from other repositories (specified via GitHub URL).
+기존 워크스페이스를 새 앱 또는 패키지의 템플릿으로 사용할 수 있습니다. 이는 기존 모노레포 내의 워크스페이스와 다른 리포지토리의 원격 워크스페이스(GitHub URL을 통해 지정) 모두에서 작동합니다.
 
-### Examples
+### 예제
 
-Create a new package in your monorepo by copying from an existing package in your repo.
+리포지토리의 기존 패키지에서 복사하여 모노레포에 새 패키지를 생성합니다.
 
 ```sh title="Terminal"
 turbo gen workspace --copy
 ```
 
-Create a new workspace in your monorepo by copying from a remote package.
+원격 패키지에서 복사하여 모노레포에 새 워크스페이스를 생성합니다.
 
 ```sh title="Terminal"
 turbo gen workspace --copy https://github.com/vercel/turborepo/tree/main/examples/with-tailwind/packages/tailwind-config
 ```
 
 <Callout>
-  **Note**: When adding from a remote source, Turborepo is unable to verify that your repo has all of the required dependencies, and is using the correct package manager. In this case, some manual modifications may be required to get the new workspace working as expected within your repository.
+  **참고**: 원격 소스에서 추가할 때 Turborepo는 리포지토리에 필요한 모든 종속성이 있고 올바른 패키지 매니저를 사용하고 있는지 확인할 수 없습니다. 이 경우 새 워크스페이스가 리포지토리 내에서 예상대로 작동하도록 일부 수동 수정이 필요할 수 있습니다.
 
 </Callout>
 
-View all available [options](/docs/reference/generate#workspace) for `gen workspace --copy`.
+`gen workspace --copy`의 사용 가능한 모든 [옵션](/docs/reference/generate#workspace)을 확인하세요.
 
-## Custom generators
+## 커스텀 생성기
 
-If a built-in generator does not fit your needs, you can create your own custom generator using [Plop](https://plopjs.com/) configurations.
-Turborepo will automatically detect any generator configurations within your repo, and make them available to run from the command line.
+내장 생성기가 요구 사항에 맞지 않는 경우 [Plop](https://plopjs.com/) 설정을 사용하여 자체 커스텀 생성기를 만들 수 있습니다.
+Turborepo는 리포지토리 내의 모든 생성기 설정을 자동으로 감지하고 명령줄에서 실행할 수 있도록 합니다.
 
 <Callout type="info">
-  While Turborepo Generators are built on top of Plop, they don't require `plop`
-  to be installed as a dependency in your repo.
+  Turborepo Generators는 Plop 위에 구축되어 있지만 리포지토리에 `plop`을
+  종속성으로 설치할 필요가 없습니다.
 </Callout>
 
-While Turborepo understands all Plop configuration options and features, it provides a few additional features to improve the experience of writing
-generators within a repo configured with Turborepo.
+Turborepo는 모든 Plop 설정 옵션과 기능을 이해하지만, Turborepo로 구성된 리포지토리 내에서 생성기를 작성하는 경험을 개선하기 위한 몇 가지 추가 기능을 제공합니다.
 
-1. Generators are automatically discovered, loaded, and organized per workspace (no need to manually `load` them within a single configuration file)
-2. Generators are automatically run from the root of the workspace where they are defined
-3. Generators can be invoked from anywhere within your repo (or outside it via the [`--root`](/docs/reference/generate#--root-path) flag)
-4. TypeScript generators are supported with zero configuration
-5. `plop` is not required to be installed as a dependency of your repo
+1. 생성기는 워크스페이스별로 자동으로 검색, 로드 및 구성됩니다(단일 설정 파일 내에서 수동으로 `load`할 필요 없음)
+2. 생성기는 정의된 워크스페이스의 루트에서 자동으로 실행됩니다
+3. 생성기는 리포지토리 내 어디서나 호출할 수 있습니다(또는 [`--root`](/docs/reference/generate#--root-path) 플래그를 통해 외부에서도 가능)
+4. TypeScript 생성기는 별도의 설정 없이 지원됩니다
+5. `plop`은 리포지토리의 종속성으로 설치할 필요가 없습니다
 
-<Callout type="info" title="Known issue">
-  ESM dependencies are not currently supported within custom generators.
+<Callout type="info" title="알려진 문제">
+  ESM 종속성은 현재 커스텀 생성기 내에서 지원되지 않습니다.
 </Callout>
 
-### Getting started
+### 시작하기
 
-To build and run a custom generator, run the following command from anywhere within your monorepo using Turborepo.
+커스텀 생성기를 빌드하고 실행하려면 Turborepo를 사용하는 모노레포 내 어디서나 다음 명령을 실행하세요.
 
 ```sh title="Terminal"
 turbo gen
 ```
 
-You'll be prompted to select an existing generator or to create one if you don't have any yet. You can also create your configuration
-manually at `turbo/generators/config.ts` (or `config.js`) at the root of your repo - or within _any_ workspace.
+기존 생성기를 선택하거나 아직 없는 경우 생성하라는 메시지가 표시됩니다. 리포지토리의 루트에 있는 `turbo/generators/config.ts`(또는 `config.js`) 또는 _임의의_ 워크스페이스 내에서 수동으로 설정을 생성할 수도 있습니다.
 
 <Callout type="info">
-  If you are using TypeScript, you will need to install [the `@turbo/gen`
-  package](https://github.com/vercel/turborepo/tree/main/packages/turbo-gen) as
-  a `devDependency` to access the required TS types.
+  TypeScript를 사용하는 경우 필요한 TS 타입에 액세스하려면 [the `@turbo/gen`
+  package](https://github.com/vercel/turborepo/tree/main/packages/turbo-gen)를
+  `devDependency`로 설치해야 합니다.
 </Callout>
 
-For example, the following illustrates a monorepo with three locations for generators:
+예를 들어, 다음은 생성기를 위한 세 가지 위치가 있는 모노레포를 보여줍니다:
 
 <PackageManagerTabs>
 
@@ -249,18 +244,18 @@ For example, the following illustrates a monorepo with three locations for gener
 </Tab>
 </PackageManagerTabs>
 
-Generators created within workspaces are automatically run from the workspace root, **not** the repo root, nor the location of the generator configuration.
+워크스페이스 내에서 생성된 생성기는 리포지토리 루트나 생성기 설정 위치가 아닌 워크스페이스 루트에서 자동으로 실행됩니다.
 
-This makes your generators more simple to write. Creating a file at `[workspace-root]` only needs to be specified as `<file>` rather than `../../<file>`.
+이를 통해 생성기를 더 간단하게 작성할 수 있습니다. `[workspace-root]`에 파일을 생성할 때 `../../<file>`이 아닌 `<file>`로만 지정하면 됩니다.
 
-Learn more about [creating custom generators using Plop](https://plopjs.com/documentation/#creating-a-generator).
+[Plop을 사용한 커스텀 생성기 생성](https://plopjs.com/documentation/#creating-a-generator)에 대해 자세히 알아보세요.
 
-### Writing generators
+### 생성기 작성
 
-A generator configuration file is a function that returns a [Plop](https://plopjs.com/) configuration object. The configuration object is
-used to define the generator's prompts, and actions.
+생성기 설정 파일은 [Plop](https://plopjs.com/) 설정 객체를 반환하는 함수입니다. 설정 객체는
+생성기의 프롬프트와 작업을 정의하는 데 사용됩니다.
 
-In its simplest form, a generator configuration file looks like:
+가장 간단한 형태의 생성기 설정 파일은 다음과 같습니다:
 
 ```ts title="turbo/generators/config.ts"
 import type { PlopTypes } from "@turbo/gen";
@@ -281,13 +276,13 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
 }
 ```
 
-#### Prompts
+#### 프롬프트
 
-Prompts are written using [Plop prompts](https://plopjs.com/documentation/#using-prompts) and are used to gather information from the user.
+프롬프트는 [Plop prompts](https://plopjs.com/documentation/#using-prompts)를 사용하여 작성되며 사용자로부터 정보를 수집하는 데 사용됩니다.
 
-#### Actions
+#### 작업
 
-Actions can use [built-in Plop actions](https://plopjs.com/documentation/#built-in-actions), or [custom action functions](https://plopjs.com/documentation/#functionsignature-custom-action) that you define yourself:
+작업은 [내장 Plop 작업](https://plopjs.com/documentation/#built-in-actions) 또는 직접 정의한 [커스텀 작업 함수](https://plopjs.com/documentation/#functionsignature-custom-action)를 사용할 수 있습니다:
 
 ```ts title="turbo/generators/config.ts"
 import type { PlopTypes } from "@turbo/gen";
@@ -317,20 +312,20 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
 }
 ```
 
-### Running generators
+### 생성기 실행
 
-Once you have created your generator configuration file, you can skip the selection prompt and directly run a specified generator with:
+생성기 설정 파일을 만든 후에는 선택 프롬프트를 건너뛰고 지정된 생성기를 직접 실행할 수 있습니다:
 
 ```sh title="Terminal"
 turbo gen [generator-name]
 ```
 
-Arguments can also be passed directly to the generator prompts using `--args`
+`--args`를 사용하여 생성기 프롬프트에 인수를 직접 전달할 수도 있습니다:
 
 ```sh title="Terminal"
 turbo gen [generator-name] --args answer1 answer2 ...
 ```
 
-See [bypassing prompts](https://plopjs.com/documentation/#bypassing-prompts) in the Plop documentation for more information.
+자세한 내용은 Plop 문서의 [프롬프트 우회](https://plopjs.com/documentation/#bypassing-prompts)를 참조하세요.
 
-View all available [options](/docs/reference/generate#run-generator-name) for `gen`.
+`gen`의 사용 가능한 모든 [옵션](/docs/reference/generate#run-generator-name)을 확인하세요.

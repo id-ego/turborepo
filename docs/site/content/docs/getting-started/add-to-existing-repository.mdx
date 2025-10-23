@@ -1,6 +1,6 @@
 ---
-title: Add to an existing repository
-description: Using Turborepo with your existing repository
+title: 기존 리포지토리에 추가
+description: 기존 리포지토리에서 Turborepo 사용하기
 ---
 
 import { PackageManagerTabs, Tabs, Tab } from '#components/tabs';
@@ -8,40 +8,36 @@ import { Callout } from '#components/callout';
 import { Step, Steps } from '#components/steps';
 import { LinkToDocumentation } from '#components/link-to-documentation';
 
-Turborepo can be incrementally adopted in **any repository, single or multi-package**, to speed up the developer and CI workflows of the repository.
+Turborepo는 **단일 또는 멀티 패키지 리포지토리**에서 점진적으로 채택하여 리포지토리의 개발자 및 CI 워크플로우를 가속화할 수 있습니다.
 
-After installing `turbo` and configuring your tasks in `turbo.json`, you'll notice how [caching](/docs/crafting-your-repository/caching) helps you run tasks much faster.
+`turbo`를 설치하고 `turbo.json`에서 태스크를 구성한 후, [캐싱](/docs/crafting-your-repository/caching)이 태스크를 훨씬 빠르게 실행하는 데 어떻게 도움이 되는지 알게 될 것입니다.
 
-## Preparing a single-package workspace
+## 단일 패키지 워크스페이스 준비
 
-A [single-package workspace](https://vercel.com/docs/vercel-platform/glossary#single-package-workspace) is, for example, what you get after running `npx create-next-app` or `npm create vite`. You don't need to do any extra work for Turborepo to handle your repo so you can jump to the first step below.
+[단일 패키지 워크스페이스](https://vercel.com/docs/vercel-platform/glossary#single-package-workspace)는 예를 들어 `npx create-next-app` 또는 `npm create vite`를 실행한 후 얻는 것입니다. Turborepo가 리포지토리를 처리하도록 추가 작업을 수행할 필요가 없으므로 아래 첫 번째 단계로 바로 이동할 수 있습니다.
 
-To learn more about Turborepo in single-package workspaces, visit [the dedicated guide](/docs/guides/single-package-workspaces).
+단일 패키지 워크스페이스에서 Turborepo에 대해 자세히 알아보려면 [전용 가이드](/docs/guides/single-package-workspaces)를 참조하세요.
 
-## Preparing a multi-package workspace (monorepo)
+## 멀티 패키지 워크스페이스(모노레포) 준비
 
-`turbo` is built on top of Workspaces, a feature of the major package managers in the JavaScript ecosystem. This makes it easy to adopt in your existing codebase.
+`turbo`는 JavaScript 생태계의 주요 패키지 매니저의 기능인 워크스페이스 위에 구축되었습니다. 이를 통해 기존 코드베이스에서 쉽게 채택할 수 있습니다.
 
 <Callout type="good-to-know">
-  If you're finding that `turbo` is having issues like not being able to
-  discover packages in your workspace or not following your dependency graph,
-  visit our [Structuring a
-  repository](/docs/crafting-your-repository/structuring-a-repository) page for
-  tips.
+  `turbo`가 워크스페이스에서 패키지를 발견할 수 없거나 의존성 그래프를 따르지
+  않는 등의 문제가 있는 경우 팁을 보려면 [리포지토리
+  구조화](/docs/crafting-your-repository/structuring-a-repository) 페이지를
+  참조하세요.
 </Callout>
 
-Note that you don't have to start running _all_ your tasks for _all_ your
-packages using `turbo` right away. You can start with a single task in just a
-few packages and incrementally add more tasks and packages as you get more
-familiar with Turborepo.
+`turbo`를 사용하여 _모든_ 패키지에 대해 _모든_ 태스크를 즉시 실행할 필요는 없습니다. 몇 개의 패키지에서 단일 태스크로 시작하여 Turborepo에 익숙해지면 점진적으로 더 많은 태스크와 패키지를 추가할 수 있습니다.
 
-## Adding Turborepo to your repository
+## 리포지토리에 Turborepo 추가
 
 <Steps>
 <Step>
-### Install `turbo`
+### `turbo` 설치
 
-We recommend you install `turbo` both globally and into your repository's root for the best developer experience.
+최상의 개발자 경험을 위해 `turbo`를 전역 및 리포지토리 루트에 모두 설치하는 것을 권장합니다.
 
 <PackageManagerTabs>
   <Tab value="pnpm">
@@ -87,16 +83,16 @@ We recommend you install `turbo` both globally and into your repository's root f
   </Tab>
 </PackageManagerTabs>
 
-To learn more about why we recommend both installations, visit the [Installation page](/docs/getting-started/installation).
+두 설치를 모두 권장하는 이유에 대해 자세히 알아보려면 [설치 페이지](/docs/getting-started/installation)를 참조하세요.
 
 </Step>
 <Step>
 
-### Add a `turbo.json` file
+### `turbo.json` 파일 추가
 
-In the root of your repository, create a `turbo.json` file.
+리포지토리의 루트에 `turbo.json` 파일을 생성합니다.
 
-We'll be using `build` and `check-types` tasks in this guide but you can replace these with other tasks that interest you, like `lint` or `test`.
+이 가이드에서는 `build` 및 `check-types` 태스크를 사용하지만 `lint` 또는 `test`와 같이 관심 있는 다른 태스크로 대체할 수 있습니다.
 
 <Tabs items={['Next.js', 'Vite']} storageKey="framework-preference">
   <Tab value="Next.js">
@@ -119,9 +115,9 @@ We'll be using `build` and `check-types` tasks in this guide but you can replace
 }
 ```
 
-For more information on configuring your `turbo.json`, see the [Configuration Options](/docs/reference/configuration) documentation.
+`turbo.json` 구성에 대한 자세한 내용은 [구성 옵션](/docs/reference/configuration) 문서를 참조하세요.
 
-In your Next.js application, make sure you have a `check-types` script for `turbo` to run.
+Next.js 애플리케이션에서 `turbo`가 실행할 `check-types` 스크립트가 있는지 확인하세요.
 
 ```diff title="apps/web/package.json"
 {
@@ -151,7 +147,7 @@ In your Next.js application, make sure you have a `check-types` script for `turb
 }
 ```
 
-Some Vite starters ship with a `package.json` that looks like this:
+일부 Vite 스타터는 다음과 같은 `package.json`과 함께 제공됩니다:
 
 ```json title="package.json"
 {
@@ -161,7 +157,7 @@ Some Vite starters ship with a `package.json` that looks like this:
 }
 ```
 
-We recommend splitting these into a `check-types` and `build` script so that `turbo` can run them in parallel.
+`turbo`가 병렬로 실행할 수 있도록 이를 `check-types`와 `build` 스크립트로 분리하는 것을 권장합니다.
 
 ```json title="apps/web/package.json"
 {
@@ -175,15 +171,13 @@ We recommend splitting these into a `check-types` and `build` script so that `tu
   </Tab>
 </Tabs>
 
-In a multi-package workspace, you may also want to add a `check-types` script
-to one or more of your library packages to see how multiple scripts across
-different packages run with one `turbo` command.
+멀티 패키지 워크스페이스에서는 하나의 `turbo` 명령으로 여러 패키지에 걸쳐 여러 스크립트가 실행되는 방식을 보기 위해 하나 이상의 라이브러리 패키지에 `check-types` 스크립트를 추가할 수도 있습니다.
 
 </Step>
 <Step>
-### Edit `.gitignore`
+### `.gitignore` 편집
 
-Add `.turbo` to your `.gitignore` file. The `turbo` CLI uses these folders for persisting logs, outputs, and other functionality.
+`.gitignore` 파일에 `.turbo`를 추가합니다. `turbo` CLI는 로그, 출력 및 기타 기능을 유지하기 위해 이러한 폴더를 사용합니다.
 
 ```diff title=".gitignore"
 + .turbo
@@ -191,9 +185,9 @@ Add `.turbo` to your `.gitignore` file. The `turbo` CLI uses these folders for p
 
 </Step>
 <Step>
-### Add a `packageManager` field to root `package.json`
+### 루트 `package.json`에 `packageManager` 필드 추가
 
-Turborepo optimizes your repository using information from your package manager. To declare which package manager you're using, add a [`packageManager`](https://nodejs.org/api/packages.html#packagemanager) field to your root `package.json` if you don't have one already.
+Turborepo는 패키지 매니저의 정보를 사용하여 리포지토리를 최적화합니다. 사용 중인 패키지 매니저를 선언하려면 아직 없는 경우 루트 `package.json`에 [`packageManager`](https://nodejs.org/api/packages.html#packagemanager) 필드를 추가하세요.
 
 <PackageManagerTabs>
 
@@ -240,23 +234,23 @@ Turborepo optimizes your repository using information from your package manager.
 </PackageManagerTabs>
 
 <Callout type="good-to-know">
-  Depending on your repository, you may need to use the
-  [`dangerouslyDisablePackageManagerCheck`](/docs/reference/configuration#dangerouslydisablepackagemanagercheck)
-  while migrating or in situations where you can't use the `packageManager` key
-  yet.
+  리포지토리에 따라 마이그레이션 중이거나 아직 `packageManager` 키를 사용할 수
+  없는 상황에서는
+  [`dangerouslyDisablePackageManagerCheck`](/docs/reference/configuration#dangerouslydisablepackagemanagercheck)를
+  사용해야 할 수 있습니다.
 </Callout>
 
 </Step>
 <Step>
-### Set up package manager workspaces
+### 패키지 매니저 워크스페이스 설정
 
-For [multi-package workspaces](https://vercel.com/docs/glossary#multi-package-workspace), you'll need to configure your package manager to recognize your workspace structure.
+[멀티 패키지 워크스페이스](https://vercel.com/docs/glossary#multi-package-workspace)의 경우 워크스페이스 구조를 인식하도록 패키지 매니저를 구성해야 합니다.
 
-The `workspaces` field tells your package manager which directories contain your packages. Common patterns include `apps/*` for applications and `packages/*` for shared libraries.
+`workspaces` 필드는 패키지가 포함된 디렉토리를 패키지 매니저에 알려줍니다. 일반적인 패턴으로는 애플리케이션을 위한 `apps/*`와 공유 라이브러리를 위한 `packages/*`가 있습니다.
 
 <Callout type="good-to-know">
-  If you're working with a single-package repository, you can skip this step as
-  workspaces aren't needed.
+  단일 패키지 리포지토리를 사용하는 경우 워크스페이스가 필요하지 않으므로 이
+  단계를 건너뛸 수 있습니다.
 </Callout>
 
 <PackageManagerTabs>
@@ -312,29 +306,29 @@ The `workspaces` field tells your package manager which directories contain your
 
 </PackageManagerTabs>
 
-For more details on how to structure your repository, see [Structuring a Repository](/docs/crafting-your-repository/structuring-a-repository#declaring-directories-for-packages).
+리포지토리 구조화 방법에 대한 자세한 내용은 [리포지토리 구조화](/docs/crafting-your-repository/structuring-a-repository#declaring-directories-for-packages)를 참조하세요.
 
 </Step>
 <Step>
-### Run tasks with `turbo`
+### `turbo`로 태스크 실행
 
-You can now run the tasks you added to `turbo.json` earlier using Turborepo. Using the example tasks from above:
+이제 Turborepo를 사용하여 이전에 `turbo.json`에 추가한 태스크를 실행할 수 있습니다. 위의 예제 태스크를 사용하면:
 
 ```bash title="Terminal"
 turbo build check-types
 ```
 
-This runs the `build` and `check-types` tasks at the same time. The dependency graph of your [Workspace](/docs/crafting-your-repository/structuring-a-repository#anatomy-of-a-workspace) will be used to run tasks in the right order.
+이는 `build`와 `check-types` 태스크를 동시에 실행합니다. [워크스페이스](/docs/crafting-your-repository/structuring-a-repository#anatomy-of-a-workspace)의 의존성 그래프가 올바른 순서로 태스크를 실행하는 데 사용됩니다.
 
 </Step>
 <Step>
-**Without making any changes to the code, try running `build` and `check-types` again:**
+**코드를 변경하지 않고 `build`와 `check-types`를 다시 실행해 보세요:**
 
 ```bash title="Terminal"
 turbo check-types build
 ```
 
-You should see terminal output like this:
+다음과 같은 터미널 출력이 표시됩니다:
 
 ```bash title="Terminal"
 Tasks:    2 successful, 2 total
@@ -342,28 +336,28 @@ Cached:    2 cached, 2 total
 Time:    185ms >>> FULL TURBO
 ```
 
-Congratulations! **You just built and type checked your code in milliseconds**.
+축하합니다! **밀리초 만에 코드를 빌드하고 타입 체크했습니다**.
 
-To learn more about how `turbo` makes this possible, check out [the caching documentation](/docs/crafting-your-repository/caching).
+`turbo`가 이를 가능하게 하는 방법에 대해 자세히 알아보려면 [캐싱 문서](/docs/crafting-your-repository/caching)를 확인하세요.
 
 </Step>
 <Step>
 
-### Begin developing by running `dev` with `turbo`
+### `turbo`로 `dev`를 실행하여 개발 시작
 
-In a multi-package workspace, you can run `turbo dev` to start the development tasks for all your packages at once.
+멀티 패키지 워크스페이스에서는 `turbo dev`를 실행하여 모든 패키지에 대한 개발 태스크를 한 번에 시작할 수 있습니다.
 
 ```bash title="Terminal"
 turbo dev
 ```
 
-You can also [use a filter](/docs/crafting-your-repository/running-tasks#using-filters) to focus on a specific package and its dependencies.
+[필터를 사용](/docs/crafting-your-repository/running-tasks#using-filters)하여 특정 패키지와 그 의존성에 집중할 수도 있습니다.
 
 <Callout type="info">
-Note that this step doesn't provide much value in a single-package workspace since:
+단일 패키지 워크스페이스에서는 다음 이유로 이 단계가 큰 가치를 제공하지 않습니다:
 
-- You don't cache the outputs for a development task.
-- There's only one development script so there's nothing to run in parallel.
+- 개발 태스크에 대한 출력을 캐시하지 않습니다.
+- 개발 스크립트가 하나만 있으므로 병렬로 실행할 것이 없습니다.
 
 </Callout>
 
@@ -371,14 +365,14 @@ Note that this step doesn't provide much value in a single-package workspace sin
 
 <Step>
 
-## Next steps
+## 다음 단계
 
-You're now up and running with Turborepo! To learn about more ways you can improve your workflow and get the most out of `turbo`, we recommend checking out the following pages:
+이제 Turborepo로 실행 중입니다! 워크플로우를 개선하고 `turbo`를 최대한 활용할 수 있는 더 많은 방법을 알아보려면 다음 페이지를 확인하는 것을 권장합니다:
 
-- [Enabling Remote Caching for development machines](/docs/crafting-your-repository/constructing-ci#enabling-remote-caching)
-- [Enabling Remote Caching in CI](/docs/crafting-your-repository/constructing-ci)
-- [Handling environment variables](/docs/crafting-your-repository/using-environment-variables)
-- [Filtering tasks](/docs/reference/run#--filter-string)
+- [개발 머신에 대한 원격 캐싱 활성화](/docs/crafting-your-repository/constructing-ci#enabling-remote-caching)
+- [CI에서 원격 캐싱 활성화](/docs/crafting-your-repository/constructing-ci)
+- [환경 변수 처리](/docs/crafting-your-repository/using-environment-variables)
+- [태스크 필터링](/docs/reference/run#--filter-string)
 
 </Step>
 </Steps>

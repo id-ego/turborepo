@@ -1,6 +1,6 @@
 ---
 title: Vitest
-description: Learn how to use Vitest in a monorepo.
+description: monorepo에서 Vitest를 사용하는 방법을 알아보세요.
 ---
 
 import { Callout } from '#components/callout';
@@ -8,32 +8,35 @@ import { File, Folder, Files } from '#components/files';
 import { CreateTurboCallout } from './create-turbo-callout.tsx';
 import { Tab, Tabs } from '#components/tabs';
 
-[Vitest](https://vitest.dev/) is a test runner from the Vite ecosystem. Integrating it with Turborepo will lead to enormous speed-ups.
+[Vitest](https://vitest.dev/)는 Vite 생태계의 테스트 러너입니다. Turborepo와 통합하면 엄청난 속도 향상을 얻을 수 있습니다.
 
-[The Vitest documentation](https://vitest.dev/guide/workspace) shows how to create a "Vitest Projects" configuration that runs all tests in the monorepo from one root command, enabling behavior like merged coverage reports out-of-the-box. This feature doesn't follow modern best practices for monorepos, since its designed for compatibility with Jest (whose Workspace feature was built before [package manager Workspaces](/docs/crafting-your-repository/structuring-a-repository)).
+[Vitest 문서](https://vitest.dev/guide/workspace)는 하나의 루트 명령에서 monorepo의 모든 테스트를 실행하는 "Vitest Projects" 구성을 만드는 방법을 보여줍니다. 이는 병합된 커버리지 보고서와 같은 동작을 즉시 가능하게 합니다. 이 기능은 monorepo에 대한 현대적인 모범 사례를 따르지 않는데, Jest와의 호환성을 위해 설계되었기 때문입니다(Jest의 Workspace 기능은 [패키지 관리자 Workspaces](/docs/crafting-your-repository/structuring-a-repository) 이전에 구축되었습니다).
 
 <Callout type="warning">
-  Vitest has deprecated workspaces in favor of projects. When using projects, individual project vitest configs can't extend the root config anymore since they would inherit the projects configuration. Instead, a separate shared file like `vitest.shared.ts` is needed.
+  Vitest는 projects를 위해 workspaces를 더 이상 사용하지 않습니다. projects를
+  사용할 때 개별 프로젝트 vitest 구성은 projects 구성을 상속하므로 더 이상 루트
+  구성을 확장할 수 없습니다. 대신 `vitest.shared.ts`와 같은 별도의 공유 파일이
+  필요합니다.
 </Callout>
 
-Because of this you have two options, each with their own tradeoffs:
+이 때문에 각각 고유한 장단점이 있는 두 가지 옵션이 있습니다:
 
-- [Leveraging Turborepo for caching](#leveraging-turborepo-for-caching)
-- [Using Vitest's Projects feature](#using-vitests-projects-feature)
+- [캐싱을 위한 Turborepo 활용](#leveraging-turborepo-for-caching)
+- [Vitest의 Projects 기능 사용](#using-vitests-projects-feature)
 
-### Leveraging Turborepo for caching
+### 캐싱을 위한 Turborepo 활용
 
-To improve on cache hit rates and only run tests with changes, you can choose to configure tasks per-package, splitting up the Vitest command into separate, cacheable scripts in each package. This speed comes with the tradeoff that you'll need to create merged coverage reports yourself.
+캐시 적중률을 개선하고 변경된 테스트만 실행하려면 패키지별로 작업을 구성하여 Vitest 명령을 각 패키지의 별도 캐시 가능한 스크립트로 분할할 수 있습니다. 이 속도는 병합된 커버리지 보고서를 직접 만들어야 한다는 절충안을 수반합니다.
 
 <Callout>
-  For a complete example, run `npx create-turbo@latest --example with-vitest` or
-  [visit the example's source
-  code](https://github.com/vercel/turborepo/tree/main/examples/with-vitest).
+  완전한 예제를 보려면 `npx create-turbo@latest --example with-vitest`를
+  실행하거나 [예제의 소스 코드를
+  방문하세요](https://github.com/vercel/turborepo/tree/main/examples/with-vitest).
 </Callout>
 
-#### Setting up
+#### 설정
 
-Let's say we have a simple [package manager Workspace](/docs/crafting-your-repository/structuring-a-repository) that looks like this:
+다음과 같은 간단한 [패키지 관리자 Workspace](/docs/crafting-your-repository/structuring-a-repository)가 있다고 가정해 봅시다:
 
 <Files>
   <Folder name="apps" defaultOpen>
@@ -48,7 +51,7 @@ Let's say we have a simple [package manager Workspace](/docs/crafting-your-repos
   </Folder>
 </Files>
 
-Both `apps/web` and `packages/ui` have their own test suites, with `vitest` [installed into the packages that use them](/docs/crafting-your-repository/managing-dependencies#install-dependencies-where-theyre-used). Their `package.json` files include a `test` script that runs Vitest:
+`apps/web`과 `packages/ui` 모두 자체 테스트 스위트가 있으며, `vitest`가 [사용하는 패키지에 설치됩니다](/docs/crafting-your-repository/managing-dependencies#install-dependencies-where-theyre-used). `package.json` 파일에는 Vitest를 실행하는 `test` 스크립트가 포함되어 있습니다:
 
 ```json title="./apps/web/package.json"
 {
@@ -61,7 +64,7 @@ Both `apps/web` and `packages/ui` have their own test suites, with `vitest` [ins
 }
 ```
 
-Inside the root `turbo.json`, create a `test` task:
+루트 `turbo.json` 내부에 `test` 작업을 만듭니다:
 
 ```json title="./turbo.json"
 {
@@ -76,21 +79,21 @@ Inside the root `turbo.json`, create a `test` task:
 }
 ```
 
-Now, `turbo run test` can parallelize and cache all of the test suites from each package, only testing code that has changed.
+이제 `turbo run test`는 각 패키지의 모든 테스트 스위트를 병렬화하고 캐시하여 변경된 코드만 테스트합니다.
 
-#### Running tests in watch mode
+#### watch 모드에서 테스트 실행
 
-When you run your test suite in CI, it logs results and eventually exits upon completion. This means you can [cache it with Turborepo](/docs/crafting-your-repository/caching). But when you run your tests using Vitest's watch mode during development, the process never exits. This makes a watch task more like a [long-running, development task](/docs/crafting-your-repository/developing-applications).
+CI에서 테스트 스위트를 실행하면 결과를 기록하고 완료 시 종료됩니다. 즉, [Turborepo로 캐시할 수 있습니다](/docs/crafting-your-repository/caching). 그러나 개발 중에 Vitest의 watch 모드를 사용하여 테스트를 실행하면 프로세스가 종료되지 않습니다. 이로 인해 watch 작업은 [장기 실행 개발 작업](/docs/crafting-your-repository/developing-applications)과 더 비슷합니다.
 
-Because of this difference, we recommend specifying **two separate Turborepo tasks**: one for running your tests, and one for running them in watch mode.
+이러한 차이로 인해 **두 개의 별도 Turborepo 작업**을 지정하는 것을 권장합니다: 하나는 테스트를 실행하는 것이고, 다른 하나는 watch 모드에서 실행하는 것입니다.
 
 <Callout>
-  This strategy below creates two tasks, one for local development and one for
-  CI. You could choose to make the `test` task for local development and create
-  some `test:ci` task instead.
+  아래 전략은 두 가지 작업을 만듭니다. 하나는 로컬 개발용이고 다른 하나는
+  CI용입니다. 로컬 개발용으로 `test` 작업을 만들고 대신 `test:ci` 작업을 만들
+  수도 있습니다.
 </Callout>
 
-For example, inside the `package.json` file for each workspace:
+예를 들어, 각 워크스페이스의 `package.json` 파일 내부에:
 
 ```json title="./apps/web/package.json"
 {
@@ -262,7 +265,7 @@ export const sharedConfig = {
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
     // Other shared configuration
-  }
+  },
 };
 ```
 
@@ -281,9 +284,9 @@ export default defineConfig({
       test: {
         ...sharedConfig.test,
         // Project-specific configuration
-      }
-    }
-  ]
+      },
+    },
+  ],
 });
 ```
 
@@ -313,7 +316,7 @@ export default defineConfig({
   test: {
     ...sharedConfig.test,
     // Package-specific overrides if needed
-  }
+  },
 });
 ```
 

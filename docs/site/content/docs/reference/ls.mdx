@@ -1,40 +1,40 @@
 ---
 title: ls
-description: API reference for the `turbo ls` command
+description: '`turbo ls` 명령어에 대한 API 레퍼런스'
 ---
 
 import { ExperimentalBadge } from '#components/experimental-badge';
 
-List packages in your monorepo.
+모노레포의 패키지 목록을 표시합니다.
 
 ```bash title="Terminal"
 turbo ls [package(s)] [flags]
 ```
 
-When scoped to the entire repository, output includes package manager, package count, and all package names and directories.
+전체 저장소를 대상으로 하는 경우, 출력에는 패키지 매니저, 패키지 수, 모든 패키지 이름과 디렉토리가 포함됩니다.
 
 ```bash title="Terminal"
-# List all packages in the repository
+# 저장소의 모든 패키지 나열
 turbo ls
 ```
 
-When scoped to one or more packages, output includes package name, directory, internal dependencies, and all tasks.
+하나 이상의 패키지를 대상으로 하는 경우, 출력에는 패키지 이름, 디렉토리, 내부 의존성 및 모든 태스크가 포함됩니다.
 
 ```bash title="Terminal"
-# List only two packages
+# 두 개의 패키지만 나열
 turbo ls web @repo/ui [package(s)]
 ```
 
-## Flags
+## 플래그
 
 ### `--affected`
 
-Automatically filter to only packages that are affected by changes on the current branch.
+현재 브랜치에서 변경 사항의 영향을 받는 패키지만 자동으로 필터링합니다.
 
-By default the changes considered are those between `main` and `HEAD`.
+기본적으로 `main`과 `HEAD` 사이의 변경 사항이 고려됩니다.
 
-- You can override `main` as the default base by setting `TURBO_SCM_BASE`.
-- You can override `HEAD` as the default head by setting `TURBO_SCM_HEAD`.
+- `TURBO_SCM_BASE`를 설정하여 기본 base인 `main`을 재정의할 수 있습니다.
+- `TURBO_SCM_HEAD`를 설정하여 기본 head인 `HEAD`를 재정의할 수 있습니다.
 
 ```bash title="Terminal"
 TURBO_SCM_BASE=development turbo ls --affected
@@ -42,7 +42,7 @@ TURBO_SCM_BASE=development turbo ls --affected
 
 ### `--output <format>` <ExperimentalBadge />
 
-Format to output the results. `json` or `pretty` (default)
+결과 출력 형식을 지정합니다. `json` 또는 `pretty` (기본값)
 
 ```bash title="Terminal"
 turbo ls --output=json

@@ -1,17 +1,16 @@
 ---
-title: Unnecessary package task syntax error
-description: Learn more about errors with unnecessary package task syntax in Turborepo.
+title: 불필요한 패키지 작업 구문 오류
+description: Turborepo에서 불필요한 패키지 작업 구문 오류에 대해 자세히 알아보세요.
 ---
 
-## Why this error occurred
+## 이 오류가 발생한 이유
 
-Turborepo supports adding additional `turbo.json` files in a package directory
-to override the `turbo.json` file declared at the repository root, a feature called [Workspace Configurations](/docs/crafting-your-repository/structuring-a-repository#specifying-packages-in-a-monorepo).
-In those additional `turbo.json` files, you can only configure tasks for that specific
-package. Therefore, only the task name should be included in the task,
-not the package and task name (`package#task`).
+Turborepo는 리포지토리 루트에 선언된 `turbo.json` 파일을 재정의하기 위해 패키지 디렉토리에
+추가 `turbo.json` 파일을 추가하는 것을 지원합니다. 이 기능은 [워크스페이스 구성](/docs/crafting-your-repository/structuring-a-repository#specifying-packages-in-a-monorepo)이라고 합니다.
+이러한 추가 `turbo.json` 파일에서는 해당 특정 패키지에 대한 작업만 구성할 수 있습니다.
+따라서 작업에는 작업 이름만 포함되어야 하며 패키지와 작업 이름(`package#task`)이 함께 포함되어서는 안 됩니다.
 
-`turbo.json` file in `apps/web` directory:
+`apps/web` 디렉토리의 `turbo.json` 파일:
 
 ```json title="./turbo.json"
 {
@@ -23,11 +22,11 @@ not the package and task name (`package#task`).
 }
 ```
 
-Since this `turbo.json` file is inside a package directory, the `web` prefix is unnecessary.
+이 `turbo.json` 파일은 패키지 디렉토리 내부에 있으므로 `web` 접두사는 불필요합니다.
 
-## Solution
+## 해결 방법
 
-Remove the package prefix from the task name:
+작업 이름에서 패키지 접두사를 제거하세요:
 
 ```json title="./turbo.json"
 {

@@ -1,6 +1,6 @@
 ---
-title: Using environment variables
-description: Learn how to handle environments for your applications.
+title: 환경 변수 사용하기
+description: 애플리케이션의 환경을 처리하는 방법을 알아봅니다.
 ---
 
 import { Fragment } from 'react';
@@ -9,30 +9,30 @@ import { Tabs, Tab } from '#components/tabs';
 import { Accordion, Accordions } from '#components/accordion';
 import frameworks from '@turbo/types/src/json/frameworks.json';
 
-Environment variable inputs are a vital part of your applications that you'll need to account for in your Turborepo configuration.
+환경 변수 입력은 Turborepo 구성에서 고려해야 할 애플리케이션의 중요한 부분입니다.
 
-There are three important questions when working with environment variables in Turborepo:
+Turborepo에서 환경 변수를 작업할 때 세 가지 중요한 질문이 있습니다:
 
-- [Are my environment variables accounted for in the task hash?](#adding-environment-variables-to-task-hashes)
-- [Which Environment Mode will `turbo` use?](#environment-modes)
-- [Have I handled my `.env` files?](#handling-env-files)
+- [내 환경 변수가 작업 해시에 포함되어 있습니까?](#adding-environment-variables-to-task-hashes)
+- [`turbo`가 어떤 Environment Mode를 사용합니까?](#environment-modes)
+- [`.env` 파일을 처리했습니까?](#handling-env-files)
 
 <Callout type="error">
-  Failing to account for environment variables in your configuration can result
-  in shipping your application with the wrong configuration. This can cause
-  serious issues like shipping your preview deployments to production.
+  구성에서 환경 변수를 고려하지 않으면 잘못된 구성으로 애플리케이션을 배포하게
+  될 수 있습니다. 이는 프리뷰 배포를 프로덕션으로 배포하는 것과 같은 심각한
+  문제를 일으킬 수 있습니다.
 </Callout>
 
 <Callout type="good-to-know">
-  Turborepo also uses [System Environment
-  Variables](/docs/reference/system-environment-variables) to configure its own
-  behavior. Below, you'll find information about environment variables for your
-  task's runtime and how they affect task hashing.
+  Turborepo는 자체 동작을 구성하기 위해 [시스템 환경
+  변수](/docs/reference/system-environment-variables)도 사용합니다. 아래에서는
+  작업의 런타임을 위한 환경 변수와 작업 해싱에 미치는 영향에 대한 정보를 찾을 수
+  있습니다.
 </Callout>
 
-## Adding environment variables to task hashes
+## 작업 해시에 환경 변수 추가하기
 
-Turborepo needs to be aware of your environment variables to account for changes in application behavior. To do this, use the `env` and `globalEnv` keys in your `turbo.json` file.
+Turborepo는 애플리케이션 동작의 변경 사항을 고려하기 위해 환경 변수를 인식해야 합니다. 이를 위해 `turbo.json` 파일의 `env` 및 `globalEnv` 키를 사용합니다.
 
 ```json title="./turbo.json"
 {
@@ -45,18 +45,18 @@ Turborepo needs to be aware of your environment variables to account for changes
 }
 ```
 
-- **globalEnv**: Changes to the values of any environment variables in this list will change the hash for all tasks.
-- **env**: Includes changes to the values of environment variables that affect the task, allowing for better granularity. For example, a `lint` task probably doesn't need to miss cache when the value of `API_KEY` changes, but a `build` task likely should.
+- **globalEnv**: 이 목록에 있는 환경 변수 값의 변경 사항은 모든 작업의 해시를 변경합니다.
+- **env**: 작업에 영향을 미치는 환경 변수 값의 변경 사항을 포함하여 더 나은 세분성을 허용합니다. 예를 들어, `lint` 작업은 `API_KEY` 값이 변경될 때 캐시를 놓칠 필요가 없지만, `build` 작업은 그래야 할 가능성이 높습니다.
 
 <Callout type="good-to-know">
-  Turborepo supports wildcards for environment variables so you can easily
-  account for all environment variables with a given prefix. Visit [the API
-  reference for `env`](/docs/reference/configuration#wildcards) for more.
+  Turborepo는 환경 변수에 대한 와일드카드를 지원하므로 특정 접두사를 가진 모든
+  환경 변수를 쉽게 고려할 수 있습니다. 자세한 내용은 [`env`에 대한 API
+  참조](/docs/reference/configuration#wildcards)를 참조하세요.
 </Callout>
 
 ### Framework Inference
 
-Turborepo automatically adds prefix wildcards to your [`env`](/docs/reference/configuration#env) key for common frameworks. If you're using one of the frameworks below in a package, you don't need to specify environment variables with these prefixes:
+Turborepo는 일반적인 프레임워크에 대해 [`env`](/docs/reference/configuration#env) 키에 접두사 와일드카드를 자동으로 추가합니다. 패키지에서 아래 프레임워크 중 하나를 사용하는 경우, 이러한 접두사를 가진 환경 변수를 지정할 필요가 없습니다:
 
 <table>
   <thead>
@@ -86,140 +86,138 @@ Turborepo automatically adds prefix wildcards to your [`env`](/docs/reference/co
   </tbody>
 </table>
 
-<Callout type="good-to-know">Framework inference is per-package.</Callout>
+<Callout type="good-to-know">
+  Framework Inference는 패키지별로 적용됩니다.
+</Callout>
 
-If you'd like to opt out of Framework Inference, you can do so by:
+Framework Inference를 사용하지 않으려면 다음과 같이 할 수 있습니다:
 
-- Running your tasks with `--framework-inference=false`
-- Adding a negative wildcard to the `env` key (for example, `"env": ["!NEXT_PUBLIC_*"]`)
+- `--framework-inference=false`로 작업 실행하기
+- `env` 키에 부정 와일드카드 추가하기 (예: `"env": ["!NEXT_PUBLIC_*"]`)
 
 ## Environment Modes
 
-Turborepo's Environment Modes allow you to control which environment variables are available to a task at runtime:
+Turborepo의 Environment Mode를 사용하면 런타임에 작업에서 사용할 수 있는 환경 변수를 제어할 수 있습니다:
 
-- [Strict Mode](#strict-mode) (Default): Filter environment variables to **only** those that are specified in the `env` and `globalEnv` keys in `turbo.json`.
-- [Loose Mode](#loose-mode): Allow all environment variables for the process to be available.
+- [Strict Mode](#strict-mode) (기본값): `turbo.json`의 `env` 및 `globalEnv` 키에 지정된 환경 변수**만** 필터링합니다.
+- [Loose Mode](#loose-mode): 프로세스의 모든 환경 변수를 사용할 수 있도록 허용합니다.
 
 ### Strict Mode
 
-Strict Mode filters the environment variables available to a task's runtime to **only** those that are specified in the `globalEnv` and `env` keys in `turbo.json`.
+Strict Mode는 작업의 런타임에서 사용할 수 있는 환경 변수를 `turbo.json`의 `globalEnv` 및 `env` 키에 지정된 환경 변수**만**으로 필터링합니다.
 
-This means that tasks that do not account for all of the environment variables that they need are likely to fail. This is a good thing, since you don't want to cache a task that can potentially have different behavior in a different environment.
+즉, 필요한 모든 환경 변수를 고려하지 않은 작업은 실패할 가능성이 높습니다. 다른 환경에서 잠재적으로 다른 동작을 가질 수 있는 작업을 캐시하고 싶지 않기 때문에 이것은 좋은 일입니다.
 
-<Callout type="warn" title="Cache safety with Strict Mode">
-  While Strict Mode makes it much more likely for your task to fail when you
-  haven't accounted for all of your environment variables, it doesn't guarantee
-  task failure. If your application is able to gracefully handle a missing
-  environment variable, you could still successfully complete tasks and get
-  unintended cache hits.
+<Callout type="warn" title="Strict Mode를 사용한 캐시 안전성">
+  Strict Mode는 모든 환경 변수를 고려하지 않았을 때 작업이 실패할 가능성을 훨씬
+  높이지만, 작업 실패를 보장하지는 않습니다. 애플리케이션이 누락된 환경 변수를
+  우아하게 처리할 수 있다면 여전히 작업을 성공적으로 완료하고 의도하지 않은 캐시
+  히트를 얻을 수 있습니다.
 </Callout>
 
-#### Passthrough variables
+#### Passthrough 변수
 
-In advanced use cases, you may want to make some environment variables
-available to a task without including them in the hash. Changes to these variables don't affect task outputs but still need to be available for the task to run successfully.
+고급 사용 사례에서는 일부 환경 변수를 해시에 포함하지 않고 작업에서 사용할 수 있도록 하고 싶을 수 있습니다. 이러한 변수의 변경 사항은 작업 출력에 영향을 미치지 않지만 작업이 성공적으로 실행되기 위해 여전히 사용할 수 있어야 합니다.
 
-For these cases, add those environment variables to [`globalPassThroughEnv`](/docs/reference/configuration#globalpassthroughenv) and [`passThroughEnv`](/docs/reference/configuration#passthroughenv).
+이러한 경우 해당 환경 변수를 [`globalPassThroughEnv`](/docs/reference/configuration#globalpassthroughenv) 및 [`passThroughEnv`](/docs/reference/configuration#passthroughenv)에 추가합니다.
 
-#### CI vendor compatibility
+#### CI 벤더 호환성
 
-Strict Mode will filter out environment variables that come from your CI vendors until you've accounted for them using [`env`](/docs/reference/configuration#env), [`globalEnv`](/docs/reference/configuration#globalenv), [`passThroughEnv`](/docs/reference/configuration#passthroughenv), or [`globalPassThroughEnv`](/docs/reference/configuration#globalpassthroughenv).
+Strict Mode는 [`env`](/docs/reference/configuration#env), [`globalEnv`](/docs/reference/configuration#globalenv), [`passThroughEnv`](/docs/reference/configuration#passthroughenv) 또는 [`globalPassThroughEnv`](/docs/reference/configuration#globalpassthroughenv)를 사용하여 고려할 때까지 CI 벤더에서 제공하는 환경 변수를 필터링합니다.
 
-If any of these variables are important to your tasks and aren't included by [Framework Inference](#framework-inference), make sure they are in your `turbo.json` configuration.
+이러한 변수 중 작업에 중요하고 [Framework Inference](#framework-inference)에 포함되지 않은 경우 `turbo.json` 구성에 포함되어 있는지 확인하세요.
 
 ### Loose Mode
 
-Loose Mode does not filter your environment variables according to your `globalEnv` and `env` keys. This makes it easier to get started with incrementally migrating to Strict Mode.
+Loose Mode는 `globalEnv` 및 `env` 키에 따라 환경 변수를 필터링하지 않습니다. 이를 통해 Strict Mode로 점진적으로 마이그레이션하는 것을 더 쉽게 시작할 수 있습니다.
 
-Use [the `--env-mode` flag](/docs/reference/run#--env-mode-option) to enable Loose Mode on any invocation where you're seeing environment variables cannot be found by your scripts:
+스크립트에서 환경 변수를 찾을 수 없는 경우 모든 호출에서 Loose Mode를 활성화하려면 [`--env-mode` 플래그](/docs/reference/run#--env-mode-option)를 사용합니다:
 
 ```bash title="Terminal"
 turbo run build --env-mode=loose
 ```
 
-As long as the environment variable is available when `turbo` is ran, your script will be able to use it. However, this also **lets you accidentally forget to account for an environment variable in your configuration much more easily**, allowing the task to hit cache when it shouldn't.
+`turbo`가 실행될 때 환경 변수를 사용할 수 있는 한 스크립트에서 사용할 수 있습니다. 그러나 이는 **구성에서 환경 변수를 고려하는 것을 훨씬 더 쉽게 우연히 잊어버릴 수 있게 하여** 작업이 캐시에 히트해서는 안 될 때 캐시에 히트할 수 있도록 합니다.
 
-For example, you may have some code in your application that fetches data from an API, using an environment variable for the base URL:
+예를 들어, API에서 데이터를 가져오는 애플리케이션에 일부 코드가 있고, 기본 URL에 대한 환경 변수를 사용할 수 있습니다:
 
 ```ts title="./apps/web/data-fetcher.ts"
 const data = fetch(`${process.env.MY_API_URL}/resource/1`);
 ```
 
-You then build your application using a value for `MY_API_URL` that targets your preview environment. When you're ready to ship your application, you build for production and see a cache hit - even though the value of the `MY_API_URL` variable has changed! `MY_API_URL` changed - but Turborepo restored a version of your application from cache that uses the preview environment's `MY_API_URL` rather than production's.
+그런 다음 프리뷰 환경을 대상으로 하는 `MY_API_URL` 값을 사용하여 애플리케이션을 빌드합니다. 애플리케이션을 배포할 준비가 되면 프로덕션용으로 빌드하고 캐시 히트를 확인합니다 - `MY_API_URL` 변수 값이 변경되었음에도 불구하고! `MY_API_URL`이 변경되었지만 Turborepo는 프로덕션의 `MY_API_URL`이 아닌 프리뷰 환경의 `MY_API_URL`을 사용하는 애플리케이션 버전을 캐시에서 복원했습니다.
 
-When you're using Loose Mode, `MY_API_URL` is available in the task runtime **even though it isn't accounted for in the task hash**. To make this task more likely to fail and protect you from this misconfiguration, we encourage you to opt for [Strict Mode](#strict-mode).
+Loose Mode를 사용하는 경우 `MY_API_URL`은 **작업 해시에 고려되지 않았음에도 불구하고** 작업 런타임에서 사용할 수 있습니다. 이 작업이 실패할 가능성을 높이고 이러한 잘못된 구성으로부터 보호하기 위해 [Strict Mode](#strict-mode)를 선택하는 것이 좋습니다.
 
-### Platform Environment Variables
+### Platform 환경 변수
 
-When deploying your application to [Vercel](https://vercel.com/new?ref=turborepo), you likely already have [environment variables](https://vercel.com/docs/projects/environment-variables) configured on your project. Turborepo will automatically check these variables against your `turbo.json` configuration to ensure that you've [accounted for them](/docs/crafting-your-repository/using-environment-variables#adding-environment-variables-to-task-hashes),
-and will warn you about any missing variables.
+[Vercel](https://vercel.com/new?ref=turborepo)에 애플리케이션을 배포할 때 프로젝트에 이미 [환경 변수](https://vercel.com/docs/projects/environment-variables)가 구성되어 있을 가능성이 높습니다. Turborepo는 이러한 변수를 `turbo.json` 구성과 자동으로 확인하여 [고려했는지](/docs/crafting-your-repository/using-environment-variables#adding-environment-variables-to-task-hashes) 확인하고 누락된 변수에 대해 경고합니다.
 
-This functionality can be disabled by setting `TURBO_PLATFORM_ENV_DISABLED=false`
+이 기능은 `TURBO_PLATFORM_ENV_DISABLED=false`를 설정하여 비활성화할 수 있습니다.
 
-## Handling `.env` files
+## `.env` 파일 처리하기
 
-`.env` files are great for working on an application locally. **Turborepo does not load .env files into your task's runtime**, leaving them to be handled by your framework, or tools like [`dotenv`](https://www.npmjs.com/package/dotenv).
+`.env` 파일은 로컬에서 애플리케이션 작업을 할 때 유용합니다. **Turborepo는 `.env` 파일을 작업의 런타임에 로드하지 않으며**, 프레임워크 또는 [`dotenv`](https://www.npmjs.com/package/dotenv)와 같은 도구에서 처리하도록 남겨둡니다.
 
-However, it's important that `turbo` knows about changes to values in your `.env` files so that it can use them for hashing. If you change a variable in your `.env` files between builds, the `build` task should miss cache.
+그러나 `turbo`가 `.env` 파일의 값 변경 사항을 알고 해싱에 사용할 수 있도록 하는 것이 중요합니다. 빌드 간에 `.env` 파일의 변수를 변경하면 `build` 작업은 캐시를 놓쳐야 합니다.
 
-To do this, add the files to the [`inputs`](/docs/reference/configuration#inputs) key:
+이를 위해 파일을 [`inputs`](/docs/reference/configuration#inputs) 키에 추가합니다:
 
 ```json title="./turbo.json"
 {
-  "globalDependencies": [".env"], // All task hashes
+  "globalDependencies": [".env"], // 모든 작업 해시
   "tasks": {
     "build": {
-      "inputs": ["$TURBO_DEFAULT$", ".env"] // Only the `build` task hash
+      "inputs": ["$TURBO_DEFAULT$", ".env"] // `build` 작업 해시만
     }
   }
 }
 ```
 
-### Multiple `.env` files
+### 여러 `.env` 파일
 
-You can capture multiple `.env` files at once using a `*`.
+`*`를 사용하여 여러 `.env` 파일을 한 번에 캡처할 수 있습니다.
 
 ```json title="./turbo.json"
 {
-  "globalDependencies": [".env"], // All task hashes
+  "globalDependencies": [".env"], // 모든 작업 해시
   "tasks": {
     "build": {
-      "inputs": ["$TURBO_DEFAULT$", ".env*"] // Only the `build` task hash
+      "inputs": ["$TURBO_DEFAULT$", ".env*"] // `build` 작업 해시만
     }
   }
 }
 ```
 
 <Callout type="info">
-  `.env` files can load variables into the task runtime even when the
-  environment variables have not been added to [the `env`
-  key](/docs/reference/configuration#env). Ensure that you add your environment
-  variables for your builds the `env` key for CI and production builds.
+  `.env` 파일은 환경 변수가 [`env` 키](/docs/reference/configuration#env)에
+  추가되지 않은 경우에도 작업 런타임에 변수를 로드할 수 있습니다. CI 및 프로덕션
+  빌드의 경우 빌드를 위한 환경 변수를 `env` 키에 추가했는지 확인하세요.
 </Callout>
 
-## Best practices
+## 모범 사례
 
-### Use `.env` files in packages
+### 패키지에서 `.env` 파일 사용하기
 
-Using a `.env` file at the root of the repository is not recommended. Instead, we recommend placing your `.env` files into the packages where they're used.
+리포지토리의 루트에 `.env` 파일을 사용하는 것은 권장되지 않습니다. 대신 `.env` 파일을 사용하는 패키지에 배치하는 것이 좋습니다.
 
-This practice more closely models the runtime behavior of your applications since environment variables exist in each application's runtime individually. Additionally, as your monorepo scales, this practice makes it easier to manage each application's environment, preventing environment variable leakage across applications.
+이 방법은 환경 변수가 각 애플리케이션의 런타임에 개별적으로 존재하므로 애플리케이션의 런타임 동작을 더 밀접하게 모델링합니다. 또한 monorepo가 확장됨에 따라 이 방법을 사용하면 각 애플리케이션의 환경을 더 쉽게 관리할 수 있어 애플리케이션 간 환경 변수 누출을 방지할 수 있습니다.
 
 <Callout type="good-to-know">
-  You may find it easier to use a root `.env` file when incrementally migrating
-  to a monorepo. Tools like [dotenv](https://www.npmjs.com/package/dotenv) can
-  load `.env` files from different locations.
+  monorepo로 점진적으로 마이그레이션할 때 루트 `.env` 파일을 사용하는 것이 더
+  쉬울 수 있습니다. [dotenv](https://www.npmjs.com/package/dotenv)와 같은 도구는
+  다른 위치에서 `.env` 파일을 로드할 수 있습니다.
 </Callout>
 
-### Use `eslint-config-turbo`
+### `eslint-config-turbo` 사용하기
 
-[The `eslint-config-turbo` package](/docs/reference/eslint-config-turbo) helps you find environment variables that are used in your code that aren't listed in your `turbo.json`. This helps ensure that all your environment variables are accounted for in your configuration.
+[`eslint-config-turbo` 패키지](/docs/reference/eslint-config-turbo)는 `turbo.json`에 나열되지 않은 코드에서 사용되는 환경 변수를 찾는 데 도움이 됩니다. 이를 통해 모든 환경 변수가 구성에서 고려되도록 할 수 있습니다.
 
-### Avoid creating or mutating environment variables at runtime
+### 런타임에 환경 변수 생성 또는 변경 피하기
 
-Turborepo hashes the environment variables for your task at the beginning of the task. If you create or mutate environment variables during the task, Turborepo will not know about these changes and will not account for them in the task hash.
+Turborepo는 작업 시작 시 작업의 환경 변수를 해싱합니다. 작업 중에 환경 변수를 생성하거나 변경하면 Turborepo는 이러한 변경 사항을 알지 못하고 작업 해시에 고려하지 않습니다.
 
-For instance, Turborepo will not be able to detect the inline variable in the example below:
+예를 들어, Turborepo는 아래 예제의 인라인 변수를 감지할 수 없습니다:
 
 ```json title="./apps/web/package.json"
 {
@@ -229,20 +227,20 @@ For instance, Turborepo will not be able to detect the inline variable in the ex
 }
 ```
 
-`MY_VARIABLE` is being added to the environment _after_ the `dev` task has started, so `turbo` will not be able to use it for hashing.
+`MY_VARIABLE`은 `dev` 작업이 시작된 _후에_ 환경에 추가되므로 `turbo`는 해싱에 사용할 수 없습니다.
 
-## Examples
+## 예제
 
-Below are examples of proper environment variable configuration for a few popular frameworks:
+다음은 몇 가지 인기 있는 프레임워크에 대한 적절한 환경 변수 구성의 예입니다:
 
 <Accordions>
 <Accordion title="Next.js">
 
-The `turbo.json` below expresses:
+아래 `turbo.json`은 다음을 표현합니다:
 
-- The `build` and `dev` tasks will have different hashes for changes to `MY_API_URL` and `MY_API_KEY`.
-- The `build` and `dev` tasks include the supported .env files for Next.js.
-- The `test` task does not use environment variables, so the `env` key is omitted. (Depending on your testing structure, your `test` task may need an `env` key.)
+- `build` 및 `dev` 작업은 `MY_API_URL` 및 `MY_API_KEY` 변경 사항에 대해 서로 다른 해시를 가집니다.
+- `build` 및 `dev` 작업에는 Next.js에서 지원하는 .env 파일이 포함됩니다.
+- `test` 작업은 환경 변수를 사용하지 않으므로 `env` 키가 생략됩니다. (테스트 구조에 따라 `test` 작업에 `env` 키가 필요할 수 있습니다.)
 
 ```json title="./turbo.json"
 {
@@ -273,10 +271,10 @@ The `turbo.json` below expresses:
 
 </Accordion>
 <Accordion title="Vite">
-The `turbo.json` below expresses:
-- The `build` and `dev` tasks will have different hashes for changes to `MY_API_URL` and `MY_API_KEY`.
-- The `build` and `dev` tasks include the supported .env files for Vite.
-- The `test` task does not use environment variables, so the `env` key is omitted. (Depending on your testing structure, your `test` task may need an `env` key.)
+아래 `turbo.json`은 다음을 표현합니다:
+- `build` 및 `dev` 작업은 `MY_API_URL` 및 `MY_API_KEY` 변경 사항에 대해 서로 다른 해시를 가집니다.
+- `build` 및 `dev` 작업에는 Vite에서 지원하는 .env 파일이 포함됩니다.
+- `test` 작업은 환경 변수를 사용하지 않으므로 `env` 키가 생략됩니다. (테스트 구조에 따라 `test` 작업에 `env` 키가 필요할 수 있습니다.)
 
 ```json title="./turbo.json"
 {
@@ -308,12 +306,12 @@ The `turbo.json` below expresses:
 </Accordion>
 </Accordions>
 
-## Troubleshooting
+## 문제 해결
 
-### Use `--summarize`
+### `--summarize` 사용하기
 
-[The `--summarize` flag](/docs/reference/run#--summarize) can be added to your `turbo run` command to produce a JSON file summarizing data about your task. Checking the diff for the `globalEnv` and `env` key can help you identify any environment variables that may be missing from your configuration.
+[`--summarize` 플래그](/docs/reference/run#--summarize)를 `turbo run` 명령에 추가하여 작업에 대한 데이터를 요약하는 JSON 파일을 생성할 수 있습니다. `globalEnv` 및 `env` 키의 diff를 확인하면 구성에서 누락되었을 수 있는 환경 변수를 식별하는 데 도움이 됩니다.
 
-## Next steps
+## 다음 단계
 
-Once you've accounted for your environment variables, you're ready to start building the CI pipelines that build, check, and deploy your applications, at the speed of `turbo`.
+환경 변수를 고려했으면 `turbo`의 속도로 애플리케이션을 빌드하고 확인하고 배포하는 CI 파이프라인을 구축할 준비가 되었습니다.

@@ -1,42 +1,42 @@
 ---
-title: Introduction
-description: Welcome to the Turborepo documentation!
+title: 소개
+description: Turborepo 문서에 오신 것을 환영합니다!
 ---
 
-Welcome to the Turborepo documentation!
+Turborepo 문서에 오신 것을 환영합니다!
 
 ---
 
-## What is Turborepo?
+## Turborepo란 무엇인가요?
 
-Turborepo is a high-performance build system for JavaScript and TypeScript codebases. It is designed for scaling monorepos and also makes workflows in [single-package workspaces](/docs/guides/single-package-workspaces) faster, too.
+Turborepo는 JavaScript 및 TypeScript 코드베이스를 위한 고성능 빌드 시스템입니다. monorepo 확장을 위해 설계되었으며, [단일 패키지 워크스페이스](/docs/guides/single-package-workspaces)의 워크플로우도 더 빠르게 만들어줍니다.
 
-From individual developers to the largest enterprise engineering organizations in the world, Turborepo is saving years of engineering time and millions of dollars in compute costs through a lightweight approach to optimizing the tasks you need to run in your repository.
+개인 개발자부터 세계 최대 엔터프라이즈 엔지니어링 조직까지, Turborepo는 리포지토리에서 실행해야 하는 작업을 최적화하는 경량 접근 방식을 통해 수년간의 엔지니어링 시간과 수백만 달러의 컴퓨팅 비용을 절감하고 있습니다.
 
-## The monorepo problem
+## monorepo 문제
 
-Monorepos have many advantages - but **they struggle to scale**. Each workspace has its own test suite, its own linting, and its own build process. A single monorepo might have **thousands of tasks to execute**.
+monorepo는 많은 장점을 가지고 있지만 **확장에 어려움을 겪습니다**. 각 워크스페이스에는 자체 테스트 스위트, 자체 린팅 및 자체 빌드 프로세스가 있습니다. 단일 monorepo에는 **수천 개의 실행할 작업**이 있을 수 있습니다.
 
-![A representation of a typical monorepo. The first application took 110 seconds to complete its tasks. The second application took 140 seconds to complete its tasks. The shared package between them took 90 seconds to complete its tasks.](/images/docs/why-turborepo-problem.png)
+![일반적인 monorepo의 표현. 첫 번째 애플리케이션은 작업을 완료하는 데 110초가 걸렸습니다. 두 번째 애플리케이션은 작업을 완료하는 데 140초가 걸렸습니다. 그들 사이의 공유 패키지는 작업을 완료하는 데 90초가 걸렸습니다.](/images/docs/why-turborepo-problem.png)
 
-These slowdowns can dramatically affect the way your teams build software, especially at scale. Feedback loops need to be fast so developers can deliver high-quality code quickly.
+이러한 속도 저하는 특히 대규모에서 팀이 소프트웨어를 구축하는 방식에 극적인 영향을 미칠 수 있습니다. 개발자가 고품질 코드를 빠르게 제공할 수 있도록 피드백 루프가 빨라야 합니다.
 
-## The monorepo solution
+## monorepo 솔루션
 
-![The monorepo from before using Turborepo, showing how it can hit cache to complete tasks for all three packages in 80 milliseconds.](/images/docs/why-turborepo-solution.png)
+![Turborepo를 사용하는 이전 monorepo로, 세 패키지 모두에 대한 작업을 80밀리초 만에 완료하기 위해 캐시를 활용하는 방법을 보여줍니다.](/images/docs/why-turborepo-solution.png)
 
-**Turborepo solves your monorepo's scaling problem**. [Remote Cache](/docs/core-concepts/remote-caching) stores the result of all your tasks, meaning that **your CI never needs to do the same work twice**.
+**Turborepo는 monorepo의 확장 문제를 해결합니다**. [Remote Cache](/docs/core-concepts/remote-caching)는 모든 작업의 결과를 저장하므로 **CI가 동일한 작업을 두 번 수행할 필요가 없습니다**.
 
-Additionally, task scheduling can be difficult in a monorepo. You may need to build, _then_ test, _then_ lint...
+또한 monorepo에서 작업 스케줄링은 어려울 수 있습니다. 빌드, _그다음_ 테스트, _그다음_ 린트를 수행해야 할 수 있습니다...
 
-Turborepo **schedules your tasks for maximum speed**, parallelizing work across all available cores.
+Turborepo는 **최대 속도를 위해 작업을 스케줄링**하여 사용 가능한 모든 코어에 걸쳐 작업을 병렬화합니다.
 
-Turborepo can be **adopted incrementally** and you can **add it to any repository in just a few minutes**. It uses the `package.json` scripts you've already written, the dependencies you've already declared, and a single `turbo.json` file. You can **use it with any package manager**, like `npm`, `yarn` or `pnpm` since Turborepo leans on the conventions of the npm ecosystem.
+Turborepo는 **점진적으로 도입**할 수 있으며 **몇 분 만에 어떤 리포지토리에든 추가**할 수 있습니다. 이미 작성한 `package.json` 스크립트, 이미 선언한 종속성 및 단일 `turbo.json` 파일을 사용합니다. Turborepo는 npm 생태계의 규칙을 따르므로 `npm`, `yarn` 또는 `pnpm`과 같은 **모든 패키지 관리자와 함께 사용**할 수 있습니다.
 
-## How to use these docs
+## 이 문서 사용 방법
 
-We will do our best to keep jargon to a minimum - but there are some need-to-know words that will be important to understand as you read through the docs. We've created [a glossary page](https://vercel.com/docs/vercel-platform/glossary) to help you out in case you're learning about these terms.
+전문 용어를 최소화하기 위해 최선을 다할 것입니다. 하지만 문서를 읽을 때 이해하는 것이 중요한 몇 가지 필수 용어가 있습니다. 이러한 용어에 대해 배우는 경우를 대비하여 [용어집 페이지](https://vercel.com/docs/vercel-platform/glossary)를 만들었습니다.
 
-## Join the community
+## 커뮤니티 참여
 
-If you have questions about anything related to Turborepo, you're always welcome to ask the community on [GitHub Discussions](https://github.com/vercel/turborepo/discussions), [Vercel Community](https://community.vercel.com/tag/turborepo), and [Twitter](https://twitter.com/turborepo).
+Turborepo와 관련된 질문이 있으시면 언제든지 [GitHub Discussions](https://github.com/vercel/turborepo/discussions), [Vercel Community](https://community.vercel.com/tag/turborepo) 및 [Twitter](https://twitter.com/turborepo)에서 커뮤니티에 질문하실 수 있습니다.

@@ -1,14 +1,14 @@
 ---
-title: Multi-language support
-description: Learn how to use multiple languages with Turborepo.
+title: 다중 언어 지원
+description: Turborepo에서 여러 언어를 사용하는 방법을 알아봅니다.
 ---
 
 import { PackageManagerTabs, Tab } from '#components/tabs';
 import { LinkToDocumentation } from '#components/link-to-documentation';
 
-Turborepo is built on the conventions of the JavaScript ecosystem to find scripts and tasks to execute - but it doesn't care what those scripts do. Following [the guidance for specifying a package in a JavaScript workspace](/docs/crafting-your-repository/structuring-a-repository#specifying-packages-in-a-monorepo), you can add any other language or toolchain to Turborepo.
+Turborepo는 JavaScript 생태계의 규칙을 기반으로 실행할 스크립트와 작업을 찾지만, 이러한 스크립트가 무엇을 하는지는 신경 쓰지 않습니다. [JavaScript 워크스페이스에서 패키지를 지정하는 지침](/docs/crafting-your-repository/structuring-a-repository#specifying-packages-in-a-monorepo)을 따르면 Turborepo에 다른 언어나 도구 체인을 추가할 수 있습니다.
 
-As an example, you may have a Rust project in the `./cli` directory in your repository. To add this directory as a package to your JavaScript package manager's workspace, add the directory to the workspace definition:
+예를 들어, 리포지토리의 `./cli` 디렉토리에 Rust 프로젝트가 있을 수 있습니다. 이 디렉토리를 JavaScript 패키지 매니저의 워크스페이스에 패키지로 추가하려면 워크스페이스 정의에 디렉토리를 추가하세요:
 
 <PackageManagerTabs>
 
@@ -19,7 +19,7 @@ As an example, you may have a Rust project in the `./cli` directory in your repo
     - "packages/*"
     - "cli" // [!code highlight]
   ```
-  <LinkToDocumentation href="https://pnpm.io/pnpm-workspace_yaml">pnpm workspace documentation</LinkToDocumentation>
+  <LinkToDocumentation href="https://pnpm.io/pnpm-workspace_yaml">pnpm workspace 문서</LinkToDocumentation>
 
   </Tab>
 
@@ -34,7 +34,7 @@ As an example, you may have a Rust project in the `./cli` directory in your repo
   }
   ```
 
-  <LinkToDocumentation href="https://yarnpkg.com/features/workspaces#how-are-workspaces-declared">yarn workspace documentation</LinkToDocumentation>
+  <LinkToDocumentation href="https://yarnpkg.com/features/workspaces#how-are-workspaces-declared">yarn workspace 문서</LinkToDocumentation>
    </Tab>
 
   <Tab value="npm">
@@ -48,7 +48,7 @@ As an example, you may have a Rust project in the `./cli` directory in your repo
   }
   ```
 
-  <LinkToDocumentation href="https://docs.npmjs.com/cli/v7/using-npm/workspaces#defining-workspaces">npm workspace documentation</LinkToDocumentation>
+  <LinkToDocumentation href="https://docs.npmjs.com/cli/v7/using-npm/workspaces#defining-workspaces">npm workspace 문서</LinkToDocumentation>
   </Tab>
 
   <Tab value="bun (Beta)">
@@ -62,11 +62,11 @@ As an example, you may have a Rust project in the `./cli` directory in your repo
   }
   ```
 
-  <LinkToDocumentation href="https://bun.sh/docs/install/workspaces">Bun workspace documentation</LinkToDocumentation>
+  <LinkToDocumentation href="https://bun.sh/docs/install/workspaces">Bun workspace 문서</LinkToDocumentation>
   </Tab>
 </PackageManagerTabs>
 
-Then, add a `package.json` to the directory:
+그런 다음 디렉토리에 `package.json`을 추가합니다:
 
 ```json title="./cli/package.json"
 {
@@ -77,11 +77,11 @@ Then, add a `package.json` to the directory:
 }
 ```
 
-Now, when you use `turbo build`, the `"build"` script in `./cli/package.json` will be included into the tasks that `turbo` runs.
+이제 `turbo build`를 사용하면 `./cli/package.json`의 `"build"` 스크립트가 `turbo`가 실행하는 작업에 포함됩니다.
 
-## Caching build artifacts
+## 빌드 아티팩트 캐싱
 
-Ensure that the outputs for your builds are being cached with [the outputs key](/docs/reference/configuration#outputs) in `turbo.json`. In the case of a Rust CLI being compiled with cargo, a release build would be created in the `target/release` directory and we can cache it using:
+빌드의 출력이 `turbo.json`의 [outputs 키](/docs/reference/configuration#outputs)로 캐시되고 있는지 확인하세요. cargo로 컴파일되는 Rust CLI의 경우 릴리스 빌드가 `target/release` 디렉토리에 생성되며 다음을 사용하여 캐시할 수 있습니다:
 
 ```json title="./turbo.json"
 {
@@ -93,11 +93,11 @@ Ensure that the outputs for your builds are being cached with [the outputs key](
 }
 ```
 
-## Creating dependency relationships
+## 종속성 관계 생성
 
-Because the directory is now a part of the package manager's workspace, you can create dependencies exactly the same as you do for your JavaScript packages.
+디렉토리가 이제 패키지 매니저의 워크스페이스의 일부이므로 JavaScript 패키지와 정확히 동일한 방식으로 종속성을 만들 수 있습니다.
 
-For instance, if you wanted to make sure that the `rust-cli` "package" from above is built before your `web` application, install it into the dependencies for the `web` application:
+예를 들어, 위의 `rust-cli` "패키지"가 `web` 애플리케이션 전에 빌드되도록 하려면 `web` 애플리케이션의 종속성에 설치하세요:
 
 <PackageManagerTabs>
   <Tab value="pnpm">
@@ -149,7 +149,7 @@ For instance, if you wanted to make sure that the `rust-cli` "package" from abov
   </Tab>
 </PackageManagerTabs>
 
-Given a `turbo.json` with a `build` task like:
+다음과 같은 `build` 작업이 있는 `turbo.json`이 주어지면:
 
 ```json title="./turbo.json"
 {
@@ -162,4 +162,4 @@ Given a `turbo.json` with a `build` task like:
 }
 ```
 
-`turbo build` will first create the artifacts for the Rust CLI and then build the `web` application.
+`turbo build`는 먼저 Rust CLI에 대한 아티팩트를 생성한 다음 `web` 애플리케이션을 빌드합니다.

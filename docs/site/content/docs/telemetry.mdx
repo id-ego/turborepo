@@ -1,63 +1,61 @@
 ---
-title: Telemetry
-description: Learn more about Turborepo's anonymous telemetry.
+title: 원격 측정
+description: Turborepo의 익명 원격 측정에 대해 자세히 알아보세요.
 ---
 
-Vercel Inc. (Vercel) may collect telemetry data about your use of Turborepo as explained below.
-Telemetry data allows us to monitor and improve Turborepo and the Vercel platform by
-collecting anonymous data about its usage and host information. The data may be used to broadly identify,
-troubleshoot, or respond to issues that impact users.
+Vercel Inc. (Vercel)는 아래 설명된 대로 Turborepo 사용에 대한 원격 측정 데이터를 수집할 수 있습니다.
+원격 측정 데이터를 통해 사용 및 호스트 정보에 대한 익명 데이터를 수집하여 Turborepo 및 Vercel 플랫폼을 모니터링하고 개선할 수 있습니다. 이 데이터는 사용자에게 영향을 미치는 문제를 광범위하게 식별, 해결 또는 대응하는 데 사용될 수 있습니다.
 
-Collection of telemetry data is optional. If you do not want telemetry data collected, you may [opt-out](#how-do-i-opt-out).
+원격 측정 데이터 수집은 선택 사항입니다. 원격 측정 데이터가 수집되는 것을 원하지 않으시면 [opt-out](#how-do-i-opt-out)할 수 있습니다.
 
-## Why
+## 이유
 
-Telemetry allows us to accurately gauge Turborepo feature usage, pain points, and customization across all users.
-This data enables us to better tailor Turborepo to the masses, ensuring its continued growth, relevance, and best-in-class developer experience.
-Furthermore, this data allows us to verify if improvements are improving the baseline of all applications.
+원격 측정을 통해 모든 사용자에 걸쳐 Turborepo 기능 사용, 문제점 및 사용자 정의를 정확하게 측정할 수 있습니다.
+이 데이터를 통해 Turborepo를 대중에게 더 잘 맞춤화하여 지속적인 성장, 관련성 및 최고 수준의 개발자 경험을 보장할 수 있습니다.
+또한 이 데이터를 통해 개선 사항이 모든 애플리케이션의 기준을 개선하고 있는지 확인할 수 있습니다.
 
-## What is collected
+## 수집되는 내용
 
-We track general usage information, specifically, we track the following with anonymized telemetry data using random identifiers:
+일반적인 사용 정보를 추적하며, 구체적으로 무작위 식별자를 사용하여 익명화된 원격 측정 데이터로 다음을 추적합니다:
 
-- Command invoked ([turbo run](/docs/reference/run), [turbo prune](/docs/reference/prune), [turbo gen](/docs/reference/generate), etc.)
-- Version of `turbo`
-- General machine information (e.g. number of CPUs, macOS/Windows/Linux, whether or not the command was run within CI)
-- Size of application (total number of workspaces)
-- We **DO NOT** collect any metrics which may contain sensitive data. This includes, but is not limited to: task names, package names, sensitive argument or flag values, environment variables, file paths, or contents of files.
+- 호출된 명령 ([turbo run](/docs/reference/run), [turbo prune](/docs/reference/prune), [turbo gen](/docs/reference/generate) 등)
+- `turbo`의 버전
+- 일반적인 머신 정보 (예: CPU 수, macOS/Windows/Linux, CI 내에서 명령이 실행되었는지 여부)
+- 애플리케이션 크기 (전체 워크스페이스 수)
+- 민감한 데이터를 포함할 수 있는 메트릭은 **수집하지 않습니다**. 여기에는 작업 이름, 패키지 이름, 민감한 인수 또는 플래그 값, 환경 변수, 파일 경로 또는 파일 내용이 포함되지만 이에 국한되지 않습니다.
 
-**Note**: This list is regularly audited to ensure its accuracy.
+**참고**: 이 목록은 정확성을 보장하기 위해 정기적으로 감사됩니다.
 
-You can view exactly what is being collected by setting the following environment variable: `TURBO_TELEMETRY_DEBUG=1`.
+다음 환경 변수를 설정하여 정확히 무엇이 수집되는지 확인할 수 있습니다: `TURBO_TELEMETRY_DEBUG=1`.
 
-Additionally, all possible events can be viewed by browsing the [events](https://github.com/vercel/turborepo/blob/main/crates/turborepo-telemetry/src/events) file directly.
+또한 [events](https://github.com/vercel/turborepo/blob/main/crates/turborepo-telemetry/src/events) 파일을 직접 탐색하여 가능한 모든 이벤트를 볼 수 있습니다.
 
-## How do I opt out?
+## opt-out하는 방법
 
-### Disable
+### 비활성화
 
-You may opt out-by running:
+다음을 실행하여 opt-out할 수 있습니다:
 
 ```bash title="Terminal"
 turbo telemetry disable
 ```
 
-You can also opt out by setting any of the following environment variables:
+다음 환경 변수 중 하나를 설정하여 opt-out할 수도 있습니다:
 
 - `TURBO_TELEMETRY_DISABLED=1`
-- `DO_NOT_TRACK=1` (Learn more about [Console Do Not Track (DNT)](https://consoledonottrack.com/))
+- `DO_NOT_TRACK=1` ([Console Do Not Track (DNT)](https://consoledonottrack.com/)에 대해 자세히 알아보기)
 
-### Status
+### 상태
 
-You may check the status of telemetry collection at any time by running:
+다음을 실행하여 언제든지 원격 측정 수집 상태를 확인할 수 있습니다:
 
 ```sh title="Terminal"
 turbo telemetry status
 ```
 
-### Enable
+### 활성화
 
-You may re-enable telemetry if you'd like to re-join the program by running the following:
+프로그램에 다시 참여하고 싶다면 다음을 실행하여 원격 측정을 다시 활성화할 수 있습니다:
 
 ```sh title="Terminal"
 turbo telemetry enable

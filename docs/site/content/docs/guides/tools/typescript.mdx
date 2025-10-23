@@ -1,6 +1,6 @@
 ---
 title: TypeScript
-description: Learn how to use TypeScript in a monorepo.
+description: monorepo에서 TypeScript를 사용하는 방법을 알아보세요.
 ---
 
 import { Callout } from '#components/callout';
@@ -8,25 +8,25 @@ import { File, Folder, Files } from '#components/files';
 import { PackageManagerTabs, Tabs, Tab } from '#components/tabs';
 import { LinkToDocumentation } from '#components/link-to-documentation';
 
-TypeScript is an excellent tool in monorepos, allowing teams to safely add types to their JavaScript code. While there is some complexity to getting set up, this guide will walk you through the important parts of a TypeScript setup for most use cases.
+TypeScript는 monorepo에서 훌륭한 도구로, 팀이 JavaScript 코드에 안전하게 타입을 추가할 수 있습니다. 설정에 약간의 복잡성이 있지만, 이 가이드는 대부분의 사용 사례에 대한 TypeScript 설정의 중요한 부분을 안내합니다.
 
-- [Sharing TypeScript configuration](#sharing-tsconfigjson)
-- [Building a TypeScript package](#building-a-typescript-package)
-- [Making type checking faster across your workspace](/docs/guides/tools/typescript#linting-your-codebase)
+- [TypeScript 구성 공유](#sharing-tsconfigjson)
+- [TypeScript 패키지 빌드](#building-a-typescript-package)
+- [워크스페이스 전체에서 타입 검사를 더 빠르게 만들기](/docs/guides/tools/typescript#linting-your-codebase)
 
 <Callout type="info">
-  This guide assumes you are using a recent version of TypeScript and uses some
-  features that are only available in those versions. You may need to adjust the
-  guidance on this page if you are unable to features from those versions.
+  이 가이드는 최신 버전의 TypeScript를 사용한다고 가정하며 해당 버전에서만
+  사용할 수 있는 일부 기능을 사용합니다. 해당 버전의 기능을 사용할 수 없는 경우
+  이 페이지의 지침을 조정해야 할 수 있습니다.
 </Callout>
 
-## Sharing `tsconfig.json`
+## `tsconfig.json` 공유
 
-You want to build consistency into your TypeScript configurations so that your entire repo can use great defaults and your fellow developers can know what to expect when writing code in the Workspace.
+TypeScript 구성에 일관성을 구축하여 전체 저장소가 훌륭한 기본값을 사용할 수 있고 동료 개발자가 Workspace에서 코드를 작성할 때 무엇을 기대할 수 있는지 알 수 있기를 원합니다.
 
-TypeScript's `tsconfig.json` sets the configuration for the TypeScript compiler and features an [`extends` key](https://www.typescriptlang.org/tsconfig#extends) that you'll use to share configuration across your workspace.
+TypeScript의 `tsconfig.json`은 TypeScript 컴파일러에 대한 구성을 설정하며 워크스페이스 전체에서 구성을 공유하는 데 사용할 [`extends` 키](https://www.typescriptlang.org/tsconfig#extends)를 제공합니다.
 
-This guide will use [`create-turbo`](/docs/reference/create-turbo) as an example.
+이 가이드는 예제로 [`create-turbo`](/docs/reference/create-turbo)를 사용합니다.
 
 <PackageManagerTabs>
 
@@ -63,9 +63,9 @@ bunx create-turbo@latest
 </Tab>
 </PackageManagerTabs>
 
-### Use a base `tsconfig` file
+### 기본 `tsconfig` 파일 사용
 
-Inside `packages/typescript-config`, you have a few `json` files which represent different ways you might want to configure TypeScript in various packages. The `base.json` file is extended by every other `tsconfig.json` in the workspace and looks like this:
+`packages/typescript-config` 내부에는 다양한 패키지에서 TypeScript를 구성하려는 여러 가지 방법을 나타내는 몇 개의 `json` 파일이 있습니다. `base.json` 파일은 워크스페이스의 다른 모든 `tsconfig.json`에 의해 확장되며 다음과 같습니다:
 
 ```json title="./packages/typescript-config/base.json"
 {
@@ -88,11 +88,11 @@ Inside `packages/typescript-config`, you have a few `json` files which represent
   `tsconfig` options reference
 </LinkToDocumentation>
 
-### Creating the rest of the package
+### 나머지 패키지 만들기
 
-The other `tsconfig` files in this package use the `extends` key to start with the base configuration and customize for specific types of projects, like for Next.js (`nextjs.json`) and a React library (`react-library.json`).
+이 패키지의 다른 `tsconfig` 파일은 `extends` 키를 사용하여 기본 구성으로 시작하고 Next.js(`nextjs.json`) 및 React 라이브러리(`react-library.json`)와 같은 특정 유형의 프로젝트에 맞게 사용자 지정합니다.
 
-Inside `package.json`, name the package so it can be referenced in the rest of the Workspace:
+`package.json` 내부에서 Workspace의 나머지 부분에서 참조할 수 있도록 패키지 이름을 지정합니다:
 
 ```json title="packages/typescript-config/package.json"
 {
@@ -100,11 +100,11 @@ Inside `package.json`, name the package so it can be referenced in the rest of t
 }
 ```
 
-## Building a TypeScript package
+## TypeScript 패키지 빌드
 
-### Using the configuration package
+### 구성 패키지 사용
 
-First, install the `@repo/typescript-config` package into your package:
+먼저, `@repo/typescript-config` 패키지를 패키지에 설치합니다:
 
 <PackageManagerTabs>
 
@@ -153,7 +153,7 @@ First, install the `@repo/typescript-config` package into your package:
 </Tab>
 </PackageManagerTabs>
 
-Then, extend the `tsconfig.json` for the package from the `@repo/typescript-config` package. In this example, the `web` package is a Next.js application:
+그런 다음 `@repo/typescript-config` 패키지에서 패키지에 대한 `tsconfig.json`을 확장합니다. 이 예제에서 `web` 패키지는 Next.js 애플리케이션입니다:
 
 ```json title="./apps/web/tsconfig.json"
 {
@@ -166,9 +166,9 @@ Then, extend the `tsconfig.json` for the package from the `@repo/typescript-conf
 }
 ```
 
-### Creating entrypoints to the package
+### 패키지에 대한 진입점 만들기
 
-First, make sure your code gets compiled with `tsc` so there will be a `dist` directory. You'll need a `build` script as well as a `dev` script:
+먼저, `dist` 디렉터리가 있도록 코드가 `tsc`로 컴파일되었는지 확인합니다. `build` 스크립트와 `dev` 스크립트가 필요합니다:
 
 ```json title="./packages/ui/package.json"
 {

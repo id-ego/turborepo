@@ -1,12 +1,12 @@
 ---
-title: Package task in single-package workspace error
-description: Learn more about errors with package tasks in single-package workspaces.
+title: 단일 패키지 워크스페이스의 패키지 작업 오류
+description: 단일 패키지 워크스페이스에서 패키지 작업 오류에 대해 자세히 알아보세요.
 ---
 
-## Why this error occurred
+## 이 오류가 발생한 이유
 
-In single package mode, there cannot be multiple packages in your repository. Therefore, declaring a task in the
-`turbo.json` with a specified package name is not permitted.
+단일 패키지 모드에서는 리포지토리에 여러 패키지가 있을 수 없습니다. 따라서 `turbo.json`에서
+지정된 패키지 이름으로 작업을 선언하는 것은 허용되지 않습니다.
 
 ```json title="./turbo.json"
 {
@@ -18,9 +18,9 @@ In single package mode, there cannot be multiple packages in your repository. Th
 }
 ```
 
-## Solution
+## 해결 방법
 
-Remove the package name from the task declaration.
+작업 선언에서 패키지 이름을 제거하세요.
 
 ```json title="./turbo.json"
 {
@@ -32,4 +32,4 @@ Remove the package name from the task declaration.
 }
 ```
 
-Alternatively, if you would like to have multiple packages, you can [specify the workspaces in your repository](/docs/getting-started/add-to-existing-repository).
+또는 여러 패키지를 사용하려면 [리포지토리에서 워크스페이스를 지정](/docs/getting-started/add-to-existing-repository)할 수 있습니다.

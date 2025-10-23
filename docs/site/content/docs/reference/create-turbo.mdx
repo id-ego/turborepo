@@ -1,12 +1,12 @@
 ---
 title: create-turbo
-description: Quickly set up a new Turborepo repository from scratch.
+description: 새로운 Turborepo 저장소를 처음부터 빠르게 설정합니다.
 ---
 
 import { PackageManagerTabs, Tab } from '#components/tabs';
 import { ExamplesTable } from '#components/examples-table';
 
-The easiest way to get started with Turborepo is by using `create-turbo`. Use this CLI tool to quickly start building a new monorepo, with everything set up for you.
+Turborepo를 시작하는 가장 쉬운 방법은 `create-turbo`를 사용하는 것입니다. 이 CLI 도구를 사용하여 모든 것이 설정된 새로운 monorepo 구축을 빠르게 시작할 수 있습니다.
 
 <PackageManagerTabs>
 
@@ -40,9 +40,9 @@ bunx create-turbo@latest
 
 </PackageManagerTabs>
 
-## Start with an example
+## 예제로 시작하기
 
-The community curates a set of examples to showcase ways to use common tools and libraries with Turborepo. To bootstrap your monorepo with one of the examples, use the `--example` flag:
+커뮤니티에서는 Turborepo와 함께 일반적인 도구 및 라이브러리를 사용하는 방법을 보여주는 예제 세트를 관리합니다. 예제 중 하나로 monorepo를 부트스트랩하려면 `--example` 플래그를 사용하세요:
 
 <PackageManagerTabs>
 
@@ -76,23 +76,23 @@ bunx create-turbo@latest --example [example-name]
 
 </PackageManagerTabs>
 
-Use any of the example's names below:
+아래 예제 이름 중 하나를 사용하세요:
 
-## Core-maintained examples
+## 코어 관리 예제
 
-The following examples are maintained by the Turborepo core team. Dependencies are kept as up-to-date as possible and GitHub Issues are accepted and addressed for these examples.
+다음 예제는 Turborepo 코어 팀에서 관리합니다. 의존성은 가능한 한 최신 상태로 유지되며 이러한 예제에 대한 GitHub Issues가 수락되고 처리됩니다.
 
 <ExamplesTable coreMaintained />
 
-## Community-maintained examples
+## 커뮤니티 관리 예제
 
-The community curates a set of examples to showcase ways to use common tools and libraries with Turborepo. To bootstrap your monorepo with one of the examples, use the `--example` flag:
+커뮤니티에서는 Turborepo와 함께 일반적인 도구 및 라이브러리를 사용하는 방법을 보여주는 예제 세트를 관리합니다. 예제 중 하나로 monorepo를 부트스트랩하려면 `--example` 플래그를 사용하세요:
 
 <ExamplesTable />
 
-### Use a community example
+### 커뮤니티 예제 사용하기
 
-You can also use a custom starter or example by using a GitHub URL. This is useful for using your own custom starters or examples from the community.
+GitHub URL을 사용하여 사용자 정의 스타터 또는 예제를 사용할 수도 있습니다. 이는 커뮤니티의 사용자 정의 스타터 또는 예제를 사용하는 데 유용합니다.
 
 <PackageManagerTabs>
 
@@ -126,22 +126,22 @@ bunx create-turbo@latest --example [github-url]
 
 </PackageManagerTabs>
 
-## Options
+## 옵션
 
 ```txt title="Terminal"
--m, --package-manager to use (choices: "npm", "yarn", "pnpm", "bun")
+-m, --package-manager 사용할 패키지 매니저 (선택 항목: "npm", "yarn", "pnpm", "bun")
 
---skip-install: Do not run a package manager install after creating the project (Default: false)
+--skip-install: 프로젝트 생성 후 패키지 매니저 설치를 실행하지 않습니다 (기본값: false)
 
---skip-transforms: Do not run any code transformation after creating the project (Default: false)
+--skip-transforms: 프로젝트 생성 후 코드 변환을 실행하지 않습니다 (기본값: false)
 
---turbo-version <version>: Use a specific version of turbo (default: latest)
+--turbo-version <version>: 특정 버전의 turbo를 사용합니다 (기본값: latest)
 
--e, --example [name]|[github-url]: An example to bootstrap the app with. You can use an example name from the official Turborepo repo or a GitHub URL. The URL can use any branch and/or subdirectory
+-e, --example [name]|[github-url]: 앱을 부트스트랩할 예제입니다. 공식 Turborepo 저장소의 예제 이름이나 GitHub URL을 사용할 수 있습니다. URL은 모든 브랜치 및/또는 하위 디렉토리를 사용할 수 있습니다
 
--p, --example-path <path-to-example>: In a rare case, your GitHub URL might contain a branch name with a slash (e.g. bug/fix-1) and the path to the example (e.g. foo/bar). In this case, you must specify the path to the example separately: --example-path foo/bar
+-p, --example-path <path-to-example>: 드문 경우지만, GitHub URL에 슬래시가 있는 브랜치 이름(예: bug/fix-1)과 예제 경로(예: foo/bar)가 포함될 수 있습니다. 이 경우 예제 경로를 별도로 지정해야 합니다: --example-path foo/bar
 
--v, --version:  Output the current version
+-v, --version: 현재 버전을 출력합니다
 
--h, --help: Display help for command
+-h, --help: 명령어 도움말을 표시합니다
 ```

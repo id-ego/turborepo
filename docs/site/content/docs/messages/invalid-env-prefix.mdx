@@ -1,12 +1,12 @@
 ---
-title: Invalid environment variable prefix
-description: Learn more about errors with invalid environment variable prefixes in Turborepo.
+title: 잘못된 환경 변수 접두사
+description: Turborepo에서 잘못된 환경 변수 접두사 오류에 대해 자세히 알아보세요.
 ---
 
-## Why this error occurred
+## 이 오류가 발생한 이유
 
-When declaring environment variables in your `turbo.json`, you cannot prefix them with `$`. This
-was an old syntax for declaring a dependency on an environment variable that was deprecated in Turborepo 1.5.
+`turbo.json`에서 환경 변수를 선언할 때 `$` 접두사를 사용할 수 없습니다. 이것은
+Turborepo 1.5에서 더 이상 사용되지 않는 환경 변수 의존성 선언을 위한 오래된 구문이었습니다.
 
 ```json title="./turbo.json"
 {
@@ -14,11 +14,11 @@ was an old syntax for declaring a dependency on an environment variable that was
 }
 ```
 
-The environment variable declared above has the `$` prefix.
+위에서 선언된 환경 변수는 `$` 접두사를 가지고 있습니다.
 
-## Solution
+## 해결 방법
 
-Remove the `$` prefix from your environment variable declaration.
+환경 변수 선언에서 `$` 접두사를 제거하세요.
 
 ```json title="./turbo.json"
 {
@@ -26,5 +26,5 @@ Remove the `$` prefix from your environment variable declaration.
 }
 ```
 
-You can migrate to the `env` and `globalEnv` keys using `npx @turbo/codemod migrate-env-var-dependencies`.
-Check out [the codemod's documentation for more details](/docs/reference/turbo-codemod#turborepo-1x).
+`npx @turbo/codemod migrate-env-var-dependencies`를 사용하여 `env` 및 `globalEnv` 키로 마이그레이션할 수 있습니다.
+자세한 내용은 [codemod 문서](/docs/reference/turbo-codemod#turborepo-1x)를 확인하세요.

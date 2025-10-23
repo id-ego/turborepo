@@ -1,43 +1,43 @@
 ---
-title: Vercel Remote Cache is now free
-description: Free Remote Caching for repositories linked to Vercel
+title: Vercel Remote Cache가 이제 무료입니다
+description: Vercel에 연결된 저장소를 위한 무료 원격 캐싱
 date: '2024/12/20'
 tag: 'web development'
 ogImage: '/images/blog/free-vercel-remote-cache/x-card.png'
 ---
 
-<h1 className="text-center">Vercel Remote Cache is now free</h1>
+<h1 className="text-center">Vercel Remote Cache가 이제 무료입니다</h1>
 
-One of Turborepo's most important features is [Remote Caching](/docs/core-concepts/remote-caching), a distributed caching layer that ensures your developers and CI never do the same work twice.
+Turborepo의 가장 중요한 기능 중 하나는 [원격 캐싱](/docs/core-concepts/remote-caching)입니다. 이는 개발자와 CI가 동일한 작업을 두 번 수행하지 않도록 보장하는 분산 캐싱 레이어입니다.
 
-As of today, [Vercel Remote Cache](https://vercel.com/docs/monorepos/remote-caching) is now a free, zero-configuration option for any Turborepo linked to Vercel, joining the [open-source Remote Caches created by the community](/docs/core-concepts/remote-caching#community-implementations) as free options for speeding up your development.
+오늘부터 [Vercel Remote Cache](https://vercel.com/docs/monorepos/remote-caching)는 Vercel에 연결된 모든 Turborepo에 대해 무료로 제공되는 설정 불필요 옵션이 되었으며, [커뮤니티에서 만든 오픈소스 원격 캐시](/docs/core-concepts/remote-caching#community-implementations)와 함께 개발 속도를 높이는 무료 옵션으로 제공됩니다.
 
-## Linking a repository to Vercel Remote Cache
+## 저장소를 Vercel Remote Cache에 연결하기
 
-### On Vercel
+### Vercel에서
 
-Commands using `turbo` on Vercel are automatically configured to use Vercel Remote Cache. Your builds will benefit from Remote Caching with zero-configuration.
+Vercel에서 `turbo`를 사용하는 명령은 자동으로 Vercel Remote Cache를 사용하도록 구성됩니다. 빌드는 설정 없이도 원격 캐싱의 이점을 누릴 수 있습니다.
 
-### On other Continuous Integration providers
+### 다른 지속적 통합 제공업체에서
 
-Create the `TURBO_TOKEN` and `TURBO_TEAM` environment variables to authenticate to Vercel Remote Cache with their respective values. Visit [our CI provider documentation](/docs/guides/ci-vendors) to learn how to connect to:
+`TURBO_TOKEN` 및 `TURBO_TEAM` 환경 변수를 생성하여 각각의 값으로 Vercel Remote Cache에 인증합니다. 다음에 연결하는 방법을 알아보려면 [CI 제공업체 문서](/docs/guides/ci-vendors)를 참조하십시오:
 
 - [GitHub Actions](/docs/guides/ci-vendors/github-actions)
 - [GitLab CI](/docs/guides/ci-vendors/gitlab-ci)
 - [CircleCI](/docs/guides/ci-vendors/circleci)
 - [GitLab CI](/docs/guides/ci-vendors/gitlab-ci)
 - [Travis CI](/docs/guides/ci-vendors/travis-ci)
-- [Any other CI provider](/docs/guides/ci-vendors#general-setup)
+- [기타 CI 제공업체](/docs/guides/ci-vendors#general-setup)
 
-### On your local machine
+### 로컬 머신에서
 
-To get started locally, run:
+로컬에서 시작하려면 다음을 실행하십시오:
 
 ```bash title="Terminal"
 npx turbo login
 npx turbo link
 ```
 
-## More information
+## 추가 정보
 
-To learn more, visit [Vercel's changelog announcement](https://vercel.com/changelog/free-vercel-remote-cache) or [Vercel Remote Cache documentation](https://vercel.com/docs/monorepos/remote-caching).
+자세한 내용은 [Vercel의 변경 로그 공지](https://vercel.com/changelog/free-vercel-remote-cache) 또는 [Vercel Remote Cache 문서](https://vercel.com/docs/monorepos/remote-caching)를 참조하십시오.

@@ -1,30 +1,29 @@
 ---
 title: Biome
-description: Learn how to use Biome in your Turborepo projects.
+description: Turborepo 프로젝트에서 Biome을 사용하는 방법을 알아보세요.
 ---
 
 import { Callout } from '#components/callout';
 import { CreateTurboCallout } from './create-turbo-callout.tsx';
 
-[Biome](https://biomejs.dev/) is a fast formatter for JavaScript, TypeScript, JSX, and JSON that saves CI and developer time.
+[Biome](https://biomejs.dev/)은 JavaScript, TypeScript, JSX, JSON을 위한 빠른 포매터로 CI와 개발자 시간을 절약합니다.
 
 <CreateTurboCallout />
 
-## Using Biome with Turborepo
+## Turborepo와 함께 Biome 사용하기
 
-Biome is a rare exception to most tools that are used with Turborepo because it is **so extraordinarily fast**. For this reason, we recommend using a [Root Task](/docs/crafting-your-repository/configuring-tasks#registering-root-tasks) rather than creating separate scripts in each of your packages.
+Biome은 Turborepo와 함께 사용되는 대부분의 도구와는 달리 **매우 빠른** 예외적인 도구입니다. 이러한 이유로, 각 패키지에 별도의 스크립트를 만드는 대신 [Root Task](/docs/crafting-your-repository/configuring-tasks#registering-root-tasks)를 사용하는 것을 권장합니다.
 
-<Callout type="info" title="Caching behavior">
-  Using Biome at the root of the project will result in cache misses for all
-  tasks when you upgrade Biome versions or change configuration. If you prefer
-  the tradeoff of higher cache hit ratios in these situations over less
-  configuration, you can still use Biome in separate scripts like the other
-  recommendations in our guides.
+<Callout type="info" title="캐싱 동작">
+  프로젝트 루트에서 Biome을 사용하면 Biome 버전을 업그레이드하거나 설정을 변경할
+  때 모든 작업에 대해 캐시 미스가 발생합니다. 이러한 상황에서 적은 설정보다 높은
+  캐시 적중률의 장단점을 선호하는 경우, 가이드의 다른 권장 사항처럼 별도의
+  스크립트에서 Biome을 사용할 수 있습니다.
 </Callout>
 
-### Initialize Biome
+### Biome 초기화
 
-First, [follow the installation documentation to set up Biome](https://biomejs.dev/guides/getting-started/) in your repository. You'll then be able to create a script to use Biome in the root of your repository:
+먼저, 저장소에서 [Biome 설정을 위한 설치 문서](https://biomejs.dev/guides/getting-started/)를 따르세요. 그런 다음 저장소의 루트에서 Biome을 사용할 스크립트를 만들 수 있습니다:
 
 ```json title="./package.json"
 {
@@ -35,17 +34,16 @@ First, [follow the installation documentation to set up Biome](https://biomejs.d
 }
 ```
 
-### Create a root task
+### Root Task 생성
 
-In practice, Biome is unlikely to be a bottleneck in the iteration speed of your repository. For this reason, we can have less configuration to manage in our repository by using Biome in a [Root Task](/docs/crafting-your-repository/configuring-tasks#registering-root-tasks).
+실제로 Biome은 저장소의 반복 속도에 병목 현상이 될 가능성이 낮습니다. 이러한 이유로, [Root Task](/docs/crafting-your-repository/configuring-tasks#registering-root-tasks)에서 Biome을 사용하여 저장소에서 관리할 설정을 줄일 수 있습니다.
 
 <Callout type="info">
-  If you believe Biome may be faster in your repository split up into tasks in
-  packages, you are free to do so. We encourage you to experiment with what's
-  best for your use case.
+  저장소에서 패키지의 작업으로 분할하는 것이 Biome이 더 빠를 것이라고 생각한다면
+  그렇게 하셔도 됩니다. 사용 사례에 가장 적합한 것을 실험해 보시기 바랍니다.
 </Callout>
 
-To create a [Root Task](/docs/crafting-your-repository/configuring-tasks#registering-root-tasks), register the scripts to Turborepo:
+[Root Task](/docs/crafting-your-repository/configuring-tasks#registering-root-tasks)를 생성하려면 스크립트를 Turborepo에 등록하세요:
 
 ```json title="./turbo.json"
 {
@@ -58,4 +56,4 @@ To create a [Root Task](/docs/crafting-your-repository/configuring-tasks#registe
 }
 ```
 
-You'll now be able to run these scripts using `turbo run format-and-lint` and `turbo run format-and-lint:fix`.
+이제 `turbo run format-and-lint`와 `turbo run format-and-lint:fix`를 사용하여 이러한 스크립트를 실행할 수 있습니다.

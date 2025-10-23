@@ -1,16 +1,16 @@
 ---
 title: Next.js
-description: Learn how to use Next.js in a monorepo.
+description: 모노레포에서 Next.js를 사용하는 방법을 알아봅니다.
 ---
 
 import { PackageManagerTabs, Tab } from '#components/tabs';
 import { Callout } from '#components/callout';
 
-[Next.js](https://nextjs.org) is the React framework for the web. Used by some of the world's largest companies, Next.js enables you to create high-quality web applications with the power of React components.
+[Next.js](https://nextjs.org)는 웹을 위한 React 프레임워크입니다. 세계 최대 기업들이 사용하는 Next.js는 React 컴포넌트의 강력함으로 고품질 웹 애플리케이션을 만들 수 있게 해줍니다.
 
-## Quickstart
+## 빠른 시작
 
-To get started with Next.js in a Turborepo quickly, follow the [quickstart](/docs/getting-started/installation) to create a repository with two Next.js applications:
+Turborepo에서 Next.js를 빠르게 시작하려면 [빠른 시작](/docs/getting-started/installation)을 따라 두 개의 Next.js 애플리케이션이 있는 저장소를 생성하세요:
 
 <PackageManagerTabs>
 
@@ -47,9 +47,9 @@ bunx create-turbo@latest
 </Tab>
 </PackageManagerTabs>
 
-## Adding a Next.js application to an existing repository
+## 기존 저장소에 Next.js 애플리케이션 추가하기
 
-Use [`create-next-app`](https://nextjs.org/docs/app/api-reference/create-next-app) to set up a new Next.js application in a package. From the root of your repository, run:
+[`create-next-app`](https://nextjs.org/docs/app/api-reference/create-next-app)을 사용하여 패키지에 새 Next.js 애플리케이션을 설정합니다. 저장소의 루트에서 다음을 실행하세요:
 
 <PackageManagerTabs>
 
@@ -86,9 +86,9 @@ bunx create-next-app@latest apps/my-app
 </Tab>
 </PackageManagerTabs>
 
-## Integrating with your repository
+## 저장소와 통합하기
 
-To add [Internal Packages](/docs/core-concepts/internal-packages) to your new application, install them into the app with your package manager:
+새 애플리케이션에 [내부 패키지](/docs/core-concepts/internal-packages)를 추가하려면 패키지 매니저를 사용하여 앱에 설치하세요:
 
 <PackageManagerTabs>
 
@@ -145,15 +145,15 @@ To add [Internal Packages](/docs/core-concepts/internal-packages) to your new ap
 </Tab>
 </PackageManagerTabs>
 
-Make sure to run your package manager's install command. You also may need to update `scripts` in `package.json` to fit your use case in your repository.
+패키지 매니저의 install 명령을 실행해야 합니다. 또한 저장소의 사용 사례에 맞게 `package.json`의 `scripts`를 업데이트해야 할 수도 있습니다.
 
-### Customizing tasks
+### 작업 사용자 정의
 
-By default, the new application will use the tasks defined in the root `turbo.json`. If you'd like to configure tasks differently for the new application, use [Package Configurations](/docs/reference/package-configurations).
+기본적으로 새 애플리케이션은 루트 `turbo.json`에 정의된 작업을 사용합니다. 새 애플리케이션에 대해 작업을 다르게 구성하려면 [패키지 구성](/docs/reference/package-configurations)을 사용하세요.
 
-### Microfrontends
+### 마이크로프론트엔드
 
-When using Next.js with [Turborepo's microfrontends](/docs/guides/microfrontends), make sure to set the `basePath` property for child applications. This ensures the assets like images and CSS will be routed to the correct application.
+[Turborepo의 마이크로프론트엔드](/docs/guides/microfrontends)와 함께 Next.js를 사용할 때는 하위 애플리케이션에 대해 `basePath` 속성을 설정해야 합니다. 이렇게 하면 이미지 및 CSS와 같은 자산이 올바른 애플리케이션으로 라우팅됩니다.
 
 ```ts title="./apps/my-app/next.config.ts"
 import type { NextConfig } from 'next';

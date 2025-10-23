@@ -1,6 +1,6 @@
 ---
 title: Microfrontends
-description: Learn how to use Turborepo's built-in microfrontends proxy for local development.
+description: 로컬 개발을 위한 Turborepo의 내장 microfrontends 프록시 사용 방법을 알아봅니다.
 ---
 
 import { Callout } from '#components/callout';
@@ -10,11 +10,11 @@ import { PrereleaseBadge } from '#components/prerelease-badge';
 
 <PrereleaseBadge />
 
-Microfrontends are an architectural pattern where a web application is decomposed into smaller, independently developed and deployed applications that work together.
+Microfrontends는 웹 애플리케이션을 더 작고 독립적으로 개발 및 배포되어 함께 작동하는 애플리케이션으로 분해하는 아키텍처 패턴입니다.
 
-Turborepo provides built-in support for running vertical microfrontends (sometimes called "zones") locally during development through an integrated proxy server. The proxy coordinates multiple applications and routes traffic between them.
+Turborepo는 통합 프록시 서버를 통해 개발 중 수직 microfrontends(때로는 "zones"라고 함)를 로컬에서 실행하기 위한 기본 지원을 제공합니다. 프록시는 여러 애플리케이션을 조정하고 그들 간의 트래픽을 라우팅합니다.
 
-Let's imagine you have a monorepo with multiple frontend applications:
+여러 프론트엔드 애플리케이션이 있는 모노레포가 있다고 가정해 봅시다:
 
 <Files>
   <Folder name="apps" defaultOpen>
@@ -35,26 +35,26 @@ Let's imagine you have a monorepo with multiple frontend applications:
   <File name="turbo.json" />
 </Files>
 
-In production, these applications might be deployed separately and composed together using a reverse proxy or edge routing. But during development, you want to:
+프로덕션 환경에서 이러한 애플리케이션은 개별적으로 배포되고 리버스 프록시 또는 엣지 라우팅을 사용하여 함께 구성될 수 있습니다. 하지만 개발 중에는 다음을 원합니다:
 
-- Run all applications simultaneously with a single command
-- Access them through a unified URL (e.g., `http://localhost:3024`)
-- Route requests to the correct application based on path patterns
-- Support hot module reloading and WebSocket connections
-- Avoid port conflicts and manual coordination
+- 단일 명령으로 모든 애플리케이션을 동시에 실행
+- 통합 URL(예: `http://localhost:3024`)을 통해 액세스
+- 경로 패턴을 기반으로 올바른 애플리케이션으로 요청 라우팅
+- 핫 모듈 리로딩 및 WebSocket 연결 지원
+- 포트 충돌 및 수동 조정 방지
 
-## Getting started
+## 시작하기
 
-Turborepo provides a built-in proxy server that automatically routes traffic between your microfrontend applications during development. The proxy reads a `microfrontends.json` configuration file and starts when you run `turbo dev`.
+Turborepo는 개발 중 microfrontend 애플리케이션 간의 트래픽을 자동으로 라우팅하는 내장 프록시 서버를 제공합니다. 프록시는 `microfrontends.json` 설정 파일을 읽고 `turbo dev`를 실행할 때 시작됩니다.
 
 <Callout>
-  You can try the following instructions with the monorepo created by `npx
-  create-turbo@latest -e with-microfrontends`.
+  `npx create-turbo@latest -e with-microfrontends`로 생성된 모노레포로 다음
+  지침을 시도할 수 있습니다.
 </Callout>
 
-### Create `microfrontends.json`
+### `microfrontends.json` 생성
 
-Create a `microfrontends.json` file in your parent application. This application is the one that all requests will fall through to when not matched by another application.
+상위 애플리케이션에 `microfrontends.json` 파일을 생성합니다. 이 애플리케이션은 다른 애플리케이션과 일치하지 않을 때 모든 요청이 대체되는 애플리케이션입니다.
 
 ```json title="./apps/web/microfrontends.json"
 {
@@ -78,9 +78,9 @@ Create a `microfrontends.json` file in your parent application. This application
 }
 ```
 
-### Set application ports
+### 애플리케이션 포트 설정
 
-Next, use the `TURBO_MFE_PORT` environment variable to set the ports in your application's development scripts. For example:
+다음으로 `TURBO_MFE_PORT` 환경 변수를 사용하여 애플리케이션의 개발 스크립트에서 포트를 설정합니다. 예를 들어:
 
 <Tabs items={['Next.js', 'Vite']} storageKey="framework-preference">
 
@@ -110,9 +110,9 @@ Next, use the `TURBO_MFE_PORT` environment variable to set the ports in your app
 
 </Tabs>
 
-### Handle base paths
+### 베이스 경로 처리
 
-If you're using a framework, set the base path according to the needs of the framework.
+프레임워크를 사용하는 경우 프레임워크의 요구 사항에 따라 베이스 경로를 설정합니다.
 
 <Tabs items={['Next.js', 'Vite']} storageKey="framework-preference">
 
@@ -144,32 +144,32 @@ export default defineConfig({
 
 </Tabs>
 
-[Visit the Microfrontends section of your framework](/docs/guides/frameworks) for framework-specific guidance.
+프레임워크별 지침은 [프레임워크의 Microfrontends 섹션](/docs/guides/frameworks)을 참조하세요.
 
-### Run `turbo dev`
+### `turbo dev` 실행
 
-When you run `turbo dev`, Turborepo will:
+`turbo dev`를 실행하면 Turborepo는 다음을 수행합니다:
 
-1. **Start the proxy server** on the configured port (default: `3024`)
-1. **Inject the `TURBO_MFE_PORT` environment variable** in tasks to set the applications' port
-1. **Run development tasks** for all configured applications
-1. **Route incoming requests** based on path patterns to the appropriate application
+1. **구성된 포트에서 프록시 서버 시작**(기본값: `3024`)
+1. **작업에 `TURBO_MFE_PORT` 환경 변수 주입**하여 애플리케이션의 포트 설정
+1. **모든 구성된 애플리케이션에 대한 개발 작업 실행**
+1. **경로 패턴을 기반으로 적절한 애플리케이션으로 수신 요청 라우팅**
 
-Now you can access all of your microfrontends applications at `http://localhost:3024`.
+이제 `http://localhost:3024`에서 모든 microfrontends 애플리케이션에 액세스할 수 있습니다.
 
-## Configuration
+## 설정
 
-Each application in the `applications` object can have the following properties:
+`applications` 객체의 각 애플리케이션은 다음 속성을 가질 수 있습니다:
 
-If not provided, the application key is used to match the name in `package.json.
+제공되지 않으면 애플리케이션 키가 `package.json`의 이름과 일치하도록 사용됩니다.
 
 ### `development.local`
 
-The port where the application runs locally. Can be specified as:
+애플리케이션이 로컬에서 실행되는 포트입니다. 다음과 같이 지정할 수 있습니다:
 
-- A number: `3000`
-- A hostname with port: `"localhost:3000"`
-- A URL: `"http://localhost:3000"`
+- 숫자: `3000`
+- 포트가 있는 호스트명: `"localhost:3000"`
+- URL: `"http://localhost:3000"`
 
 ```json title="./apps/web/microfrontends.json"
 {
@@ -181,9 +181,9 @@ The port where the application runs locally. Can be specified as:
 
 ### `development.fallback`
 
-Optionally provide a target to proxy to when an application is not running locally. This is most frequently used to route to production to make commands like `turbo dev --filter=web` that only run a subset of applications a seamless experience.
+애플리케이션이 로컬에서 실행되지 않을 때 프록시할 대상을 선택적으로 제공합니다. 이는 애플리케이션의 하위 집합만 실행하는 `turbo dev --filter=web`와 같은 명령을 원활하게 만들기 위해 프로덕션으로 라우팅하는 데 가장 자주 사용됩니다.
 
-Must be a fully qualified URL.
+완전히 정규화된 URL이어야 합니다.
 
 ```json title="./apps/web/microfrontends.json"
 {
@@ -195,9 +195,9 @@ Must be a fully qualified URL.
 
 ### `routing`
 
-An array of path groups that should route to this application. If no routing is provided, the application becomes the **default application** that catches all unmatched routes.
+이 애플리케이션으로 라우팅해야 하는 경로 그룹의 배열입니다. 라우팅이 제공되지 않으면 애플리케이션은 일치하지 않는 모든 경로를 포착하는 **기본 애플리케이션**이 됩니다.
 
-Only one application can have no `routing` configuration. This is your "root" application that handles all routes not matched by other applications.
+하나의 애플리케이션만 `routing` 설정을 가지지 않을 수 있습니다. 이것이 다른 애플리케이션과 일치하지 않는 모든 경로를 처리하는 "루트" 애플리케이션입니다.
 
 ```json title="./apps/web/microfrontends.json"
 {
@@ -212,7 +212,7 @@ Only one application can have no `routing` configuration. This is your "root" ap
 }
 ```
 
-#### Exact matches
+#### 정확한 일치
 
 ```json title="./apps/web/microfrontends.json"
 {
@@ -220,9 +220,9 @@ Only one application can have no `routing` configuration. This is your "root" ap
 }
 ```
 
-These paths match exactly as written.
+이러한 경로는 작성된 대로 정확하게 일치합니다.
 
-#### Parameters
+#### 매개변수
 
 ```json title="./apps/web/microfrontends.json"
 {
@@ -230,9 +230,9 @@ These paths match exactly as written.
 }
 ```
 
-Segments starting with `:` match any single path segment. For example, `/blog/:slug` matches `/blog/hello` but not `/blog/hello/world`.
+`:`로 시작하는 세그먼트는 단일 경로 세그먼트와 일치합니다. 예를 들어, `/blog/:slug`는 `/blog/hello`와 일치하지만 `/blog/hello/world`와는 일치하지 않습니다.
 
-#### Wildcards
+#### 와일드카드
 
 ```json title="./apps/web/microfrontends.json"
 {
@@ -240,11 +240,11 @@ Segments starting with `:` match any single path segment. For example, `/blog/:s
 }
 ```
 
-Parameters ending with `*` match zero or more path segments. For example, `/docs/:path*` matches `/docs`, `/docs/intro`, and `/docs/api/reference`.
+`*`로 끝나는 매개변수는 0개 이상의 경로 세그먼트와 일치합니다. 예를 들어, `/docs/:path*`는 `/docs`, `/docs/intro`, `/docs/api/reference`와 일치합니다.
 
-#### Group labels
+#### 그룹 레이블
 
-Organize routes into logical groups for better maintainability:
+더 나은 유지 관리를 위해 경로를 논리적 그룹으로 구성합니다:
 
 ```json title="./apps/web/microfrontends.json"
 {
@@ -268,11 +268,11 @@ Organize routes into logical groups for better maintainability:
 }
 ```
 
-The `group` field is for organizational purposes and doesn't affect routing behavior.
+`group` 필드는 구성 목적을 위한 것이며 라우팅 동작에 영향을 주지 않습니다.
 
-#### Complex routing patterns
+#### 복잡한 라우팅 패턴
 
-You can define sophisticated routing with nested parameters:
+중첩된 매개변수로 정교한 라우팅을 정의할 수 있습니다:
 
 ```json title="./apps/web/microfrontends.json"
 {
@@ -290,7 +290,7 @@ You can define sophisticated routing with nested parameters:
 
 ### `packageName`
 
-Optionally use the name of the package from `package.json` in your workspace.
+워크스페이스에서 `package.json`의 패키지 이름을 선택적으로 사용합니다.
 
 ```json title="./apps/main/microfrontends.json"
 {
@@ -304,9 +304,9 @@ Optionally use the name of the package from `package.json` in your workspace.
 
 ### `options.localProxyPort`
 
-Optionally change the proxy port using the `localProxyPort` option
+`localProxyPort` 옵션을 사용하여 선택적으로 프록시 포트를 변경합니다.
 
-Defaults to `3024`.
+기본값은 `3024`입니다.
 
 ```json title="./apps/web/microfrontends.json"
 {
@@ -316,64 +316,64 @@ Defaults to `3024`.
 }
 ```
 
-## Integrating with production
+## 프로덕션과 통합
 
-The Turborepo microfrontends proxy is meant for local usage only. How you implement and integrate your production microfrontends depends on your production infrastructure. However, we can integrate your local and production environments to create a seamless experience across environments.
+Turborepo microfrontends 프록시는 로컬 사용만을 위한 것입니다. 프로덕션 microfrontends를 구현하고 통합하는 방법은 프로덕션 인프라에 따라 다릅니다. 그러나 로컬 및 프로덕션 환경을 통합하여 환경 전반에 걸쳐 원활한 경험을 만들 수 있습니다.
 
-To start, we've built Turborepo's local proxy to integrate with Vercel's microfrontends. We look forward to working with any infrastructure providers that would also like to integrate.
+시작하기 위해 Turborepo의 로컬 프록시를 Vercel의 microfrontends와 통합하도록 구축했습니다. 통합하고자 하는 모든 인프라 제공업체와 협력하기를 기대합니다.
 
-### Microfrontends on Vercel
+### Vercel의 Microfrontends
 
-Vercel has native support for microfrontends that provide:
+Vercel은 다음을 제공하는 microfrontends에 대한 기본 지원을 제공합니다:
 
-- Production proxy implementation with enhance performance
-- Fallback URL support across environments
-- Vercel toolbar integration
-- Feature flag support
-- Asset prefix handling
+- 향상된 성능의 프로덕션 프록시 구현
+- 환경 전반의 대체 URL 지원
+- Vercel 툴바 통합
+- 기능 플래그 지원
+- 애셋 접두사 처리
 
-[Learn more in Vercel's documentation](https://vercel.com/docs/microfrontends).
+[Vercel 문서에서 자세히 알아보기](https://vercel.com/docs/microfrontends).
 
-#### Migrating to `@vercel/microfrontends`
+#### `@vercel/microfrontends`로 마이그레이션
 
-If you install [`@vercel/microfrontends`](https://www.npmjs.com/package/@vercel/microfrontends) in any package or add it to your workspace, Turborepo will automatically defer to it instead of using the built-in proxy. This allows for a gradual migration path.
+패키지에 [`@vercel/microfrontends`](https://www.npmjs.com/package/@vercel/microfrontends)를 설치하거나 워크스페이스에 추가하면 Turborepo가 내장 프록시 대신 자동으로 이를 사용합니다. 이를 통해 점진적인 마이그레이션 경로가 가능합니다.
 
-You can use the same `microfrontends.json` configuration as for Turborepo. Turborepo's `microfrontends.json` schema is a subset of Vercel's schema, so it is compatible with `@vercel/microfrontends`.
+Turborepo와 동일한 `microfrontends.json` 설정을 사용할 수 있습니다. Turborepo의 `microfrontends.json` 스키마는 Vercel 스키마의 하위 집합이므로 `@vercel/microfrontends`와 호환됩니다.
 
-To learn more about `@vercel/microfrontends`, [visit the package on npm](https://www.npmjs.com/package/@vercel/microfrontends).
+`@vercel/microfrontends`에 대해 자세히 알아보려면 [npm의 패키지를 방문](https://www.npmjs.com/package/@vercel/microfrontends)하세요.
 
-## Troubleshooting
+## 문제 해결
 
-### Port already in use
+### 포트가 이미 사용 중
 
-By default, the microfrontends proxy will try to use port 3024. If you already use that port for a different purpose, you can change Turborepo's port using the [`options.localProxyPort`](#optionslocalproxyport).
+기본적으로 microfrontends 프록시는 포트 3024를 사용하려고 시도합니다. 다른 목적으로 해당 포트를 이미 사용 중인 경우 [`options.localProxyPort`](#optionslocalproxyport)를 사용하여 Turborepo의 포트를 변경할 수 있습니다.
 
-### Missing CSS, images, or other assets, or routes not matching
+### CSS, 이미지 또는 기타 애셋 누락 또는 경로가 일치하지 않음
 
-Ensure that the paths that the microfrontends matches for in its [`routing` configuration](#routing) include the routes for the assets. Check your network tab to find paths that are or aren't matching as expected.
+microfrontends가 [`routing` 설정](#routing)에서 일치시키는 경로에 애셋에 대한 경로가 포함되어 있는지 확인합니다. 네트워크 탭을 확인하여 예상대로 일치하거나 일치하지 않는 경로를 찾으세요.
 
-### Links across applications causing errors
+### 애플리케이션 간 링크로 인한 오류
 
-If you use a Single-Page Application (SPA) link (like the Next.js `<Link>` component) to link across applications, this can result in errors. Even though the port and domain remain the same, the applications are different. This means the routing is, by definition, not a "single-page application".
+애플리케이션 간 링크에 Single-Page Application(SPA) 링크(Next.js `<Link>` 컴포넌트 등)를 사용하면 오류가 발생할 수 있습니다. 포트와 도메인은 동일하게 유지되지만 애플리케이션은 다릅니다. 이는 라우팅이 정의상 "단일 페이지 애플리케이션"이 아님을 의미합니다.
 
-### Visiting a proxied port does not redirect
+### 프록시된 포트 방문 시 리디렉션되지 않음
 
-You are still be able to reach a proxied port directly. For example, if `localhost:3000` is proxied to `localhost:3042`, you can still visit `localhost:3000` in your browser.
+프록시된 포트에 여전히 직접 접근할 수 있습니다. 예를 들어, `localhost:3000`이 `localhost:3042`로 프록시되어 있어도 브라우저에서 여전히 `localhost:3000`을 방문할 수 있습니다.
 
-If you would like for `localhost:3000` to redirect to `localhost:3024`, you must set this up manually in your application.
+`localhost:3000`이 `localhost:3024`로 리디렉션되도록 하려면 애플리케이션에서 수동으로 설정해야 합니다.
 
-### Applications not starting
+### 애플리케이션이 시작되지 않음
 
-Verify that:
+다음을 확인하세요:
 
-1. The `packageName` matches your actual package name
-2. The `task` specified exists in the package's `package.json`
-3. Each application's port is available
-4. All dependencies are installed
+1. `packageName`이 실제 패키지 이름과 일치하는지
+2. 지정된 `task`가 패키지의 `package.json`에 존재하는지
+3. 각 애플리케이션의 포트가 사용 가능한지
+4. 모든 종속성이 설치되어 있는지
 
-## Complete example
+## 전체 예제
 
-Here's a full example of a microfrontends configuration for an e-commerce platform:
+다음은 전자 상거래 플랫폼을 위한 microfrontends 설정의 전체 예제입니다:
 
 ```json title="./apps/web/microfrontends.json"
 {
@@ -441,9 +441,9 @@ Here's a full example of a microfrontends configuration for an e-commerce platfo
 }
 ```
 
-With this configuration:
+이 설정을 사용하면:
 
-- The `web` app handles the homepage and any unmatched routes
-- The `docs` app handles all documentation
-- The `blog` app handles blog posts and author pages
-- The `shop` app handles e-commerce functionality
+- `web` 앱은 홈페이지 및 일치하지 않는 모든 경로를 처리합니다
+- `docs` 앱은 모든 문서를 처리합니다
+- `blog` 앱은 블로그 게시물 및 저자 페이지를 처리합니다
+- `shop` 앱은 전자 상거래 기능을 처리합니다

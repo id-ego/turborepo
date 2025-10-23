@@ -1,11 +1,11 @@
 ---
-title: Continuous Integration
-description: Recipes for using Turborepo with Vercel, GitHub Actions, and other continuous integration providers.
+title: 지속적 통합
+description: Vercel, GitHub Actions 및 기타 지속적 통합 제공자와 함께 Turborepo를 사용하기 위한 레시피입니다.
 ---
 
 import { Cards, Card } from '#components/card';
 
-Turborepo not only speeds up builds, but also the rest of your Continuous Integration pipeline by using [Remote Caching](/docs/core-concepts/remote-caching). Below are a few platform recipes to use Turborepo with your CI providers.
+Turborepo는 빌드 속도를 높일 뿐만 아니라 [Remote Caching](/docs/core-concepts/remote-caching)을 사용하여 지속적 통합 파이프라인의 나머지 부분도 가속화합니다. 아래는 CI 제공자와 함께 Turborepo를 사용하기 위한 몇 가지 플랫폼 레시피입니다.
 
 <Cards>
 
@@ -26,15 +26,15 @@ Turborepo not only speeds up builds, but also the rest of your Continuous Integr
 
 </Cards>
 
-## General Setup
+## 일반 설정
 
-To enable Remote Caching for your CI:
+CI에 대해 Remote Caching을 활성화하려면:
 
-1. Setup the environment variables for Turborepo in your CI to access your Remote Cache.
-   | Variable | Description |
+1. Remote Cache에 액세스하기 위해 CI에서 Turborepo에 대한 환경 변수를 설정합니다.
+   | 변수 | 설명 |
    | ----------- | ----------- |
-   | `TURBO_TOKEN` | The Bearer token to access the Remote Cache |
-   | `TURBO_TEAM` | The account name associated with your repository. When using{' '} <a href="https://vercel.com/docs/monorepos/remote-caching#vercel-remote-cache" rel="noreferrer noopener" target="_blank" >Vercel Remote Cache</a>, this is [your team's slug](https://vercel.com/d?to=%2F%5Bteam%5D%2F%7E%2Fsettings&title=Get+team+slug). |
-2. Clone your repository.
-3. Install your dependencies through your package manager.
-4. Run your tasks through `turbo`.
+   | `TURBO_TOKEN` | Remote Cache에 액세스하기 위한 Bearer 토큰 |
+   | `TURBO_TEAM` | 저장소와 연결된 계정 이름. <a href="https://vercel.com/docs/monorepos/remote-caching#vercel-remote-cache" rel="noreferrer noopener" target="_blank" >Vercel Remote Cache</a>를 사용할 때 이것은 [팀의 슬러그](https://vercel.com/d?to=%2F%5Bteam%5D%2F%7E%2Fsettings&title=Get+team+slug)입니다. |
+2. 저장소를 복제합니다.
+3. 패키지 매니저를 통해 의존성을 설치합니다.
+4. `turbo`를 통해 작업을 실행합니다.

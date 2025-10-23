@@ -1,6 +1,6 @@
 ---
 title: ESLint
-description: Learn how to use ESLint in a monorepo.
+description: monorepo에서 ESLint를 사용하는 방법을 알아보세요.
 ---
 
 import { PackageManagerTabs, Tabs, Tab } from '#components/tabs';
@@ -8,21 +8,21 @@ import { Callout } from '#components/callout';
 import { Files, Folder, File } from '#components/files';
 import { CreateTurboCallout } from './create-turbo-callout.tsx';
 
-ESLint is a static analysis tool for quickly finding and fixing problems in your JavaScript code.
+ESLint는 JavaScript 코드의 문제를 빠르게 찾고 수정하기 위한 정적 분석 도구입니다.
 
 <CreateTurboCallout />
 
-In this guide, we'll cover:
+이 가이드에서는 다음을 다룹니다:
 
-- [ESLint v9 with Flat Configuration](#eslint-v9-flat-configs)
-- [ESLint v8 with legacy configuration](#eslint-v8-legacy)
-- [How to set up a `lint` task (applies to both versions)](#setting-up-a-lint-task)
+- [Flat Configuration을 사용하는 ESLint v9](#eslint-v9-flat-configs)
+- [레거시 구성을 사용하는 ESLint v8](#eslint-v8-legacy)
+- [`lint` 작업 설정 방법 (두 버전 모두에 적용)](#setting-up-a-lint-task)
 
-We will share configurations across the monorepo's Workspace, ensuring configuration is consistent across packages and composable to maintain high cache hit ratios.
+monorepo의 Workspace 전체에서 구성을 공유하여 패키지 전반에 걸쳐 구성이 일관되고 구성 가능하여 높은 캐시 적중률을 유지합니다.
 
 ## ESLint v9 (Flat Configs)
 
-Using ESLint v9's Flat Configs, we will end up with a file structure like this:
+ESLint v9의 Flat Configs를 사용하면 다음과 같은 파일 구조를 갖게 됩니다:
 
 <Files>
   <Folder name="apps" defaultOpen>
@@ -54,21 +54,21 @@ Using ESLint v9's Flat Configs, we will end up with a file structure like this:
   </Folder>
 </Files>
 
-This structure includes:
+이 구조에는 다음이 포함됩니다:
 
-- A package called `@repo/eslint-config` in `./packages/eslint-config` that holds all ESLint configuration
-- Two applications, each with their own `eslint.config.js`
-- A `ui` package that also has its own `eslint.config.js`
+- 모든 ESLint 구성을 보유하는 `./packages/eslint-config`의 `@repo/eslint-config`라는 패키지
+- 각각 자체 `eslint.config.js`가 있는 두 개의 애플리케이션
+- 자체 `eslint.config.js`가 있는 `ui` 패키지
 
-### About the configuration package
+### 구성 패키지에 대하여
 
-The `@repo/eslint-config` package has three configuration files, `base.js`, `next.js`, and `react-internal.js`. They are [exported from `package.json`](https://github.com/vercel/turborepo/blob/main/examples/basic/packages/eslint-config/package.json#L6) so that they can be used by other packages, according to needs. Examples of the configurations can be found [in the Turborepo GitHub repository](https://github.com/vercel/turborepo/tree/main/examples/basic/packages/eslint-config) and are available in `npx create-turbo@latest`.
+`@repo/eslint-config` 패키지에는 세 개의 구성 파일인 `base.js`, `next.js`, `react-internal.js`가 있습니다. 필요에 따라 다른 패키지에서 사용할 수 있도록 [`package.json`에서 내보내집니다](https://github.com/vercel/turborepo/blob/main/examples/basic/packages/eslint-config/package.json#L6). 구성의 예는 [Turborepo GitHub 저장소](https://github.com/vercel/turborepo/tree/main/examples/basic/packages/eslint-config)에서 찾을 수 있으며 `npx create-turbo@latest`에서 사용할 수 있습니다.
 
-Notably, the `next.js` and `react-internal.js` configurations use the `base.js` configuration for consistency, extending it with more configuration for their respective requirements. Additionally, notice that [the `package.json` for `eslint-config`](https://github.com/vercel/turborepo/blob/main/examples/basic/packages/eslint-config/package.json) has all of the ESLint dependencies for the repository. This is useful, since it means we don't need to re-specify the dependencies in the packages that import `@repo/eslint-config`.
+특히, `next.js` 및 `react-internal.js` 구성은 일관성을 위해 `base.js` 구성을 사용하며, 각각의 요구 사항에 대한 더 많은 구성으로 확장합니다. 또한 [`eslint-config`에 대한 `package.json`](https://github.com/vercel/turborepo/blob/main/examples/basic/packages/eslint-config/package.json)에는 저장소에 대한 모든 ESLint 종속성이 있습니다. 이는 `@repo/eslint-config`를 가져오는 패키지에서 종속성을 다시 지정할 필요가 없다는 것을 의미하므로 유용합니다.
 
-### Using the configuration package
+### 구성 패키지 사용
 
-In our `web` app, we first need to add `@repo/eslint-config` as a dependency.
+`web` 앱에서는 먼저 `@repo/eslint-config`를 종속성으로 추가해야 합니다.
 
 <PackageManagerTabs>
 
@@ -113,7 +113,7 @@ In our `web` app, we first need to add `@repo/eslint-config` as a dependency.
   </Tab>
 </PackageManagerTabs>
 
-We can then import the configuration like this:
+그런 다음 다음과 같이 구성을 가져올 수 있습니다:
 
 ```js title="./apps/web/eslint.config.js"
 import { nextJsConfig } from '@repo/eslint-config/next-js';
@@ -122,7 +122,7 @@ import { nextJsConfig } from '@repo/eslint-config/next-js';
 export default nextJsConfig;
 ```
 
-Additionally, you can add configuration specific to the package like this:
+또한 다음과 같이 패키지별 구성을 추가할 수 있습니다:
 
 ```js title="./apps/web/eslint.config.js"
 import { nextJsConfig } from '@repo/eslint-config/next-js';
@@ -137,12 +137,12 @@ export default [
 ## ESLint v8 (Legacy)
 
 <Callout type="warn">
-  ESLint v8 is end-of-life as of October 5, 2024. We encourage you to upgrade to
-  ESLint v9 or later. This documentation is here to help with existing projects
-  that have not yet upgraded.
+  ESLint v8은 2024년 10월 5일부로 수명이 종료되었습니다. ESLint v9 이상으로
+  업그레이드하는 것을 권장합니다. 이 문서는 아직 업그레이드하지 않은 기존
+  프로젝트를 위한 것입니다.
 </Callout>
 
-Using legacy configuration from ESLint v8 and lower, we will end up with a file structure like this:
+ESLint v8 이하의 레거시 구성을 사용하면 다음과 같은 파일 구조를 갖게 됩니다:
 
 <Files>
   <Folder name="apps" defaultOpen>
@@ -174,13 +174,13 @@ Using legacy configuration from ESLint v8 and lower, we will end up with a file 
   </Folder>
 </Files>
 
-There's a package called `@repo/eslint-config`, and two applications, each with their own `.eslintrc.js`.
+`@repo/eslint-config`라는 패키지와 각각 자체 `.eslintrc.js`가 있는 두 개의 애플리케이션이 있습니다.
 
-### The `@repo/eslint-config` package
+### `@repo/eslint-config` 패키지
 
-The `@repo/eslint-config` file contains two files, `next.js`, and `library.js`. These are two different ESLint configurations, which we can use in different packages, depending on our needs.
+`@repo/eslint-config` 파일에는 두 개의 파일인 `next.js`와 `library.js`가 포함되어 있습니다. 이들은 두 가지 다른 ESLint 구성이며, 필요에 따라 다른 패키지에서 사용할 수 있습니다.
 
-A configuration for Next.js may look like this:
+Next.js에 대한 구성은 다음과 같을 수 있습니다:
 
 ```js title="./packages/eslint-config/next.js"
 /* Custom ESLint configuration for use with Next.js apps. */
@@ -194,7 +194,7 @@ module.exports = {
 };
 ```
 
-The `package.json` looks like this:
+`package.json`은 다음과 같습니다:
 
 ```json title="./packages/eslint-config/package.json"
 {
@@ -209,11 +209,11 @@ The `package.json` looks like this:
 }
 ```
 
-Note that the ESLint dependencies are all listed here. This is useful, since it means we don't need to re-specify the dependencies inside the apps which import `@repo/eslint-config`.
+ESLint 종속성이 모두 여기에 나열되어 있습니다. 이는 `@repo/eslint-config`를 가져오는 앱 내에서 종속성을 다시 지정할 필요가 없다는 것을 의미하므로 유용합니다.
 
-### How to use the `@repo/eslint-config` package
+### `@repo/eslint-config` 패키지 사용 방법
 
-In our `web` app, we first need to add `@repo/eslint-config` as a dependency.
+`web` 앱에서는 먼저 `@repo/eslint-config`를 종속성으로 추가해야 합니다.
 
 <PackageManagerTabs>
 
@@ -257,7 +257,7 @@ In our `web` app, we first need to add `@repo/eslint-config` as a dependency.
   </Tab>
 </PackageManagerTabs>
 
-We can then import the config like this:
+그런 다음 다음과 같이 구성을 가져올 수 있습니다:
 
 ```js title="./apps/web/.eslintrc.js"
 module.exports = {
@@ -266,11 +266,11 @@ module.exports = {
 };
 ```
 
-By adding `@repo/eslint-config/next.js` to our `extends` array, we're telling ESLint to look for a package called `@repo/eslint-config`, and reference the file `next.js`.
+`extends` 배열에 `@repo/eslint-config/next.js`를 추가함으로써, ESLint에게 `@repo/eslint-config`라는 패키지를 찾고 `next.js` 파일을 참조하도록 지시합니다.
 
-## Setting up a `lint` task
+## `lint` 작업 설정
 
-The `package.json` for each package where you'd like to run ESLint should look like this:
+ESLint를 실행하려는 각 패키지의 `package.json`은 다음과 같아야 합니다:
 
 ```json title="./packages/*/package.json"
 {
@@ -280,7 +280,7 @@ The `package.json` for each package where you'd like to run ESLint should look l
 }
 ```
 
-With your scripts prepared, you can then create your Turborepo task:
+스크립트가 준비되면 Turborepo 작업을 만들 수 있습니다:
 
 ```bash title="./turbo.json"
 {
@@ -290,7 +290,7 @@ With your scripts prepared, you can then create your Turborepo task:
 }
 ```
 
-You can now run `turbo lint` with [global `turbo`](/docs/getting-started/installation#global-installation) or create a script in your root `package.json`:
+[전역 `turbo`](/docs/getting-started/installation#global-installation)로 `turbo lint`를 실행하거나 루트 `package.json`에 스크립트를 만들 수 있습니다:
 
 ```json title="./package.json"
 {

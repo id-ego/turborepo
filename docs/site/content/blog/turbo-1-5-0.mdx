@@ -1,6 +1,6 @@
 ---
 title: Turborepo 1.5
-description: Turborepo 1.5 brings the Monorepo Handbook, drops the 'run' command, improves pruning, and much more!
+description: Turborepo 1.5는 Monorepo Handbook을 제공하고, 'run' 명령을 생략하며, 프루닝을 개선하는 등 많은 기능을 제공합니다!
 date: '2022/09/19'
 tag: 'web development'
 ---
@@ -26,31 +26,31 @@ import { Date } from '#components/blog/date';
   ]}
 />
 
-Turborepo 1.5 is a **huge leap forward for our documentation and DX**, as well as bringing big improvements to `turbo prune`:
+Turborepo 1.5는 **문서 및 개발자 경험의 큰 도약**이며 `turbo prune`에 대한 주요 개선 사항을 제공합니다:
 
-- [**The Monorepo Handbook**](/docs/guides): We've built the missing manual for your monorepo - a guide on workspaces, code sharing, integrating common tools and much more.
-- [**Drop the `run`**](#drop-the-run): `turbo run <task>` can now be shortened to `turbo <task>`
-- [**`turbo prune` now supports pnpm and yarn 2+**](#prune-now-supported-on-pnpm-and-yarn-2): Pruning your monorepo is now supported in `pnpm` and `yarn@berry`.
-- [**Improved environment variables in `turbo.json`**](#environment-variables-in-turbojson): Environment variables are now first-class citizens in your Turborepo pipeline configuration.
-- [**Changes to `package.json` hashing**](#changes-to-packagejson-hashing): We've improved how we hash `package.json` when running tasks.
+- [**Monorepo Handbook**](/docs/guides): 워크스페이스, 코드 공유, 일반적인 도구 통합 등에 대한 가이드인 모노레포를 위한 누락된 매뉴얼을 만들었습니다.
+- [**`run` 생략**](#drop-the-run): `turbo run <task>`를 이제 `turbo <task>`로 단축할 수 있습니다
+- [**`turbo prune`이 이제 pnpm과 yarn 2+를 지원합니다**](#prune-now-supported-on-pnpm-and-yarn-2): 이제 `pnpm`과 `yarn@berry`에서 모노레포 프루닝이 지원됩니다.
+- [**`turbo.json`의 환경 변수 개선**](#environment-variables-in-turbojson): 환경 변수는 이제 Turborepo 파이프라인 구성의 일급 시민입니다.
+- [**`package.json` 해싱 변경**](#changes-to-packagejson-hashing): 작업 실행 시 `package.json`을 해싱하는 방법을 개선했습니다.
 
-Update today by running `npm install turbo@latest`.
+`npm install turbo@latest`를 실행하여 오늘 업데이트하세요.
 
-## The Monorepo Handbook
+## Monorepo Handbook
 
-Setting up a monorepo for the first time often means navigating a lot of new concepts. You'll need to understand workspaces, package installation, sharing code and dependency management - and a lot more.
+모노레포를 처음 설정하는 것은 종종 많은 새로운 개념을 탐색하는 것을 의미합니다. 워크스페이스, 패키지 설치, 코드 공유 및 종속성 관리 등을 이해해야 합니다.
 
-This often meant that folks who wanted to set up a monorepo from scratch had to piece information together from different documentation sites. First `pnpm`, then `tsup`, then back to `changesets`, then back to Turborepo for dessert.
+이는 종종 처음부터 모노레포를 설정하려는 사람들이 다양한 문서 사이트에서 정보를 모아야 함을 의미했습니다. 먼저 `pnpm`, 그 다음 `tsup`, 다시 `changesets`, 그리고 마지막으로 Turborepo로 돌아왔습니다.
 
-We want to fill this gap with [the Monorepo Handbook](/docs/guides). We've built guides on how to integrate all the tools you'll need to make ship happen with your monorepo, including guides on:
+우리는 [Monorepo Handbook](/docs/guides)로 이 격차를 메우고자 합니다. 모노레포로 배포를 성공시키는 데 필요한 모든 도구를 통합하는 방법에 대한 가이드를 만들었습니다:
 
-- [Installing Packages](/docs/crafting-your-repository/managing-dependencies)
-- [Linting](/docs/guides/tools/eslint)
-- [Development Tasks](/docs/crafting-your-repository/developing-applications)
-- [Building Apps](/docs/crafting-your-repository/constructing-ci)
-- [Publishing Packages](/docs/guides/publishing-libraries)
+- [패키지 설치](/docs/crafting-your-repository/managing-dependencies)
+- [린팅](/docs/guides/tools/eslint)
+- [개발 작업](/docs/crafting-your-repository/developing-applications)
+- [앱 빌드](/docs/crafting-your-repository/constructing-ci)
+- [패키지 게시](/docs/guides/publishing-libraries)
 
-## Drop the `run`
+## `run` 생략
 
 <iframe
   className="mt-6 h-72 w-full max-w-xl sm:h-96"
@@ -60,7 +60,7 @@ We want to fill this gap with [the Monorepo Handbook](/docs/guides). We've built
   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 ></iframe>
 
-You can now run tasks with the Turborepo CLI using `turbo <task>`.
+이제 `turbo <task>`를 사용하여 Turborepo CLI로 작업을 실행할 수 있습니다.
 
 ```diff title="Terminal"
 - turbo run build
@@ -71,23 +71,23 @@ You can now run tasks with the Turborepo CLI using `turbo <task>`.
 + turbo lint build test
 ```
 
-If your task name conflicts with a built-in `turbo` subcommand, we'll run our subcommand instead. That means you shouldn't name your tasks things like `prune`, `run`, or `login` - since those are built-in subcommands.
+작업 이름이 기본 제공 `turbo` 하위 명령과 충돌하는 경우 대신 하위 명령을 실행합니다. 즉, `prune`, `run` 또는 `login`과 같은 작업 이름은 사용하지 않아야 합니다. 이들은 기본 제공 하위 명령이기 때문입니다.
 
-`turbo run <task>` will continue to work, and there are no plans to deprecate it.
+`turbo run <task>`는 계속 작동하며 더 이상 사용하지 않을 계획은 없습니다.
 
-## Prune now supported on pnpm and yarn 2+
+## pnpm 및 yarn 2+에서 이제 Prune 지원
 
-We're delighted to announce that [`turbo prune`](/docs/reference/prune) now supports in pnpm, yarn, and yarn 2+.
+[`turbo prune`](/docs/reference/prune)이 이제 pnpm, yarn 및 yarn 2+를 지원한다는 것을 발표하게 되어 기쁩니다.
 
-You can use `turbo prune` to create a pruned subset of your monorepo with a dedicated lockfile--with the correct dependencies needed for a given target application and its dependencies. This is especially useful for using efficiently Turborepo within a Docker image.
+`turbo prune`을 사용하여 주어진 대상 애플리케이션과 그 종속성에 필요한 올바른 종속성이 포함된 전용 lockfile과 함께 모노레포의 프루닝된 하위 집합을 만들 수 있습니다. 이는 Docker 이미지 내에서 Turborepo를 효율적으로 사용하는 데 특히 유용합니다.
 
-As part of the new handbook, we've also added a section on using `turbo prune` to [build docker images](/docs/guides/tools/docker).
+새로운 핸드북의 일부로 `turbo prune`을 사용하여 [Docker 이미지 빌드](/docs/guides/tools/docker)에 대한 섹션도 추가했습니다.
 
-Check out our previous [blog on prune](/blog/turbo-0-4-0#experimental-pruned-workspaces) to learn more.
+자세한 내용은 [prune에 대한 이전 블로그](/blog/turbo-0-4-0#experimental-pruned-workspaces)를 확인하세요.
 
-## Environment variables in `turbo.json`
+## `turbo.json`의 환경 변수
 
-We've introduced two new keys to `turbo.json` - `env` and `globalEnv`. These allow environment variables to be configured _separately_ from tasks:
+`turbo.json`에 두 개의 새로운 키인 `env`와 `globalEnv`를 도입했습니다. 이들은 환경 변수를 작업과 _별도로_ 구성할 수 있게 합니다:
 
 ```diff title="turbo.json"
 {
@@ -110,30 +110,30 @@ We've introduced two new keys to `turbo.json` - `env` and `globalEnv`. These all
 }
 ```
 
-`globalEnv` and `env` allow you to specify a list of environment variables _without_ `$` prefixes. This makes the configuration file significantly easier to read. Read more [in our updated docs](/docs/crafting-your-repository/using-environment-variables#adding-environment-variables-to-task-hashes).
+`globalEnv`와 `env`를 사용하면 `$` 접두사 _없이_ 환경 변수 목록을 지정할 수 있습니다. 이는 구성 파일을 훨씬 더 읽기 쉽게 만듭니다. 자세한 내용은 [업데이트된 문서](/docs/crafting-your-repository/using-environment-variables#adding-environment-variables-to-task-hashes)를 참조하세요.
 
-To help migrate from the previous syntax, we've prepared a codemod. You can run `npx @turbo/codemod migrate-env-var-dependencies`.
+이전 구문에서 마이그레이션하는 데 도움이 되도록 codemod를 준비했습니다. `npx @turbo/codemod migrate-env-var-dependencies`를 실행할 수 있습니다.
 
-This work builds on the [automatic env variable detection](/blog/turbo-1-4-0) we added in 1.4.0.
+이 작업은 1.4.0에서 추가한 [자동 환경 변수 감지](/blog/turbo-1-4-0)를 기반으로 합니다.
 
-## Changes to `package.json` hashing
+## `package.json` 해싱 변경
 
-The `package.json` file in each workspace is now _always_ considered an input for tasks in that workspace. This means that if you change the _definition_ for a task in `package.json`, we want to invalidate any caches from the previous definition.
+각 워크스페이스의 `package.json` 파일은 이제 해당 워크스페이스의 작업에 대한 입력으로 _항상_ 간주됩니다. 이는 `package.json`에서 작업의 *정의*를 변경하면 이전 정의의 캐시를 무효화하려는 것을 의미합니다.
 
-This also counts for the `package.json` in the root. Changes to the root `package.json` will invalidate tasks in the root workspace.
+이는 루트의 `package.json`에도 적용됩니다. 루트 `package.json`의 변경은 루트 워크스페이스의 작업을 무효화합니다.
 
-This helps make Turborepo's cache a bit smarter, and less likely to trip up when task definitions change.
+이는 Turborepo의 캐시를 조금 더 스마트하게 만들고 작업 정의가 변경될 때 문제가 발생할 가능성을 줄입니다.
 
-## Community
+## 커뮤니티
 
-Since releasing [Turborepo v1.4 in August](/blog/turbo-1-4-0), we've seen incredible adoption and community growth:
+[8월에 Turborepo v1.4를 출시](/blog/turbo-1-4-0)한 이후 놀라운 채택률과 커뮤니티 성장을 보았습니다:
 
 - [9.5k+ GitHub Stars](https://github.com/vercel/turbo)
-- [440k weekly NPM downloads](https://www.npmjs.com/package/turbo)
-- 15 years of compute time saved through [Remote Caching on Vercel](https://vercel.com/docs/concepts/monorepos/remote-caching), saving over a 1 year per week, up 2x since July
+- [주간 NPM 다운로드 440k](https://www.npmjs.com/package/turbo)
+- [Vercel의 Remote Caching](https://vercel.com/docs/concepts/monorepos/remote-caching)을 통해 15년의 컴퓨팅 시간 절약, 주당 1년 이상 절약, 7월 이후 2배 증가
 
-Turborepo is the result of the combined work of all of our contributors including our core team.
+Turborepo는 핵심 팀을 포함한 모든 기여자들의 결합된 작업의 결과입니다.
 
-This release was brought to you by the contributions of: @7flash, @afady, @alexander-young, @atilafassina, @bguedes-moz, @bobaaaaa, @brunojppb, @chris-olszewski, @DoctorJohn, @erj826, @futantan, @gsoltis, @HosseinAgha, @ivov, @jaredpalmer, @joelhooks, @knownasnaffy, @laurentlucian, @leerob, @MarceloAlves, @mattpocock, @mauricekleine, @mehulkar, @Misikir, @nareshbhatia, @nathanhammond, @pakaponk, @PhentomPT, @renovate, @ruisaraiva19, @samuelhorn, @shemayas, @shuding, @t-i-0414, @theurgi, @tknickman, @yanmao-cc, and more!
+이 릴리스는 다음 분들의 기여로 제공되었습니다: @7flash, @afady, @alexander-young, @atilafassina, @bguedes-moz, @bobaaaaa, @brunojppb, @chris-olszewski, @DoctorJohn, @erj826, @futantan, @gsoltis, @HosseinAgha, @ivov, @jaredpalmer, @joelhooks, @knownasnaffy, @laurentlucian, @leerob, @MarceloAlves, @mattpocock, @mauricekleine, @mehulkar, @Misikir, @nareshbhatia, @nathanhammond, @pakaponk, @PhentomPT, @renovate, @ruisaraiva19, @samuelhorn, @shemayas, @shuding, @t-i-0414, @theurgi, @tknickman, @yanmao-cc 등 더 많은 분들!
 
-Thank you for your continued support, feedback, and collaboration to make Turborepo your build tool of choice.
+Turborepo를 여러분의 선택한 빌드 도구로 만들기 위한 지속적인 지원, 피드백 및 협력에 감사드립니다.

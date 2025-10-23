@@ -1,15 +1,15 @@
 ---
-title: Recursive `turbo` invocations
-description: Learn more about errors with recursive scripts and tasks in Turborepo.
+title: 재귀적 `turbo` 호출
+description: Turborepo에서 재귀 스크립트 및 작업 오류에 대해 자세히 알아보세요.
 ---
 
-## Why this error occurred
+## 이 오류가 발생한 이유
 
-When a cycle of `turbo` invocations is detected in a [single-package workspace](https://turborepo.com/docs/guides/single-package-workspaces), Turborepo will error to prevent the recursive calls to itself. Typically, this situation occurs for one of two reasons:
+[단일 패키지 워크스페이스](https://turborepo.com/docs/guides/single-package-workspaces)에서 `turbo` 호출의 순환이 감지되면 Turborepo는 자기 자신에 대한 재귀 호출을 방지하기 위해 오류를 발생시킵니다. 일반적으로 이러한 상황은 다음 두 가지 이유 중 하나로 발생합니다:
 
-### Recursion in scripts and tasks
+### 스크립트 및 작업의 재귀
 
-In a single-package workspace, a script in `package.json` that calls a Turborepo task with the same name causes a loop.
+단일 패키지 워크스페이스에서 `package.json`의 스크립트가 동일한 이름을 가진 Turborepo 작업을 호출하면 루프가 발생합니다.
 
 ```json title="./package.json"
 {
@@ -19,9 +19,9 @@ In a single-package workspace, a script in `package.json` that calls a Turborepo
 }
 ```
 
-Calling the `build` script calls `turbo run build`. `turbo run build` then calls the `build` script, initiating the loop of recursive calls.
+`build` 스크립트를 호출하면 `turbo run build`가 호출됩니다. 그러면 `turbo run build`가 `build` 스크립트를 호출하여 재귀 호출의 루프를 시작합니다.
 
-To resolve this, ensure that the name of the script in `package.json` is not the same as the Turborepo task. For example, to fix the snippet above, renaming the script would break the cycle:
+이를 해결하려면 `package.json`의 스크립트 이름이 Turborepo 작업과 동일하지 않도록 해야 합니다. 예를 들어, 위의 코드를 수정하려면 스크립트 이름을 변경하여 순환을 끊을 수 있습니다:
 
 ```json title="./package.json"
 {
@@ -31,10 +31,10 @@ To resolve this, ensure that the name of the script in `package.json` is not the
 }
 ```
 
-### Package manager Workspace misconfiguration
+### 패키지 매니저 워크스페이스 잘못된 구성
 
-A misconfigured workspace can make it appear that a [multi-package workspace](https://vercel.com/docs/vercel-platform/glossary#multi-package-workspace) is a single-package workspace. This causes Turborepo to infer that the repository is of the wrong type, causing it to see the script in `package.json` to be recursive.
+잘못 구성된 워크스페이스는 [다중 패키지 워크스페이스](https://vercel.com/docs/vercel-platform/glossary#multi-package-workspace)가 단일 패키지 워크스페이스처럼 보이게 만들 수 있습니다. 이로 인해 Turborepo는 리포지토리 유형을 잘못 추론하여 `package.json`의 스크립트가 재귀적이라고 판단합니다.
 
-Your repo can end up in this state in a few ways, with the most common being that the [packages are not defined according to your package manager](https://turborepo.com/docs/crafting-your-repository/structuring-a-repository#specifying-packages-in-a-monorepo). An npm workspace that is missing the `workspaces` field in `package.json` or a pnpm workspace that is missing a `pnpm-workspace.yaml` file can result in this error message.
+리포지토리가 이 상태가 되는 몇 가지 방법이 있으며, 가장 일반적인 것은 [패키지 매니저에 따라 패키지가 정의되지 않은 경우](https://turborepo.com/docs/crafting-your-repository/structuring-a-repository#specifying-packages-in-a-monorepo)입니다. `package.json`에 `workspaces` 필드가 누락된 npm 워크스페이스나 `pnpm-workspace.yaml` 파일이 누락된 pnpm 워크스페이스는 이 오류 메시지를 발생시킬 수 있습니다.
 
-Check that your repository is complying with standards for multi-package workspaces and correct any issues.
+리포지토리가 다중 패키지 워크스페이스 표준을 준수하는지 확인하고 문제를 수정하세요.

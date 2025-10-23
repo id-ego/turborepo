@@ -1,21 +1,21 @@
 ---
 title: link
-description: API reference for the `turbo link` command
+description: `turbo link` 명령어에 대한 API 레퍼런스
 ---
 
-Link the repository to a Remote Cache provider.
+저장소를 Remote Cache 제공자에 연결합니다.
 
 ```bash title="Terminal"
 turbo link
 ```
 
-The selected owner (either a user or an organization) will be able to share [cache artifacts](/docs/core-concepts/remote-caching) through [Remote Caching](/docs/core-concepts/remote-caching).
+선택한 소유자(사용자 또는 조직)는 [Remote Caching](/docs/core-concepts/remote-caching)을 통해 [캐시 아티팩트](/docs/core-concepts/remote-caching)를 공유할 수 있습니다.
 
-## Flag options
+## 플래그 옵션
 
 ### `--api <url>`
 
-Specifies the URL of your Remote Cache provider.
+Remote Cache 제공자의 URL을 지정합니다.
 
 ```bash title="Terminal"
 turbo link --api=https://example.com
@@ -23,7 +23,7 @@ turbo link --api=https://example.com
 
 ### `--yes`
 
-Answer yes to all prompts
+모든 프롬프트에 yes로 답변합니다
 
 ```bash title="Terminal"
 turbo link --yes
@@ -31,7 +31,7 @@ turbo link --yes
 
 ### `--scope <scope>`
 
-The scope to which you are linking. For example, when using Vercel, this is your Vercel team's slug.
+연결할 범위입니다. 예를 들어, Vercel을 사용할 때 이것은 Vercel 팀의 슬러그입니다.
 
 ```bash title="Terminal"
 turbo link --scope=your-team

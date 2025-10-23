@@ -1,119 +1,112 @@
 ---
-title: Support policy
-description: Learn about Turborepo's Support policy.
+title: 지원 정책
+description: Turborepo의 지원 정책에 대해 알아보세요.
 ---
 
 import { Callout } from '#components/callout';
 
-## Package managers
+## 패키지 관리자
 
-Core `turbo` functionality depends on the package managers in the JavaScript ecosystem and their implementations of Workspaces and
-lockfile formats.
+핵심 `turbo` 기능은 JavaScript 생태계의 패키지 관리자와 해당 Workspace 및 lockfile 형식 구현에 의존합니다.
 
-| Package manager | Supported                       |
-| --------------- | ------------------------------- |
-| pnpm 8+         | Yes                             |
-| npm 8+          | Yes                             |
-| yarn 1+         | Yes (Includes Yarn Plug'n'Play) |
-| bun 1.2+        | Beta                            |
+| 패키지 관리자 | 지원 여부                  |
+| ------------- | -------------------------- |
+| pnpm 8+       | 예                         |
+| npm 8+        | 예                         |
+| yarn 1+       | 예 (Yarn Plug'n'Play 포함) |
+| bun 1.2+      | Beta                       |
 
 <Callout type="info">
-  Package managers have their own release schedules, bugs, and features. While
-  we intend to keep up with new major versions, we likely will not be able to
-  release support immediately.
+  패키지 관리자는 자체 릴리스 일정, 버그 및 기능을 가지고 있습니다. 새로운 주요
+  버전을 따라가려고 노력하지만 즉시 지원을 릴리스하지 못할 가능성이 높습니다.
 </Callout>
 
-## Platforms
+## 플랫폼
 
-`turbo` is generally supported on Debian-based Linux distributions, macOS, and
-Windows on both x86_64 and ARM 64 architectures. Specifically, we build and ship
-the following binaries via npm:
+`turbo`는 일반적으로 Debian 기반 Linux 배포판, macOS 및 Windows에서 x86_64 및 ARM 64 아키텍처 모두에서 지원됩니다. 구체적으로, npm을 통해 다음 바이너리를 빌드하고 제공합니다:
 
-- `turbo-darwin-64` (macOS with Intel chips)
-- `turbo-darwin-arm64` (macOS with Apple Silicon)
+- `turbo-darwin-64` (Intel 칩을 사용하는 macOS)
+- `turbo-darwin-arm64` (Apple Silicon을 사용하는 macOS)
 - `turbo-linux-64`
 - `turbo-linux-arm64`
 - `turbo-windows-64`\*
 - `turbo-windows-arm64`\*
 
 <small>
-  \*: Requires [Windows C Runtime
+  \*: [Windows C Runtime
   Libraries](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist)
+  필요
 </small>
 
 ## Node.js
 
-Core `turbo` functionality does not depend on the
-active Node.js version on your system, but [some packages in the Turborepo ecosystem](/docs/reference#packages)
-such as [`create-turbo`](/docs/reference/create-turbo), [`turbo-ignore`](/docs/reference/turbo-ignore), and [`eslint-config-turbo`](/docs/reference/eslint-config-turbo) do. For these features,
-we intend to support the [Active and Maintenance LTS versions of Node.js](https://nodejs.org/en/about/previous-releases).
+핵심 `turbo` 기능은 시스템의 활성 Node.js 버전에 의존하지 않지만, [`create-turbo`](/docs/reference/create-turbo), [`turbo-ignore`](/docs/reference/turbo-ignore) 및 [`eslint-config-turbo`](/docs/reference/eslint-config-turbo)와 같은 [Turborepo 생태계의 일부 패키지](/docs/reference#packages)는 의존합니다. 이러한 기능의 경우 [Node.js의 Active 및 Maintenance LTS 버전](https://nodejs.org/en/about/previous-releases)을 지원할 예정입니다.
 
-Turborepo's [examples](/docs/getting-started/examples) are also expected to work with these Node.js versions.
+Turborepo의 [예제](/docs/getting-started/examples)도 이러한 Node.js 버전에서 작동할 것으로 예상됩니다.
 
-## Version control
+## 버전 관리
 
-We support repositories that are version controlled with Git and repositories that don't have
-version control at all. Any other version control system will be ignored.
+Git으로 버전 관리되는 리포지토리와 버전 관리가 전혀 없는 리포지토리를 지원합니다. 다른 버전 관리 시스템은 무시됩니다.
 
-Note that we use Git to hash files, so repositories without git may perform and behave differently.
+파일 해싱에 Git을 사용하므로 git이 없는 리포지토리는 다르게 수행되고 동작할 수 있습니다.
 
-## LTS policy
+## LTS 정책
 
-Major versions of Turborepo will be supported for two years from the release date of the next major version.
+Turborepo의 주요 버전은 다음 주요 버전의 릴리스 날짜로부터 2년 동안 지원됩니다.
 
-Changes required for critical security fixes in older versions will be backported. Such situations will be rare and will land as semver-minor releases, even if they are breaking changes.
+이전 버전의 중요한 보안 수정에 필요한 변경 사항은 백포트됩니다. 이러한 상황은 드물며 중대한 변경 사항이더라도 semver-minor 릴리스로 제공됩니다.
 
-We highly encourage you to use the most current version of Turborepo whenever possible.
+가능한 한 최신 버전의 Turborepo를 사용하실 것을 강력히 권장합니다.
 
-| Major version | Release date | End-of-life date |
-| ------------- | ------------ | ---------------- |
-| 2.x           | Jun. 4, 2024 |                  |
-| 1.x           | Dec. 9, 2021 | Jun. 4, 2026     |
+| 주요 버전 | 릴리스 날짜     | 지원 종료 날짜 |
+| --------- | --------------- | -------------- |
+| 2.x       | 2024년 6월 4일  |                |
+| 1.x       | 2021년 12월 9일 | 2026년 6월 4일 |
 
-## Release phases
+## 릴리스 단계
 
-Stable builds of Turborepo follow semantic versioning (semver) and are thoroughly tested before being released.
+Turborepo의 안정 빌드는 시맨틱 버저닝(semver)을 따르며 릴리스되기 전에 철저하게 테스트됩니다.
 
-Turborepo also offers specific APIs that may be released in an earlier phase of development. This is to allow early adopters to give valuable feedback and help the core team gain confidence in APIs ahead of their stable release. APIs that are available pre-stable will be marked as such in the documentation and within `turbo` itself whenever possible.
+Turborepo는 또한 개발의 초기 단계에서 릴리스될 수 있는 특정 API를 제공합니다. 이는 얼리 어답터가 귀중한 피드백을 제공하고 핵심 팀이 안정적인 릴리스 전에 API에 대한 확신을 얻을 수 있도록 하기 위한 것입니다. 사전 안정 버전으로 제공되는 API는 가능한 한 문서와 `turbo` 자체에서 그렇게 표시됩니다.
 
-Not every API will be released in every phase. We use our best judgment to determine the phase for an API based on our confidence for the feature, weighing factors like the feature's complexity, possible use cases, and feedback from early users of the API.
+모든 API가 모든 단계에서 릴리스되는 것은 아닙니다. 기능의 복잡성, 가능한 사용 사례 및 API의 초기 사용자로부터의 피드백과 같은 요소를 고려하여 기능에 대한 확신을 바탕으로 API의 단계를 결정하기 위해 최선의 판단을 사용합니다.
 
-The Turborepo core team would like to thank any users who do use features early and express our appreciation for any feedback you provide.
+Turborepo 핵심 팀은 기능을 조기에 사용하는 모든 사용자에게 감사드리며 제공해주시는 모든 피드백에 대해 감사를 표합니다.
 
 ### Stable
 
-When an API reaches stability, it is considered ready for use in production. APIs marked as stable will only change in a backward-compatible way in a major release.
+API가 안정성에 도달하면 프로덕션에서 사용할 준비가 된 것으로 간주됩니다. 안정 버전으로 표시된 API는 주요 릴리스에서만 하위 호환되는 방식으로 변경됩니다.
 
-- If a stable API is going to **have breaking changes** in an upcoming major release, warnings and documentation will be provided to help with migrations and next steps.
-- If a stable API is going to be **removed** in an upcoming major release, it will be marked as [Deprecated](#deprecated) to provide early notice of future removal.
+- 안정적인 API가 향후 주요 릴리스에서 **중대한 변경 사항**을 가질 예정인 경우, 마이그레이션 및 다음 단계를 돕기 위한 경고 및 문서가 제공됩니다.
+- 안정적인 API가 향후 주요 릴리스에서 **제거**될 예정인 경우, 향후 제거에 대한 조기 통지를 제공하기 위해 [Deprecated](#deprecated)로 표시됩니다.
 
 ### Beta
 
-Beta APIs require more confidence around reliability before a stable release. In the Beta phase, we are confident about the overall design of the feature and expect to be able to promote the feature to stable with relatively few changes. In rare cases, an API may require a breaking change and will not be covered by semver.
+Beta API는 안정적인 릴리스 전에 신뢰성에 대한 더 많은 확신이 필요합니다. Beta 단계에서는 기능의 전체 디자인에 대해 확신하고 있으며 상대적으로 적은 변경으로 기능을 안정 버전으로 승격할 수 있을 것으로 예상합니다. 드문 경우지만 API가 중대한 변경을 필요로 할 수 있으며 semver의 적용을 받지 않습니다.
 
-We encourage early adopters to use Beta APIs to help us gain certainty around the feature's design and stability. Depending on your risk tolerance, you can use the feature in production as you see fit.
+얼리 어답터가 Beta API를 사용하여 기능의 디자인과 안정성에 대한 확신을 얻도록 권장합니다. 위험 허용 범위에 따라 적절하게 프로덕션에서 기능을 사용할 수 있습니다.
 
-**APIs currently in the Beta phase:**
+**현재 Beta 단계에 있는 API:**
 
-- None
+- 없음
 
 ### Experimental
 
-Experimental APIs lack essential capabilities required to be ready for stability. The design of the feature is considered to be under active development and can change at any time.
+Experimental API는 안정성을 위해 필요한 필수 기능이 부족합니다. 기능의 디자인은 활발하게 개발 중인 것으로 간주되며 언제든지 변경될 수 있습니다.
 
-We encourage you to help us test experimental APIs in side projects, proof-of-concepts, and other environments where stability is non-essential. This gives you the opportunity to aid in the API's development by providing early feedback to the core team as the feature develops. We do not recommend using experimental APIs where reliability is essential.
+안정성이 필수적이지 않은 사이드 프로젝트, 개념 증명 및 기타 환경에서 Experimental API를 테스트하는 데 도움을 주시길 권장합니다. 이를 통해 기능이 개발되는 동안 핵심 팀에 조기 피드백을 제공함으로써 API 개발을 지원할 수 있는 기회를 얻을 수 있습니다. 신뢰성이 필수적인 곳에서는 Experimental API를 사용하지 않는 것이 좋습니다.
 
-**APIs currently in the Experimental phase:**
+**현재 Experimental 단계에 있는 API:**
 
 - [`turbo query`](/docs/reference/query)
-- [`turbo boundaries`](/docs/reference/boundaries) and [Tags](/docs/reference/boundaries#tags)
-- [`--experimental-write-cache` for `turbo watch`](/docs/reference/watch#caching)
-- [`--output=json` for `turbo ls --affected` flag](/docs/reference/ls)
+- [`turbo boundaries`](/docs/reference/boundaries) 및 [Tags](/docs/reference/boundaries#tags)
+- [`turbo watch`용 `--experimental-write-cache`](/docs/reference/watch#caching)
+- [`turbo ls --affected` 플래그용 `--output=json`](/docs/reference/ls)
 
 ### Deprecated
 
-Deprecated APIs are in the process of being removed. Any feature we intend to remove will include documentation for existing users with next steps and information on when to expect the feature to be removed.
+Deprecated API는 제거 중입니다. 제거할 예정인 모든 기능에는 다음 단계와 기능이 제거될 것으로 예상되는 시기에 대한 정보가 포함된 기존 사용자를 위한 문서가 포함됩니다.
 
-**APIs that are currently deprecated:**
+**현재 deprecated된 API:**
 
-- `TURBO_REMOTE_ONLY` and `--remote-only`: Use [`TURBO_CACHE`](/docs/reference/system-environment-variables) or [--cache](/docs/reference/run#--cache-options)
+- `TURBO_REMOTE_ONLY` 및 `--remote-only`: [`TURBO_CACHE`](/docs/reference/system-environment-variables) 또는 [--cache](/docs/reference/run#--cache-options) 사용

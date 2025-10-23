@@ -1,23 +1,23 @@
 ---
-title: Single-package workspaces
-description: Learn how to use Turborepo in a single-package workspace.
+title: 단일 패키지 워크스페이스
+description: 단일 패키지 워크스페이스에서 Turborepo를 사용하는 방법을 알아봅니다.
 ---
 
 import { Callout } from '#components/callout';
 import { PackageManagerTabs, Tab } from '#components/tabs';
 
-While Turborepo is highly effective in [multi-package workspaces](https://vercel.com/docs/vercel-platform/glossary#multi-package-workspace) (commonly referred to as monorepos), it can also be used to make [single-package workspaces](https://vercel.com/docs/vercel-platform/glossary#single-package-workspace) faster.
+Turborepo는 [multi-package workspaces](https://vercel.com/docs/vercel-platform/glossary#multi-package-workspace)(일반적으로 모노레포라고 함)에서 매우 효과적이지만 [single-package workspaces](https://vercel.com/docs/vercel-platform/glossary#single-package-workspace)를 더 빠르게 만드는 데도 사용할 수 있습니다.
 
-Turborepo's most important features work in single-package workspaces including local and [Remote Caching](/docs/core-concepts/remote-caching) and task parallelization. Features that don't work are ones that don't make sense in the context of a single package, like package tasks (`app#build`).
+Turborepo의 가장 중요한 기능은 로컬 및 [Remote Caching](/docs/core-concepts/remote-caching)과 작업 병렬화를 포함하여 단일 패키지 워크스페이스에서 작동합니다. 작동하지 않는 기능은 패키지 작업(`app#build`)과 같이 단일 패키지의 컨텍스트에서 의미가 없는 기능입니다.
 
 <Callout type="good-to-know">
-  Examples of single-package workspaces are the output of `npx create-next-app`
-  or `npm create vite`.
+  단일 패키지 워크스페이스의 예로는 `npx create-next-app` 또는 `npm create
+  vite`의 출력이 있습니다.
 </Callout>
 
-## Installation
+## 설치
 
-Install `turbo` into your application:
+애플리케이션에 `turbo`를 설치합니다:
 
 <PackageManagerTabs>
 
@@ -50,26 +50,26 @@ Install `turbo` into your application:
   </Tab>
 </PackageManagerTabs>
 
-### Running a `package.json` script using global `turbo` (optional)
+### 글로벌 `turbo`를 사용하여 `package.json` 스크립트 실행(선택 사항)
 
-For even faster developer workflows, you can [install `turbo` globally](/docs/getting-started/installation#global-installation), too, and run commands directly from the command line.
+더 빠른 개발자 워크플로우를 위해 [`turbo`를 전역으로 설치](/docs/getting-started/installation#global-installation)할 수도 있으며 명령줄에서 직접 명령을 실행할 수 있습니다.
 
-Once installed, you can run `turbo build` and Turborepo will run your `build` script from `package.json`. Running `turbo build` again will hit the cache.
+설치되면 `turbo build`를 실행할 수 있으며 Turborepo는 `package.json`에서 `build` 스크립트를 실행합니다. `turbo build`를 다시 실행하면 캐시에 히트합니다.
 
-At this point, `turbo` isn't providing much value since you're likely to only be rebuilding your application when code changes and, when your code changes, `turbo` will miss the cache. In two short steps, you can get more out of `turbo`.
+이 시점에서 `turbo`는 코드가 변경될 때만 애플리케이션을 다시 빌드할 가능성이 높고 코드가 변경되면 `turbo`가 캐시를 놓칠 것이기 때문에 많은 가치를 제공하지 않습니다. 두 가지 간단한 단계로 `turbo`에서 더 많은 것을 얻을 수 있습니다.
 
-## Running many scripts with one command
+## 하나의 명령으로 여러 스크립트 실행
 
-In many repositories, there are setup tasks or pre-build steps to run. These tasks are often run one at a time - but you can easily turn them into one script with `turbo`.
+많은 리포지토리에는 실행해야 할 설정 작업이나 빌드 전 단계가 있습니다. 이러한 작업은 종종 한 번에 하나씩 실행되지만 `turbo`를 사용하면 쉽게 하나의 스크립트로 전환할 수 있습니다.
 
-For example, let's say you have a project where we always have to set up a development environment whenever you start working. You need to:
+예를 들어, 작업을 시작할 때마다 개발 환경을 설정해야 하는 프로젝트가 있다고 가정해 봅시다. 다음이 필요합니다:
 
-1. Start a Docker container for a database.
-2. Push a database schema to the database.
-3. Seed the database with data.
-4. Start the development server.
+1. 데이터베이스용 Docker 컨테이너를 시작합니다.
+2. 데이터베이스에 데이터베이스 스키마를 푸시합니다.
+3. 데이터베이스에 데이터를 시드합니다.
+4. 개발 서버를 시작합니다.
 
-You can schedule these tasks into one command using Turborepo. First, create scripts in your `package.json`:
+Turborepo를 사용하여 이러한 작업을 하나의 명령으로 스케줄링할 수 있습니다. 먼저 `package.json`에 스크립트를 만듭니다:
 
 ```json title="package.json"
 {
@@ -88,7 +88,7 @@ You can schedule these tasks into one command using Turborepo. First, create scr
 }
 ```
 
-Then, create tasks in `turbo.json` to run these scripts in order:
+그런 다음 `turbo.json`에 작업을 만들어 이러한 스크립트를 순서대로 실행합니다:
 
 ```json title="./turbo.json"
 {
@@ -114,11 +114,11 @@ Then, create tasks in `turbo.json` to run these scripts in order:
 }
 ```
 
-The `dependsOn` arrays in the tasks above create a sequential order for the tasks. When you run `turbo dev`, the scripts for `db:up`, then `db:push`, then `db:seed` will be run first.
+위의 작업에서 `dependsOn` 배열은 작업의 순차적 순서를 만듭니다. `turbo dev`를 실행하면 `db:up`, `db:push`, `db:seed`에 대한 스크립트가 먼저 실행됩니다.
 
-## Parallelizing tasks
+## 작업 병렬화
 
-Using `turbo` to parallelize tasks results in speeding up tasks by running all at once, when they can be. For instance, you can run your ESLint, TypeScript, and Prettier checks at the same time. Given scripts like:
+`turbo`를 사용하여 작업을 병렬화하면 가능할 때 모든 작업을 한 번에 실행하여 작업 속도를 높일 수 있습니다. 예를 들어, ESLint, TypeScript 및 Prettier 검사를 동시에 실행할 수 있습니다. 다음과 같은 스크립트가 주어지면:
 
 ```json title="./package.json"
 {
@@ -130,7 +130,7 @@ Using `turbo` to parallelize tasks results in speeding up tasks by running all a
 }
 ```
 
-You can create a configuration like this one:
+다음과 같은 설정을 만들 수 있습니다:
 
 ```json title="turbo.json"
 {
@@ -143,17 +143,17 @@ You can create a configuration like this one:
 }
 ```
 
-Then, to run all tasks at the same time:
+그런 다음 모든 작업을 동시에 실행하려면:
 
 ```bash title="Terminal"
 turbo check-types lint format
 ```
 
-## Optimizing task using inputs
+## inputs를 사용한 작업 최적화
 
-Because Turborepo will treat a single-package workspace as one package, it can help to optimize inputs to tasks to make sure unrelated changes don't create cache misses.
+Turborepo는 단일 패키지 워크스페이스를 하나의 패키지로 취급하기 때문에 관련 없는 변경 사항이 캐시 미스를 생성하지 않도록 작업에 대한 입력을 최적화하는 데 도움이 될 수 있습니다.
 
-For instance, a script for checking types using `tsc --noEmit` can be configured with inputs that only include TypeScript files:
+예를 들어, `tsc --noEmit`을 사용하여 타입을 확인하는 스크립트는 TypeScript 파일만 포함하는 입력으로 설정할 수 있습니다:
 
 ```json title="./turbo.json"
 {

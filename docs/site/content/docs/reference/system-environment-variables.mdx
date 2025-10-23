@@ -1,19 +1,19 @@
 ---
-title: System environment variables
-description: Learn about system variables used by Turborepo.
+title: 시스템 환경 변수
+description: Turborepo에서 사용하는 시스템 변수에 대해 알아봅니다.
 ---
 
 import { Heading } from 'fumadocs-ui/components/heading';
 
-By setting certain environment variables, you can change Turborepo's behavior. This can be useful for creating specific configurations for different environments and machines.
+특정 환경 변수를 설정하여 Turborepo의 동작을 변경할 수 있습니다. 이는 다양한 환경과 머신에 대한 특정 구성을 만드는 데 유용할 수 있습니다.
 
-System environment variables are always overridden by flag values provided directly to your `turbo` commands.
+시스템 환경 변수는 `turbo` 명령에 직접 제공된 플래그 값에 의해 항상 재정의됩니다.
 
 <table id="system-environment-variables-table">
   <thead>
     <tr>
-      <th>Variable</th>
-      <th>Description</th>
+      <th>변수</th>
+      <th>설명</th>
     </tr>
   </thead>
   <tbody>
@@ -21,15 +21,15 @@ System environment variables are always overridden by flag values provided direc
       <td>
         <code>FORCE_COLOR</code>
       </td>
-      <td>Forces color to be shown in terminal logs</td>
+      <td>터미널 로그에 색상을 강제로 표시합니다</td>
     </tr>
     <tr id="turbo_api">
       <td>
         <code>TURBO_API</code>
       </td>
       <td>
-        Set the base URL for{' '}
-        <a href="/docs/core-concepts/remote-caching">Remote Cache</a>.
+        <a href="/docs/core-concepts/remote-caching">Remote Cache</a>의 기본
+        URL을 설정합니다.
       </td>
     </tr>
     <tr id="turbo_binary_path">
@@ -39,9 +39,9 @@ System environment variables are always overridden by flag values provided direc
         </code>
       </td>
       <td>
-        Manually set the path to the <code>turbo</code> binary. By default,{' '}
-        <code>turbo</code> will automatically discover the binary so you should
-        only use this in rare circumstances.
+        <code>turbo</code> 바이너리의 경로를 수동으로 설정합니다. 기본적으로{' '}
+        <code>turbo</code>는 바이너리를 자동으로 검색하므로 드문 경우에만
+        사용해야 합니다.
       </td>
     </tr>
     <tr id="turbo_cache">
@@ -51,12 +51,11 @@ System environment variables are always overridden by flag values provided direc
         </code>
       </td>
       <td>
-        Control reading and writing for cache sources. Uses the same syntax as{' '}
+        캐시 소스의 읽기 및 쓰기를 제어합니다.{' '}
         <a href="/docs/reference/run#--cache-options">
-          {' '}
           <code>--cache</code>
         </a>
-        .
+        와 동일한 구문을 사용합니다.
       </td>
     </tr>
     <tr id="turbo_cache_dir">
@@ -64,12 +63,10 @@ System environment variables are always overridden by flag values provided direc
         <code>TURBO_CACHE_DIR</code>
       </td>
       <td>
-        Sets the cache directory, similar to using{' '}
         <a href="/docs/reference/run#--cache-dir-path">
-          {' '}
           <code>--cache-dir</code>
         </a>{' '}
-        flag.
+        플래그를 사용하는 것과 유사하게 캐시 디렉토리를 설정합니다.
       </td>
     </tr>
     <tr id="turbo_ci_vendor_env_key">
@@ -77,12 +74,12 @@ System environment variables are always overridden by flag values provided direc
         <code>TURBO_CI_VENDOR_ENV_KEY</code>
       </td>
       <td>
-        Set a prefix for environment variables that you want
-        <strong>excluded</strong> from <a href="/docs/crafting-your-repository/using-environment-variables#framework-inference">
-          Framework Inference
-        </a>.<span></span>
-        <strong>NOTE</strong>: This does not need to be set by the user and should
-        be configured automatically by supported platforms.
+        <a href="/docs/crafting-your-repository/using-environment-variables#framework-inference">
+          프레임워크 추론
+        </a>
+        에서 <strong>제외</strong>하려는 환경 변수의 접두사를 설정합니다.<span></span>
+        <strong>참고</strong>: 이것은 사용자가 설정할 필요가 없으며 지원되는
+        플랫폼에서 자동으로 구성되어야 합니다.
       </td>
     </tr>
     <tr id="turbo_dangerously_disable_package_manager_check">
@@ -90,13 +87,13 @@ System environment variables are always overridden by flag values provided direc
         <code>TURBO_DANGEROUSLY_DISABLE_PACKAGE_MANAGER_CHECK</code>
       </td>
       <td>
-        Disable checking the <code>packageManager</code> field in{' '}
-        <code>package.json</code>. You may run into{' '}
+        <code>package.json</code>의 <code>packageManager</code> 필드 검사를
+        비활성화합니다. 이 검사를 비활성화하면{' '}
         <a href="/docs/reference/run#--dangerously-disable-package-manager-check">
-          errors and unexpected caching behavior
-        </a>{' '}
-        when disabling this check. Use <code>true</code> or <code>1</code> to
-        disable.
+          오류 및 예상치 못한 캐싱 동작
+        </a>
+        이 발생할 수 있습니다. 비활성화하려면 <code>true</code> 또는{' '}
+        <code>1</code>을 사용합니다.
       </td>
     </tr>
     <tr id="turbo_download_local_enabled">
@@ -104,8 +101,8 @@ System environment variables are always overridden by flag values provided direc
         <code>TURBO_DOWNLOAD_LOCAL_ENABLED</code>
       </td>
       <td>
-        Enables global <code>turbo</code> to install the correct local version
-        if one is not found.
+        로컬 버전이 없는 경우 전역 <code>turbo</code>가 올바른 로컬 버전을
+        설치하도록 활성화합니다.
       </td>
     </tr>
     <tr id="turbo_force">
@@ -113,8 +110,8 @@ System environment variables are always overridden by flag values provided direc
         <code>TURBO_FORCE</code>
       </td>
       <td>
-        Set to <code>true</code> to force all tasks to run in full, opting out
-        of all caching.
+        <code>true</code>로 설정하면 모든 캐싱을 선택 해제하고 모든 작업을
+        전체적으로 실행하도록 강제합니다.
       </td>
     </tr>
     <tr id="turbo_global_warning_disabled">
@@ -122,8 +119,8 @@ System environment variables are always overridden by flag values provided direc
         <code>TURBO_GLOBAL_WARNING_DISABLED</code>
       </td>
       <td>
-        Disable warning when global <code>turbo</code> cannot find a local
-        version to use.
+        전역 <code>turbo</code>가 사용할 로컬 버전을 찾을 수 없을 때 경고를
+        비활성화합니다.
       </td>
     </tr>
     <tr id="turbo_print_version_disabled">
@@ -131,8 +128,7 @@ System environment variables are always overridden by flag values provided direc
         <code>TURBO_PRINT_VERSION_DISABLED</code>
       </td>
       <td>
-        Disable printing the version of <code>turbo</code> that is being
-        executed.
+        실행 중인 <code>turbo</code> 버전의 출력을 비활성화합니다.
       </td>
     </tr>
     <tr id="turbo_log_order">
@@ -140,8 +136,9 @@ System environment variables are always overridden by flag values provided direc
         <code>TURBO_LOG_ORDER</code>
       </td>
       <td>
-        Set the <a href="/docs/reference/run#--log-order-option">log order</a>.
-        Allowed values are <code>grouped</code> and <code>default</code>.
+        <a href="/docs/reference/run#--log-order-option">로그 순서</a>를
+        설정합니다. 허용되는 값은 <code>grouped</code> 및 <code>default</code>
+        입니다.
       </td>
     </tr>
     <tr id="turbo_login">
@@ -149,10 +146,9 @@ System environment variables are always overridden by flag values provided direc
         <code>TURBO_LOGIN</code>
       </td>
       <td>
-        Set the URL used to log in to{' '}
-        <a href="/docs/core-concepts/remote-caching">Remote Cache</a>. Only
-        needed for self-hosted Remote Caches that implement an endpoint that
-        dynamically creates tokens.
+        <a href="/docs/core-concepts/remote-caching">Remote Cache</a>에
+        로그인하는 데 사용되는 URL을 설정합니다. 토큰을 동적으로 생성하는
+        엔드포인트를 구현하는 자체 호스팅 Remote Cache에만 필요합니다.
       </td>
     </tr>
     <tr id="turbo_no_update_notifier">
@@ -160,9 +156,9 @@ System environment variables are always overridden by flag values provided direc
         <code>TURBO_NO_UPDATE_NOTIFIER</code>
       </td>
       <td>
-        Remove the update notifier that appears when a new version of{' '}
-        <code>turbo</code> is available. You can also use{' '}
-        <code>NO_UPDATE_NOTIFIER</code> per ecosystem convention.
+        새 버전의 <code>turbo</code>를 사용할 수 있을 때 나타나는 업데이트
+        알림을 제거합니다. 에코시스템 규칙에 따라{' '}
+        <code>NO_UPDATE_NOTIFIER</code>도 사용할 수 있습니다.
       </td>
     </tr>
     <tr id="turbo_platform_env">
@@ -170,10 +166,10 @@ System environment variables are always overridden by flag values provided direc
         <code>TURBO_PLATFORM_ENV</code>
       </td>
       <td>
-        A CSV of environment variable keys that are configured in a supported CI
-        environment (Vercel). <strong>NOTE</strong>: This variable is meant for
-        platforms looking to implement zero-configuration environment variables.
-        You are not meant to use this variable as an end user.{' '}
+        지원되는 CI 환경(Vercel)에서 구성된 환경 변수 키의 CSV입니다.{' '}
+        <strong>참고</strong>: 이 변수는 제로 구성 환경 변수를 구현하려는
+        플랫폼을 위한 것입니다. 최종 사용자로서 이 변수를 사용하도록 의도되지
+        않았습니다.{' '}
       </td>
     </tr>
     <tr id="turbo_platform_env_disabled">
@@ -181,8 +177,8 @@ System environment variables are always overridden by flag values provided direc
         <code>TURBO_PLATFORM_ENV_DISABLED</code>
       </td>
       <td>
-        Disable checking environment variables configured in your{' '}
-        <code>turbo.json</code> against those set on your supported platform
+        <code>turbo.json</code>에 구성된 환경 변수를 지원되는 플랫폼에 설정된
+        환경 변수와 비교하는 검사를 비활성화합니다
       </td>
     </tr>
     <tr id="turbo_preflight">
@@ -190,11 +186,10 @@ System environment variables are always overridden by flag values provided direc
         <code>TURBO_PREFLIGHT</code>
       </td>
       <td>
-        Enables sending a preflight request before every cache artifact and
-        analytics request. The follow-up upload and download will follow
-        redirects. Only applicable when{' '}
-        <a href="/docs/core-concepts/remote-caching">Remote Caching</a> is
-        configured.
+        모든 캐시 아티팩트 및 분석 요청 전에 preflight 요청 전송을 활성화합니다.
+        후속 업로드 및 다운로드는 리디렉션을 따릅니다.{' '}
+        <a href="/docs/core-concepts/remote-caching">Remote Caching</a>이 구성된
+        경우에만 적용됩니다.
       </td>
     </tr>
     <tr id="turbo_remote_cache_read_only">
@@ -202,9 +197,8 @@ System environment variables are always overridden by flag values provided direc
         <code>TURBO_REMOTE_CACHE_READ_ONLY</code>
       </td>
       <td>
-        Prevent writing to the{' '}
-        <a href="/docs/core-concepts/remote-caching">Remote Cache</a> - but
-        still allow reading.
+        <a href="/docs/core-concepts/remote-caching">Remote Cache</a>에 쓰기를
+        방지하지만 읽기는 허용합니다.
       </td>
     </tr>
     <tr id="turbo_remote_cache_signature_key">
@@ -212,11 +206,11 @@ System environment variables are always overridden by flag values provided direc
         <code>TURBO_REMOTE_CACHE_SIGNATURE_KEY</code>
       </td>
       <td>
-        Sign artifacts with a secret key. For more information, visit{' '}
+        비밀 키로 아티팩트에 서명합니다. 자세한 내용은{' '}
         <a href="/docs/core-concepts/remote-caching#artifact-integrity-and-authenticity-verification">
-          the Artifact Integrity section
+          아티팩트 무결성 섹션
         </a>
-        .
+        을 참조하세요.
       </td>
     </tr>
     <tr id="turbo_remote_cache_timeout">
@@ -224,8 +218,9 @@ System environment variables are always overridden by flag values provided direc
         <code>TURBO_REMOTE_CACHE_TIMEOUT</code>
       </td>
       <td>
-        Set a timeout in seconds for <code>turbo</code> to get artifacts from{' '}
-        <a href="/docs/core-concepts/remote-caching">Remote Cache</a>.
+        <code>turbo</code>가{' '}
+        <a href="/docs/core-concepts/remote-caching">Remote Cache</a>에서
+        아티팩트를 가져오는 시간 초과를 초 단위로 설정합니다.
       </td>
     </tr>
     <tr id="turbo_remote_cache_upload_timeout">
@@ -233,23 +228,24 @@ System environment variables are always overridden by flag values provided direc
         <code>TURBO_REMOTE_CACHE_UPLOAD_TIMEOUT</code>
       </td>
       <td>
-        Set a timeout in seconds for <code>turbo</code> to upload artifacts to{' '}
-        <a href="/docs/core-concepts/remote-caching">Remote Cache</a>.
+        <code>turbo</code>가{' '}
+        <a href="/docs/core-concepts/remote-caching">Remote Cache</a>에
+        아티팩트를 업로드하는 시간 초과를 초 단위로 설정합니다.
       </td>
     </tr>
     <tr id="turbo_remote_only">
       <td>
         <code>TURBO_REMOTE_ONLY</code>
       </td>
-      <td>Always ignore the local filesystem cache for all tasks.</td>
+      <td>모든 작업에 대해 로컬 파일 시스템 캐시를 항상 무시합니다.</td>
     </tr>
     <tr id="turbo_run_summary">
       <td>
         <code>TURBO_RUN_SUMMARY</code>
       </td>
       <td>
-        Generate a <a href="/docs/reference/run#--summarize">Run Summary</a>{' '}
-        when you run tasks.
+        작업을 실행할 때 <a href="/docs/reference/run#--summarize">실행 요약</a>
+        을 생성합니다.
       </td>
     </tr>
     <tr id="turbo_scm_base">
@@ -257,8 +253,8 @@ System environment variables are always overridden by flag values provided direc
         <code>TURBO_SCM_BASE</code>
       </td>
       <td>
-        Base used by <code>--affected</code> when calculating what has changed
-        from <code>base...head</code>
+        <code>base...head</code>에서 변경된 내용을 계산할 때{' '}
+        <code>--affected</code>에서 사용하는 base
       </td>
     </tr>
     <tr id="turbo_scm_head">
@@ -266,8 +262,8 @@ System environment variables are always overridden by flag values provided direc
         <code>TURBO_SCM_HEAD</code>
       </td>
       <td>
-        Head used by <code>--affected</code> when calculating what has changed
-        from <code>base...head</code>
+        <code>base...head</code>에서 변경된 내용을 계산할 때{' '}
+        <code>--affected</code>에서 사용하는 head
       </td>
     </tr>
     <tr id="turbo_team">
@@ -275,7 +271,7 @@ System environment variables are always overridden by flag values provided direc
         <code>TURBO_TEAM</code>
       </td>
       <td>
-        The account name associated with your repository. When using{' '}
+        저장소와 연결된 계정 이름입니다.{' '}
         <a
           href="https://vercel.com/docs/monorepos/remote-caching#vercel-remote-cache"
           rel="noreferrer noopener"
@@ -283,7 +279,8 @@ System environment variables are always overridden by flag values provided direc
         >
           Vercel Remote Cache
         </a>
-        , this is [your team's slug](https://vercel.com/d?to=%2F%5Bteam%5D%2F%7E%2Fsettings&title=Get+team+slug).
+        를 사용하는 경우 이것은 [팀의
+        슬러그](https://vercel.com/d?to=%2F%5Bteam%5D%2F%7E%2Fsettings&title=Get+team+slug)입니다.
       </td>
     </tr>
     <tr id="turbo_teamid">
@@ -291,7 +288,7 @@ System environment variables are always overridden by flag values provided direc
         <code>TURBO_TEAMID</code>
       </td>
       <td>
-        The account identifier associated with your repository. When using{' '}
+        저장소와 연결된 계정 식별자입니다.{' '}
         <a
           href="https://vercel.com/docs/monorepos/remote-caching#vercel-remote-cache"
           rel="noreferrer noopener"
@@ -299,7 +296,7 @@ System environment variables are always overridden by flag values provided direc
         >
           Vercel Remote Cache
         </a>
-        , this is your team's ID.
+        를 사용하는 경우 이것은 팀의 ID입니다.
       </td>
     </tr>
     <tr id="turbo_telemetry_message_disabled">
@@ -307,8 +304,8 @@ System environment variables are always overridden by flag values provided direc
         <code>TURBO_TELEMETRY_MESSAGE_DISABLED</code>
       </td>
       <td>
-        Disable the message notifying you that{' '}
-        <a href="/docs/telemetry">Telemetry</a> is enabled.
+        <a href="/docs/telemetry">원격 측정</a>이 활성화되어 있음을 알려주는
+        메시지를 비활성화합니다.
       </td>
     </tr>
     <tr id="turbo_token">
@@ -316,8 +313,8 @@ System environment variables are always overridden by flag values provided direc
         <code>TURBO_TOKEN</code>
       </td>
       <td>
-        The Bearer token for authentication to access{' '}
-        <a href="/docs/core-concepts/remote-caching">Remote Cache</a>.
+        <a href="/docs/core-concepts/remote-caching">Remote Cache</a>에
+        액세스하기 위한 인증용 Bearer 토큰입니다.
       </td>
     </tr>
     <tr id="turbo_ui">
@@ -325,7 +322,8 @@ System environment variables are always overridden by flag values provided direc
         <code>TURBO_UI</code>
       </td>
       <td>
-        Enables TUI when passed true or 1, disables when passed false or 0.
+        true 또는 1이 전달되면 TUI를 활성화하고, false 또는 0이 전달되면
+        비활성화합니다.
       </td>
     </tr>
     <tr id="turbo_concurrency">
@@ -333,11 +331,11 @@ System environment variables are always overridden by flag values provided direc
         <code>TURBO_CONCURRENCY</code>
       </td>
       <td>
-        Controls{' '}
+        실행 또는 감시 모드에서{' '}
         <a href="/repo/docs/reference/run#--concurrency-number--percentage">
-          concurrency
+          동시성
         </a>{' '}
-        settings in run or watch mode.
+        설정을 제어합니다.
       </td>
     </tr>
     <tr id="turbo_sso_login_callback_port">
@@ -345,19 +343,18 @@ System environment variables are always overridden by flag values provided direc
         <code>TURBO_SSO_LOGIN_CALLBACK_PORT</code>
       </td>
       <td>
-        Override the default port (9789) used for the SSO login callback server
-        during authentication.
+        인증 중 SSO 로그인 콜백 서버에 사용되는 기본 포트(9789)를 재정의합니다.
       </td>
     </tr>
   </tbody>
 </table>
 
-## Environment variables in tasks
+## 작업의 환경 변수
 
-Turborepo will make the following environment variables available within your tasks while they are executing:
+Turborepo는 작업이 실행되는 동안 다음 환경 변수를 작업 내에서 사용할 수 있도록 합니다:
 
-| Variable       | Description                                                                                                                                          |
-| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `TURBO_HASH`   | The hash of the currently running task.                                                                                                              |
-| `TURBO_IS_TUI` | When using the [TUI](/docs/reference/configuration#ui), this variable is set to `true`.                                                              |
-| `TURBO_IS_MFE` | When using the [microfrontends](/docs/guides/microfrontends), this variable is set to the port defined in `microfrontends.json` for the application. |
+| 변수           | 설명                                                                                                                                     |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `TURBO_HASH`   | 현재 실행 중인 작업의 해시입니다.                                                                                                        |
+| `TURBO_IS_TUI` | [TUI](/docs/reference/configuration#ui)를 사용할 때 이 변수는 `true`로 설정됩니다.                                                       |
+| `TURBO_IS_MFE` | [마이크로프론트엔드](/docs/guides/microfrontends)를 사용할 때 이 변수는 애플리케이션의 `microfrontends.json`에 정의된 포트로 설정됩니다. |

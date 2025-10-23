@@ -1,7 +1,7 @@
 ---
 title: Turborepo 2.3
 date: 2024/11/14
-description: Turborepo 2.3 introduces the Boundaries RFC, along with several ergonomics improvements.
+description: Turborepo 2.3은 Boundaries RFC와 함께 여러 인간공학적 개선 사항을 소개합니다.
 tag: 'web development'
 ---
 
@@ -16,31 +16,30 @@ import { Callout } from '#components/callout';
 
 <Authors authors={['chrisolszewski', 'nicholasyang', 'anthonyshew']} />
 
-Turborepo 2.3 introduces several ergonomics improvements:
+Turborepo 2.3은 여러 인간공학적 개선 사항을 소개합니다:
 
-- [**Boundaries RFC**](#boundaries-rfc): Enforce constraints to maintain developer experience
-- [**Package task shortcuts**](#package-task-shortcuts): Execute tasks with `turbo run package#task`
-- [**Simplified cache control**](#simplified-cache-control): Easier management of cache sources using a single flag
+- [**Boundaries RFC**](#boundaries-rfc): 개발자 경험을 유지하기 위한 제약 조건 적용
+- [**패키지 작업 단축키**](#package-task-shortcuts): `turbo run package#task`로 작업 실행
+- [**간소화된 캐시 제어**](#simplified-cache-control): 단일 플래그를 사용한 캐시 소스의 더 쉬운 관리
 
-Update today by running `npx @turbo/codemod migrate` or get started with `npx create-turbo@latest`.
+`npx @turbo/codemod migrate`를 실행하여 지금 업데이트하거나 `npx create-turbo@latest`로 시작하세요.
 
 ## Boundaries RFC
 
-Monorepos unlock greater iteration speed and incredible flexibility, but also introduce new challenges:
+Monorepo는 더 빠른 반복 속도와 놀라운 유연성을 제공하지만 새로운 도전 과제도 도입합니다:
 
-- How do we make sure the public API of a package is respected?
-- How do we communicate where code can and cannot be used to all of our developers?
-- How can we ensure packages are only used in the right context?
+- 패키지의 공개 API가 존중되는지 어떻게 확인합니까?
+- 코드를 사용할 수 있는 위치와 사용할 수 없는 위치를 모든 개발자에게 어떻게 전달합니까?
+- 패키지가 올바른 컨텍스트에서만 사용되도록 어떻게 보장할 수 있습니까?
 
-These are only a few examples of a key question when building in monorepos: How do we communicate and enforce the structural integrity of the Workspace?
+이는 monorepo에서 구축할 때 핵심 질문의 몇 가지 예일 뿐입니다: Workspace의 구조적 무결성을 어떻게 전달하고 시행합니까?
 
 <Callout type="info">
-  At the time of publishing this post, the Boundaries RFC is only an initial
-  draft. The implementation described below is subject to change. Please see the
-  RFC itself for the most up to date information.
+  이 게시물을 게시할 당시 Boundaries RFC는 초기 초안일 뿐입니다. 아래에 설명된
+  구현은 변경될 수 있습니다. 최신 정보는 RFC 자체를 참조하세요.
 </Callout>
 
-[The Boundaries RFC](https://github.com/vercel/turborepo/discussions/9435) is our initial proposal for this problem. In our current approach, we want you to be able to incrementally adopt Boundaries in one line of code:
+[Boundaries RFC](https://github.com/vercel/turborepo/discussions/9435)는 이 문제에 대한 우리의 초기 제안입니다. 현재 접근 방식에서는 한 줄의 코드로 Boundaries를 점진적으로 채택할 수 있기를 원합니다:
 
 ```json title="turbo.json"
 {
@@ -48,7 +47,7 @@ These are only a few examples of a key question when building in monorepos: How 
 }
 ```
 
-Additionally, we want to create a tagging system so you can mark domains, concerns, contexts, and other useful metadata with custom Boundaries.
+또한 사용자 정의 Boundaries로 도메인, 관심사, 컨텍스트 및 기타 유용한 메타데이터를 표시할 수 있는 태그 시스템을 만들고자 합니다.
 
 ```json title="apps/ui/turbo.json"
 {
@@ -61,60 +60,60 @@ Additionally, we want to create a tagging system so you can mark domains, concer
 }
 ```
 
-We also plan for you to be able to allowlist existing diagnostics with a flag:
+또한 플래그로 기존 진단을 허용 목록에 추가할 수 있도록 계획하고 있습니다:
 
 ```bash title="Terminal"
 turbo boundaries --exclude-errors
 ```
 
-This way, you can enforce Boundaries for new code and gradually fix existing issues.
+이렇게 하면 새 코드에 대한 Boundaries를 시행하고 기존 문제를 점진적으로 수정할 수 있습니다.
 
-We're looking forward to hearing your ideas and feedback on [the Boundaries RFC](https://github.com/vercel/turborepo/discussions/9435).
+[Boundaries RFC](https://github.com/vercel/turborepo/discussions/9435)에 대한 여러분의 아이디어와 피드백을 기대합니다.
 
-## Package task shortcuts
+## 패키지 작업 단축키
 
-You can now run tasks using the fully qualified task identifier:
+이제 정규화된 작업 식별자를 사용하여 작업을 실행할 수 있습니다:
 
 ```bash title="Terminal"
 turbo run web#build
 ```
 
-This is more convenient than the equivalent command using `--filter` (`turbo run build --filter=web`) and allows for more precision if you have multiple tasks that you'd like to target:
+이는 `--filter`를 사용하는 동등한 명령(`turbo run build --filter=web`)보다 편리하며 여러 작업을 타겟팅하려는 경우 더 정확합니다:
 
 ```bash title="Terminal"
 turbo run web#build docs#lint
 ```
 
-[Learn more in the documentation.](/docs/crafting-your-repository/running-tasks#filtering-by-package)
+[문서에서 자세히 알아보세요.](/docs/crafting-your-repository/running-tasks#filtering-by-package)
 
-## Simplified cache control
+## 간소화된 캐시 제어
 
-Previously, the `--remote-only` and `--no-cache` flags were used to manage the sources and caching for your output artifacts. However, we've seen how they can cause confusion, and there are gaps in control as far as reading and writing to local and Remote Caches.
+이전에는 `--remote-only` 및 `--no-cache` 플래그가 출력 아티팩트의 소스 및 캐싱을 관리하는 데 사용되었습니다. 그러나 이들이 혼란을 야기할 수 있으며 로컬 및 Remote Cache에 대한 읽기 및 쓰기 제어에 격차가 있음을 확인했습니다.
 
-To refine this, we've introduced a new `--cache` flag that brings these flags together - and provides more power.
+이를 개선하기 위해 이러한 플래그를 통합하고 더 많은 기능을 제공하는 새로운 `--cache` 플래그를 도입했습니다.
 
 ```bash title="Terminal"
 turbo run build --cache=local:rw,remote:r
 ```
 
-Using `local` and `remote`, you can control the reading and writing behavior of the `turbo` invocation. Learn more in the [documentation](/docs/reference/run#--cache-options).
+`local` 및 `remote`를 사용하여 `turbo` 호출의 읽기 및 쓰기 동작을 제어할 수 있습니다. [문서](/docs/reference/run#--cache-options)에서 자세히 알아보세요.
 
-## Continued improvements for `turbo query`
+## `turbo query`에 대한 지속적인 개선
 
-In 2.2, we introduced `turbo query`, a feature built for examining your repository using Turborepo's knowledge of your package and task graphs. We've iterated further on this feature to provide you with even more powerful queries:
+2.2에서 패키지 및 작업 그래프에 대한 Turborepo의 지식을 사용하여 저장소를 검사하기 위해 구축된 기능인 `turbo query`를 도입했습니다. 더욱 강력한 쿼리를 제공하기 위해 이 기능을 추가로 반복했습니다:
 
-- Implemented reverse file tracing to find which files depend on a specific file
-- Filters for file tracing to find type-only dependencies
-- Package names that you provide are now validated to ensure that they exist
+- 특정 파일에 의존하는 파일을 찾기 위한 역방향 파일 추적 구현
+- 타입 전용 의존성을 찾기 위한 파일 추적 필터
+- 제공한 패키지 이름이 존재하는지 확인하기 위한 유효성 검사
 
-## Community
+## 커뮤니티
 
-Since releasing [Turborepo 2.2](/blog/turbo-2-2-0), we've seen great adoption and community growth:
+[Turborepo 2.2](/blog/turbo-2-2-0) 출시 이후 훌륭한 채택과 커뮤니티 성장을 보았습니다:
 
 - [26.3+ GitHub Stars](https://github.com/vercel/turbo)
-- [3.4M+ weekly NPM downloads](https://www.npmjs.com/package/turbo)
-- 496 years of compute time saved using [Vercel Remote Cache](https://vercel.com/docs/concepts/monorepos/remote-caching)
+- [3.4M+ 주간 NPM 다운로드](https://www.npmjs.com/package/turbo)
+- [Vercel Remote Cache](https://vercel.com/docs/concepts/monorepos/remote-caching)를 사용하여 496년의 컴퓨팅 시간 절약
 
-Turborepo is the result of the combined work of all of its contributors, including our core team: [Anthony](https://github.com/anthonyshew), [Chris](https://github.com/chris-olszewski), [Nicholas](https://github.com/NicholasLYang), and [Tom](https://github.com/tknickman).
+Turborepo는 핵심 팀을 포함한 모든 기여자들의 결합된 작업의 결과입니다: [Anthony](https://github.com/anthonyshew), [Chris](https://github.com/chris-olszewski), [Nicholas](https://github.com/NicholasLYang), 그리고 [Tom](https://github.com/tknickman).
 
-Thank you for your continued support, feedback, and collaboration to make Turborepo your build tool of choice.
+Turborepo를 여러분의 빌드 도구로 만들어 주시는 지속적인 지원, 피드백 및 협력에 감사드립니다.

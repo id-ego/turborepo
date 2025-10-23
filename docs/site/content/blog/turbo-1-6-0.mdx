@@ -1,6 +1,6 @@
 ---
 title: Turborepo 1.6
-description: Turborepo 1.6 lets you use Turborepo in non-monorepos, prune for npm, and improves cache performance.
+description: Turborepo 1.6을 사용하면 모노레포가 아닌 환경에서 Turborepo를 사용하고, npm용 prune을 제공하며, 캐시 성능을 개선합니다.
 date: '2022/10/21'
 tag: 'web development'
 ---
@@ -28,29 +28,29 @@ import { Callout } from '../../components/callout';
   ]}
 />
 
-Turborepo 1.6 changes the game for Turborepo - you can now use it in **any project**.
+Turborepo 1.6은 Turborepo의 게임을 바꿉니다 - 이제 **모든 프로젝트**에서 사용할 수 있습니다.
 
-- [**Turborepo in non-monorepos**](#any-codebase-can-use-turborepo): Seeing slow builds on your project? You can now use Turborepo to speed up builds in any codebase with a `package.json`.
-- [**`turbo prune` now supports npm**](#prune-now-supported-on-npm): Pruning your monorepo is now supported in monorepos using `npm`, completing support for all major workspace managers.
-- [**Faster caching**](#performance-improvements-in-the-cache): We've improved the way we handle local file writes, meaning a big speed-up of Turborepo's cache.
+- [**모노레포가 아닌 환경의 Turborepo**](#any-codebase-can-use-turborepo): 프로젝트에서 느린 빌드를 경험하고 있나요? 이제 `package.json`이 있는 모든 코드베이스에서 Turborepo를 사용하여 빌드 속도를 높일 수 있습니다.
+- [**`turbo prune`이 이제 npm을 지원합니다**](#prune-now-supported-on-npm): 이제 `npm`을 사용하는 모노레포에서 모노레포 프루닝이 지원되어 모든 주요 워크스페이스 관리자에 대한 지원이 완료되었습니다.
+- [**더 빠른 캐싱**](#performance-improvements-in-the-cache): 로컬 파일 쓰기 처리 방식을 개선하여 Turborepo 캐시의 속도를 크게 향상시켰습니다.
 
-Update today by running `npm install turbo@latest`.
+`npm install turbo@latest`를 실행하여 오늘 업데이트하세요.
 
-## Any codebase can use Turborepo
+## 모든 코드베이스에서 Turborepo 사용 가능
 
-Turborepo helps speed up tasks in your codebase. Until now, we'd built Turborepo specifically for monorepos - codebases which contain multiple applications and packages.
+Turborepo는 코드베이스의 작업 속도를 높이는 데 도움을 줍니다. 지금까지 우리는 여러 애플리케이션과 패키지를 포함하는 코드베이스인 모노레포를 위해 Turborepo를 특별히 구축했습니다.
 
-Turborepo is fantastic in monorepos because they have so many tasks to handle. Each package and app needs to be built, linted, and tested.
+Turborepo는 처리해야 할 작업이 많기 때문에 모노레포에서 환상적입니다. 각 패키지와 앱은 빌드, 린트 및 테스트가 필요합니다.
 
-But we got to thinking: lots of codebases that _aren't_ monorepos run plenty of tasks. Most CI/CD processes do a lot of duplicated work that would benefit from a [cache](/docs/crafting-your-repository/caching).
+그러나 우리는 생각했습니다: 모노레포가 _아닌_ 많은 코드베이스도 많은 작업을 실행합니다. 대부분의 CI/CD 프로세스는 [캐시](/docs/crafting-your-repository/caching)의 이점을 누릴 수 있는 중복 작업을 많이 수행합니다.
 
-So we're excited to announce that **any codebase can now use Turborepo**.
+따라서 **이제 모든 코드베이스에서 Turborepo를 사용할 수 있다**는 것을 발표하게 되어 기쁩니다.
 
-Try it out now by [starting from the example](https://github.com/vercel/turbo/tree/main/examples/non-monorepo), or by adding Turborepo to an existing project:
+[예제에서 시작](https://github.com/vercel/turbo/tree/main/examples/non-monorepo)하거나 기존 프로젝트에 Turborepo를 추가하여 지금 사용해 보세요:
 
-### Add Turborepo to your project
+### 프로젝트에 Turborepo 추가
 
-1. **Install `turbo`:**
+1. **`turbo` 설치:**
 
 <Tabs items={["npm", "yarn", "pnpm"]} id="selected-pkg-manager">
   <Tab value="npm">
@@ -73,7 +73,7 @@ Try it out now by [starting from the example](https://github.com/vercel/turbo/tr
   </Tab>
 </Tabs>
 
-2. **Add a `turbo.json` file at the base of your new repository:**
+2. **새 저장소의 기본 경로에 `turbo.json` 파일 추가:**
 
 <Tabs items={['Next.js', 'Vite']} storageKey="framework-preference">
   <Tab value="Next.js">
@@ -104,7 +104,7 @@ Try it out now by [starting from the example](https://github.com/vercel/turbo/tr
 }
 ```
 
-Some Vite starters ship with a `package.json` that looks like this:
+일부 Vite 스타터는 다음과 같은 `package.json`과 함께 제공됩니다:
 
 ```json title="package.json"
 {
@@ -114,7 +114,7 @@ Some Vite starters ship with a `package.json` that looks like this:
 }
 ```
 
-We recommend splitting these into a `lint` and `build` script.
+이를 `lint` 및 `build` 스크립트로 분할하는 것이 좋습니다.
 
 ```json title="package.json"
 {
@@ -125,29 +125,29 @@ We recommend splitting these into a `lint` and `build` script.
 }
 ```
 
-This enables `turbo` to schedule them separately.
+이렇게 하면 `turbo`가 별도로 스케줄링할 수 있습니다.
 
   </Tab>
 </Tabs>
 
-3. **Try running `build` and `lint` with `turbo`:**
+3. **`turbo`로 `build` 및 `lint` 실행 시도:**
 
 ```bash title="Terminal"
 turbo build lint
 ```
 
-Congratulations - **you just ran your first build with `turbo`**. You can try:
+축하합니다 - **`turbo`로 첫 번째 빌드를 실행했습니다**. 다음을 시도할 수 있습니다:
 
-- Running through the full [Quickstart](/docs).
-- Check out our updated [Core Concepts docs](/docs/crafting-your-repository/caching) to understand what makes Turborepo special.
+- 전체 [빠른 시작](/docs)을 실행합니다.
+- Turborepo를 특별하게 만드는 요소를 이해하려면 업데이트된 [핵심 개념 문서](/docs/crafting-your-repository/caching)를 확인하세요.
 
-## When should I use Turborepo?
+## 언제 Turborepo를 사용해야 하나요?
 
-Turborepo being available for non-monorepos opens up a lot of new use cases. But when is it at its best?
+모노레포가 아닌 환경에서 Turborepo를 사용할 수 있게 되면서 많은 새로운 사용 사례가 열렸습니다. 그러나 언제 가장 좋을까요?
 
-### When scripts depend on each other
+### 스크립트가 서로 의존할 때
 
-You should use `turbo` to run your `package.json` scripts. If you've got multiple scripts which all rely on each other, you can express them as Turborepo tasks:
+`turbo`를 사용하여 `package.json` 스크립트를 실행해야 합니다. 서로 의존하는 여러 스크립트가 있는 경우 Turborepo 작업으로 표현할 수 있습니다:
 
 ```json title="turbo.json"
 {
@@ -156,30 +156,30 @@ You should use `turbo` to run your `package.json` scripts. If you've got multipl
       "outputs": ["dist/**"]
     },
     "lint": {
-      // 'build' should be run before 'lint'
+      // 'lint' 전에 'build'를 실행해야 합니다
       "dependsOn": ["build"]
     },
     "test": {
-      // 'build' should be run before 'test'
+      // 'test' 전에 'build'를 실행해야 합니다
       "dependsOn": ["build"]
     }
   }
 }
 ```
 
-Then, you can run:
+그런 다음 다음을 실행할 수 있습니다:
 
 ```bash title="Terminal"
 turbo run lint test
 ```
 
-Because you've said that `build` should be run before `lint` and `test`, it'll _automatically run `build` for you_ when you run `lint` or `test`.
+`lint` 및 `test` 전에 `build`를 실행해야 한다고 말했기 때문에 `lint` 또는 `test`를 실행할 때 *자동으로 `build`를 실행*합니다.
 
-Not only that, but it'll figure out the optimal schedule for you. Head to our core concepts doc on [optimizing for speed](/docs/crafting-your-repository/configuring-tasks).
+뿐만 아니라 최적의 스케줄을 알아냅니다. [속도 최적화](/docs/crafting-your-repository/configuring-tasks)에 대한 핵심 개념 문서를 참조하세요.
 
-### When you want to run tasks in parallel
+### 작업을 병렬로 실행하려는 경우
 
-Imagine you're running a [Next.js](https://nextjs.org/) app, and also running the [Tailwind CLI](https://tailwindcss.com/docs/installation). You might have two scripts - `dev` and `dev:css`:
+[Next.js](https://nextjs.org/) 앱을 실행하고 [Tailwind CLI](https://tailwindcss.com/docs/installation)도 실행한다고 상상해보세요. `dev` 및 `dev:css`라는 두 개의 스크립트가 있을 수 있습니다:
 
 ```json title="package.json"
 {
@@ -190,36 +190,36 @@ Imagine you're running a [Next.js](https://nextjs.org/) app, and also running th
 }
 ```
 
-Without anything being added to your `turbo.json`, you can run:
+`turbo.json`에 아무것도 추가하지 않고도 다음을 실행할 수 있습니다:
 
 ```bash title="Terminal"
 turbo run dev dev:css
 ```
 
-Just like tools like [`concurrently`](https://www.npmjs.com/package/concurrently), Turborepo will automatically run the two scripts in parallel.
+[`concurrently`](https://www.npmjs.com/package/concurrently)와 같은 도구처럼 Turborepo는 자동으로 두 스크립트를 병렬로 실행합니다.
 
-This is extremely useful for dev mode, but can also be used to speed up tasks on CI - imagine you have multiple scripts to run:
+이것은 개발 모드에 매우 유용하지만 CI에서 작업 속도를 높이는 데도 사용할 수 있습니다 - 실행할 여러 스크립트가 있다고 상상해보세요:
 
 ```bash title="Terminal"
 turbo run lint unit:test e2e:test integration:test
 ```
 
-Turborepo will figure out the fastest possible way to run all your tasks in parallel.
+Turborepo는 모든 작업을 병렬로 실행하는 가장 빠른 방법을 알아냅니다.
 
-## Prune now supported on npm
+## npm에서 이제 Prune 지원
 
-Over the last several releases, we've been adding support for [`turbo prune`](/docs/reference/prune) on different workspace managers. This has been a challenge - `turbo prune` creates a subset of your monorepo, including pruning the dependencies in your lockfile. This means we've had to implement logic for each workspace manager separately.
+지난 몇 번의 릴리스에 걸쳐 다양한 워크스페이스 관리자에서 [`turbo prune`](/docs/reference/prune)에 대한 지원을 추가해 왔습니다. 이것은 어려운 작업이었습니다 - `turbo prune`은 lockfile의 종속성 프루닝을 포함하여 모노레포의 하위 집합을 만듭니다. 이는 각 워크스페이스 관리자에 대해 별도로 로직을 구현해야 함을 의미했습니다.
 
-We're delighted to announce that `turbo prune` now works for `npm`, completing support for all major package managers. This means that if your monorepo uses `npm`, `yarn`, `yarn 2+` or `pnpm`, you'll be able to deploy to Docker with ease.
+`turbo prune`이 이제 `npm`에서 작동한다는 것을 발표하게 되어 기쁩니다. 이로써 모든 주요 패키지 관리자에 대한 지원이 완료되었습니다. 즉, 모노레포가 `npm`, `yarn`, `yarn 2+` 또는 `pnpm`을 사용하는 경우 Docker에 쉽게 배포할 수 있습니다.
 
-Check out our previous [blog on `turbo prune`](/blog/turbo-0-4-0#experimental-pruned-workspaces) to learn more.
+자세한 내용은 [`turbo prune`에 대한 이전 블로그](/blog/turbo-0-4-0#experimental-pruned-workspaces)를 확인하세요.
 
-## Performance improvements in the cache
+## 캐시의 성능 개선
 
-Before 1.6, Turborepo's local cache was a recursive copy of files on the system to another place on disk. This was _slow_. It meant that for every file that we needed to cache, we'd need to perform six system calls: open, read, and close on the source file; open, write, and close on the destination file.
+1.6 이전에는 Turborepo의 로컬 캐시가 시스템의 파일을 디스크의 다른 위치로 재귀적으로 복사하는 방식이었습니다. 이것은 _느렸습니다_. 캐시해야 하는 모든 파일에 대해 6번의 시스템 호출을 수행해야 했습니다: 소스 파일에서 열기, 읽기 및 닫기; 대상 파일에서 열기, 쓰기 및 닫기.
 
-In 1.6, we've cut that nearly in half. Now, when creating a cache, we create a single `.tar` file (_one_ open), we write to it in 1mb chunks (_batched_ writes), and then close it (_one_ close). The halving of system calls _also_ happens on the way back out of cache.
+1.6에서는 이를 거의 절반으로 줄였습니다. 이제 캐시를 만들 때 단일 `.tar` 파일(_하나의_ 열기)을 만들고, 1mb 청크로 쓰고(_배치_ 쓰기), 닫습니다(_하나의_ 닫기). 시스템 호출의 절반은 캐시에서 나오는 방식에서도 _발생합니다_.
 
-And we didn't stop there. Over the past month we've invested significantly in our build toolchain to enable CGO which unlocks usage of best-in-class libraries written in C. This enabled us to adopt [Zstandard](https://facebook.github.io/zstd/)'s `libzstd` for compression which gets us an algorithmic 3x performance improvement for compression.
+그리고 여기서 멈추지 않았습니다. 지난 한 달 동안 C로 작성된 최고 수준의 라이브러리 사용을 가능하게 하는 CGO를 활성화하기 위해 빌드 도구 체인에 상당한 투자를 했습니다. 이를 통해 압축을 위해 [Zstandard](https://facebook.github.io/zstd/)의 `libzstd`를 채택할 수 있었으며, 이는 압축에 대한 알고리즘 3배 성능 향상을 제공합니다.
 
-After all of these changes we're regularly seeing performance improvements of more than 2x on local cache creation and more than 3x on remote cache creation. This gets even better the bigger your repository is, or the slower your device is (looking at you, CI). This means we've been able to deliver performance wins precisely to those who needed it the most.
+이러한 모든 변경 사항 이후 로컬 캐시 생성에서 2배 이상, 원격 캐시 생성에서 3배 이상의 성능 향상을 정기적으로 확인하고 있습니다. 이는 저장소가 클수록 또는 장치가 느릴수록(CI를 보고 있습니다) 더욱 좋아집니다. 이는 가장 필요로 하는 사람들에게 정확하게 성능 향상을 제공할 수 있었음을 의미합니다.

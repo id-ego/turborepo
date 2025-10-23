@@ -1,21 +1,21 @@
 ---
 title: Docker
-description: Learn how to use Docker in a monorepo.
+description: monorepo에서 Docker를 사용하는 방법을 알아보세요.
 ---
 
 import { Callout } from '#components/callout';
 import { File, Folder, Files } from '#components/files';
 import { CreateTurboCallout } from './create-turbo-callout.tsx';
 
-Building a [Docker](https://www.docker.com/) image is a common way to deploy all sorts of applications. However, doing so from a monorepo has several challenges.
+[Docker](https://www.docker.com/) 이미지를 빌드하는 것은 모든 종류의 애플리케이션을 배포하는 일반적인 방법입니다. 그러나 monorepo에서 이를 수행하는 것에는 몇 가지 과제가 있습니다.
 
 <CreateTurboCallout />
 
-## The problem
+## 문제점
 
-**In a monorepo, unrelated changes can make Docker do unnecessary work when deploying your app.**
+**monorepo에서는 관련 없는 변경 사항이 앱을 배포할 때 Docker가 불필요한 작업을 수행하게 만들 수 있습니다.**
 
-Let's imagine you have a monorepo that looks like this:
+다음과 같은 monorepo가 있다고 가정해 봅시다:
 
 <Files>
   <Folder name="apps" defaultOpen>
@@ -31,7 +31,7 @@ Let's imagine you have a monorepo that looks like this:
   <File name="package-lock.json" />
 </Files>
 
-You want to deploy `apps/api` using Docker, so you create a Dockerfile:
+Docker를 사용하여 `apps/api`를 배포하려고 하므로 Dockerfile을 만듭니다:
 
 ```docker title="./apps/api/Dockerfile"
 FROM node:16
@@ -55,42 +55,42 @@ EXPOSE 8080
 CMD [ "node", "apps/api/server.js" ]
 ```
 
-This will copy the root `package.json` and the root lockfile to the Docker image. Then, it'll install dependencies, copy the app source and start the app.
+이렇게 하면 루트 `package.json`과 루트 lockfile이 Docker 이미지로 복사됩니다. 그런 다음 종속성을 설치하고, 앱 소스를 복사하고, 앱을 시작합니다.
 
-You should also create a `.dockerignore` file to prevent node_modules from being copied in with the app's source.
+또한 node_modules가 앱의 소스와 함께 복사되는 것을 방지하기 위해 `.dockerignore` 파일을 만들어야 합니다.
 
 ```txt title=".dockerignore"
 node_modules
 npm-debug.log
 ```
 
-### The lockfile changes too often
+### lockfile이 너무 자주 변경됩니다
 
-Docker is pretty smart about how it deploys your apps. Just like Turborepo, it tries to do as [little work as possible](https://bitjudo.com/blog/2014/03/13/building-efficient-dockerfiles-node-dot-js/).
+Docker는 앱을 배포하는 방법에 대해 매우 똑똑합니다. Turborepo와 마찬가지로 [가능한 한 적은 작업](https://bitjudo.com/blog/2014/03/13/building-efficient-dockerfiles-node-dot-js/)을 수행하려고 합니다.
 
-In our Dockerfile's case, it will only run `npm install` if the files it has in its image are _different_ from the previous run. If not, it'll restore the `node_modules` directory it had before.
+우리 Dockerfile의 경우, 이미지에 있는 파일이 이전 실행과 _다른_ 경우에만 `npm install`을 실행합니다. 그렇지 않으면 이전에 있던 `node_modules` 디렉터리를 복원합니다.
 
-This means that whenever `package.json`, `apps/api/package.json` or `package-lock.json` change, the Docker image will run `npm install`.
+즉, `package.json`, `apps/api/package.json` 또는 `package-lock.json`이 변경될 때마다 Docker 이미지가 `npm install`을 실행합니다.
 
-This sounds great - until we realize something. The `package-lock.json` is _global_ for the monorepo. That means that **if we install a new package inside `apps/web`, we'll cause `apps/api` to redeploy**.
+이것은 훌륭하게 들리지만, 우리는 무언가를 깨닫습니다. `package-lock.json`은 monorepo에 대해 *전역*입니다. 즉, **`apps/web` 내부에 새 패키지를 설치하면 `apps/api`가 재배포됩니다**.
 
-In a large monorepo, this can result in a huge amount of lost time, as any change to a monorepo's lockfile cascades into tens or hundreds of deploys.
+대규모 monorepo에서는 monorepo의 lockfile에 대한 변경 사항이 수십 또는 수백 개의 배포로 이어지기 때문에 엄청난 시간 손실이 발생할 수 있습니다.
 
-## The solution
+## 해결 방법
 
-The solution is to prune the inputs to the Dockerfile to only what is strictly necessary. Turborepo provides a simple solution - `turbo prune`.
+해결 방법은 Dockerfile에 대한 입력을 엄격하게 필요한 것으로만 제한하는 것입니다. Turborepo는 간단한 해결책인 `turbo prune`을 제공합니다.
 
 ```bash title="Terminal"
 turbo prune api --docker
 ```
 
-Running this command creates a **pruned version of your monorepo** inside an `./out` directory. It only includes workspaces which `api` depends on. It also **prunes the lockfile** so that only the relevant `node_modules` will be downloaded.
+이 명령을 실행하면 `./out` 디렉터리 내에 **monorepo의 축소된 버전**이 생성됩니다. `api`가 의존하는 워크스페이스만 포함합니다. 또한 **lockfile을 축소**하여 관련 `node_modules`만 다운로드됩니다.
 
-### The `--docker` flag
+### `--docker` 플래그
 
-By default, `turbo prune` puts all relevant files inside `./out`. But to optimize caching with Docker, we ideally want to copy the files over in two stages.
+기본적으로 `turbo prune`은 모든 관련 파일을 `./out` 내부에 넣습니다. 그러나 Docker로 캐싱을 최적화하려면 파일을 두 단계로 복사하는 것이 이상적입니다.
 
-First, we want to copy over only what we need to install the packages. When running `--docker`, you'll find this inside `./out/json`.
+먼저, 패키지를 설치하는 데 필요한 것만 복사하려고 합니다. `--docker`를 실행하면 `./out/json` 내부에서 찾을 수 있습니다.
 
 <Files>
   <Folder name="out" defaultOpen>
@@ -116,28 +116,28 @@ First, we want to copy over only what we need to install the packages. When runn
   </Folder>
 </Files>
 
-Afterwards, you can copy the files in `./out/full` to add the source files.
+그런 다음 `./out/full`의 파일을 복사하여 소스 파일을 추가할 수 있습니다.
 
-Splitting up **dependencies** and **source files** in this way lets us **only run `npm install` when dependencies change** - giving us a much larger speedup.
+이렇게 **종속성**과 **소스 파일**을 분리하면 **종속성이 변경될 때만 `npm install`을 실행**할 수 있으므로 훨씬 더 큰 속도 향상을 얻을 수 있습니다.
 
 <Callout type="info">
-  Without `--docker`, all pruned files are placed inside `./out`.
+  `--docker` 없이는 모든 축소된 파일이 `./out` 내부에 배치됩니다.
 </Callout>
 
-### Example
+### 예제
 
-Our detailed [`with-docker` example](https://github.com/vercel/turborepo/tree/main/examples/with-docker) goes into depth on how to use `prune` to its full potential. Here's the Dockerfile, copied over for convenience.
+상세한 [`with-docker` 예제](https://github.com/vercel/turborepo/tree/main/examples/with-docker)는 `prune`을 최대한 활용하는 방법에 대해 자세히 설명합니다. 편의를 위해 Dockerfile을 복사했습니다.
 
-Build the Dockerfile from the root of your monorepo:
+monorepo의 루트에서 Dockerfile을 빌드합니다:
 
 ```bash title="Terminal"
 docker build -f apps/web/Dockerfile .
 ```
 
 <Callout type="info">
-  This Dockerfile is written for a [Next.js](https://nextjs.org/) app that is
-  using the `standalone` [output
-  mode](https://nextjs.org/docs/pages/api-reference/next-config-js/output).
+  이 Dockerfile은 `standalone` [output
+  mode](https://nextjs.org/docs/pages/api-reference/next-config-js/output)를
+  사용하는 [Next.js](https://nextjs.org/) 앱용으로 작성되었습니다.
 </Callout>
 
 ```docker title="./apps/web/Dockerfile"
@@ -190,11 +190,11 @@ CMD node apps/web/server.js
 
 ## Remote Caching
 
-To take advantage of remote caches during Docker builds, you will need to make sure your build container has credentials to access your [Remote Cache](/docs/core-concepts/remote-caching).
+Docker 빌드 중에 원격 캐시를 활용하려면 빌드 컨테이너가 [Remote Cache](/docs/core-concepts/remote-caching)에 액세스할 수 있는 자격 증명을 가지고 있어야 합니다.
 
-There are many ways to take care of secrets in a Docker image. We will use a simple strategy here with multi-stage builds using secrets as build arguments that will get hidden for the final image.
+Docker 이미지에서 시크릿을 처리하는 방법은 여러 가지가 있습니다. 여기서는 최종 이미지에 대해 숨겨질 빌드 인수로 시크릿을 사용하는 다단계 빌드를 사용하는 간단한 전략을 사용합니다.
 
-Assuming you are using a Dockerfile similar to the one above, we will bring in some environment variables from build arguments right before `turbo build`:
+위와 유사한 Dockerfile을 사용한다고 가정하고, `turbo build` 바로 전에 빌드 인수에서 일부 환경 변수를 가져옵니다:
 
 ```docker title="./apps/api/Dockerfile"
 ARG TURBO_TEAM
@@ -206,7 +206,7 @@ ENV TURBO_TOKEN=$TURBO_TOKEN
 RUN yarn turbo run build
 ```
 
-`turbo` will now be able to hit your Remote Cache. To see a Turborepo cache hit for a non-cached Docker build image, run a command like this one from your project root:
+`turbo`는 이제 Remote Cache에 도달할 수 있습니다. 캐시되지 않은 Docker 빌드 이미지에 대한 Turborepo 캐시 적중을 보려면 프로젝트 루트에서 다음과 같은 명령을 실행하세요:
 
 ```bash title="Terminal"
 docker build -f apps/web/Dockerfile . --build-arg TURBO_TEAM=“your-team-name” --build-arg TURBO_TOKEN=“your-token“ --no-cache

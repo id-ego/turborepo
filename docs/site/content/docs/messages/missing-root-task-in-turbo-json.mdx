@@ -1,11 +1,11 @@
 ---
-title: Missing root task in turbo.json
-description: Learn more about errors for missing root tasks in turbo.json in Turborepo.
+title: turbo.json에 루트 작업 누락
+description: Turborepo의 turbo.json에서 루트 작업 누락 오류에 대해 자세히 알아보세요.
 ---
 
-## Why this error occurred
+## 이 오류가 발생한 이유
 
-Root tasks are the scripts defined in the monorepo's root `package.json`. These tasks often call `turbo`. For example:
+루트 작업은 모노레포의 루트 `package.json`에 정의된 스크립트입니다. 이러한 작업은 종종 `turbo`를 호출합니다. 예를 들어:
 
 ```json title="./package.json"
 {
@@ -15,8 +15,8 @@ Root tasks are the scripts defined in the monorepo's root `package.json`. These 
 }
 ```
 
-This creates a problem when we declare [topological dependencies](/docs/reference/configuration#dependson). Topological
-dependencies specify that your package's dependencies should execute their tasks before your package executes its own task.
+이것은 [위상 의존성](/docs/reference/configuration#dependson)을 선언할 때 문제를 발생시킵니다. 위상 의존성은
+패키지가 자체 작업을 실행하기 전에 패키지의 의존성이 해당 작업을 실행해야 함을 지정합니다.
 
 ```json title="./turbo.json"
 {
@@ -28,12 +28,12 @@ dependencies specify that your package's dependencies should execute their tasks
 }
 ```
 
-Because the root package is a dependency for all packages inside your workspace, its task would get executed first.
-But since its task calls `turbo`, this would cause an infinite loop.
+루트 패키지는 워크스페이스 내의 모든 패키지에 대한 의존성이므로 해당 작업이 먼저 실행됩니다.
+그러나 해당 작업이 `turbo`를 호출하므로 이것은 무한 루프를 발생시킵니다.
 
-## Solution
+## 해결 방법
 
-As long as the root task does _not_ call `turbo`, you can add it to the `tasks` field in `turbo.json`:
+루트 작업이 `turbo`를 호출하지 _않는_ 경우, `turbo.json`의 `tasks` 필드에 추가할 수 있습니다:
 
 ```json title="./turbo.json"
 {
@@ -43,8 +43,8 @@ As long as the root task does _not_ call `turbo`, you can add it to the `tasks` 
 }
 ```
 
-This will permit tasks to depend on `//#build`.
+이렇게 하면 작업이 `//#build`에 의존할 수 있습니다.
 
-However, if the root task does call `turbo`, this can cause infinite recursion. In this case, we don't recommend depending
-on the root task. Instead, you can determine the tasks that this root task depends on, and depend on those directly.
-For instance, if `//#build` depends on `app#lint` and `docs#lint`, then you can declare those as dependencies.
+그러나 루트 작업이 `turbo`를 호출하는 경우 무한 재귀가 발생할 수 있습니다. 이 경우
+루트 작업에 의존하는 것을 권장하지 않습니다. 대신 이 루트 작업이 의존하는 작업을 결정하고 직접 의존할 수 있습니다.
+예를 들어, `//#build`가 `app#lint`와 `docs#lint`에 의존하는 경우 이들을 의존성으로 선언할 수 있습니다.

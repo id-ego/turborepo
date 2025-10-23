@@ -1,123 +1,122 @@
 ---
 title: run
-description: API reference for the `turbo run` command
+description: '`turbo run` 명령어의 API 레퍼런스입니다.'
 ---
 
 import { Callout } from '#components/callout';
 
-Run tasks specified in `turbo.json`.
+`turbo.json`에 지정된 작업을 실행합니다.
 
 ```bash title="Terminal"
 turbo run [tasks] [options] [-- [args passed to tasks]]
 ```
 
-- **[tasks]**: Turborepo can run one or many tasks at the same time. To run a task through `turbo`, it must be specified in `turbo.json`.
-- **[options]**: Options are used to control the behavior of the `turbo run` command. Available flag options are described below.
-- **[-- [args passed to tasks]]**: You may also pass arguments to the underlying scripts. Note that all arguments will be passed to all tasks that are named in the run command.
+- **[tasks]**: Turborepo는 한 번에 하나 또는 여러 작업을 실행할 수 있습니다. `turbo`를 통해 작업을 실행하려면 `turbo.json`에 지정되어야 합니다.
+- **[options]**: 옵션은 `turbo run` 명령어의 동작을 제어하는 데 사용됩니다. 사용 가능한 플래그 옵션은 아래에 설명되어 있습니다.
+- **[-- [args passed to tasks]]**: 하위 스크립트에 인수를 전달할 수도 있습니다. 모든 인수는 run 명령에 지정된 모든 작업에 전달됩니다.
 
 <Callout type="good-to-know">
-  `turbo run` is aliased to `turbo`. `turbo run build lint check-types` is the
-  same as `turbo build lint check-types`. We recommend [using `turbo run` in CI
-  pipelines](/docs/crafting-your-repository/constructing-ci#use-turbo-run-in-ci)
-  and `turbo` with [global `turbo`
-  locally](/docs/getting-started/installation#global-installation) for ease of
-  use.
+  `turbo run`은 `turbo`의 별칭입니다. `turbo run build lint check-types`는
+  `turbo build lint check-types`와 동일합니다. 사용 편의성을 위해 [CI
+  파이프라인에서는 `turbo
+  run`을](/docs/crafting-your-repository/constructing-ci#use-turbo-run-in-ci),
+  로컬에서는 [전역
+  `turbo`와](/docs/getting-started/installation#global-installation) 함께
+  `turbo`를 사용하는 것을 권장합니다.
 </Callout>
 
-If no tasks are provided, `turbo` will display what tasks are available for the packages in the repository.
+작업이 제공되지 않으면 `turbo`는 저장소의 패키지에서 사용 가능한 작업을 표시합니다.
 
 ```bash title="Terminal"
 turbo run
 ```
 
-## Options
+## 옵션
 
 ### `--affected`
 
-Filter to only packages that are affected by changes on the current branch.
+현재 브랜치의 변경 사항에 영향을 받는 패키지만 필터링합니다.
 
 ```bash title="Terminal"
 turbo run build lint test --affected
 ```
 
-By default, the flag is equivalent to `--filter=...[main...HEAD]`. This considers changes between `main` and `HEAD` from Git's perspective.
+기본적으로 이 플래그는 `--filter=...[main...HEAD]`와 동일합니다. 이는 Git의 관점에서 `main`과 `HEAD` 사이의 변경 사항을 고려합니다.
 
 <Callout type="warn">
-  The comparison requires everything between base and head to exist in the
-  checkout. If the checkout is too shallow, then all packages will be considered
-  changed.
+  비교를 위해서는 base와 head 사이의 모든 내용이 체크아웃에 존재해야 합니다. 체크아웃이 너무 얕으면 모든 패키지가 변경된 것으로 간주됩니다.
 
-For example, setting up Git to check out with `--filter=blob:none --depth=0` will ensure `--affected` has the right history to work correctly.
+예를 들어, Git을 `--filter=blob:none --depth=0`으로 체크아웃하도록 설정하면 `--affected`가 올바르게 작동하는 데 필요한 히스토리를 확보할 수 있습니다.
 
 </Callout>
 
-You can override the default base and head with their respective [System Environment Variables](/docs/reference/system-environment-variables).
+각각의 [시스템 환경 변수](/docs/reference/system-environment-variables)를 사용하여 기본 base와 head를 재정의할 수 있습니다.
 
 ```bash title="Terminal"
-# Override Git comparison base
+# Git 비교 base 재정의
 TURBO_SCM_BASE=development turbo run build --affected
 
-# Override Git comparison head
+# Git 비교 head 재정의
 TURBO_SCM_HEAD=your-branch turbo run build --affected
 ```
 
 ### `--cache <options>`
 
-Default: `local:rw,remote:rw`
+기본값: `local:rw,remote:rw`
 
-Specify caching sources for the run. Accepts a comma-separated list of options:
+실행할 캐싱 소스를 지정합니다. 쉼표로 구분된 옵션 목록을 허용합니다:
 
-- `local`: Use the local filesystem cache
-- `remote`: Use the Remote Cache
+- `local`: 로컬 파일 시스템 캐시 사용
+- `remote`: Remote Cache 사용
 
-When a caching source is omitted, reading and writing are both disabled.
+캐싱 소스가 생략되면 읽기와 쓰기가 모두 비활성화됩니다.
 
-Cache sources use the following values:
+캐시 소스는 다음 값을 사용합니다:
 
-- `rw`: Read and write
-- `r`: Read only
-- `w`: Write only
-- None (`local:`) : Does not use cache. Equivalent to omitting the cache source option.
+- `rw`: 읽기 및 쓰기
+- `r`: 읽기 전용
+- `w`: 쓰기 전용
+- 없음 (`local:`): 캐시를 사용하지 않습니다. 캐시 소스 옵션을 생략하는 것과 동일합니다.
 
 ```bash title="Terminal"
-# Read from and write to local cache. Only read from Remote Cache.
+# 로컬 캐시에서 읽기 및 쓰기. Remote Cache에서는 읽기만.
 turbo run build --cache=local:rw,remote:r
 
-# Only read from local cache. Read from and write to Remote Cache.
+# 로컬 캐시에서는 읽기만. Remote Cache에서 읽기 및 쓰기.
 turbo run build --cache=local:r,remote:rw
 
-# Read from and write to local cache. No Remote Cache activity.
+# 로컬 캐시에서 읽기 및 쓰기. Remote Cache 활동 없음.
 turbo run build --cache=local:rw
 
-# Do not use local cache. Only read from Remote Cache.
+# 로컬 캐시를 사용하지 않음. Remote Cache에서는 읽기만.
 turbo run build --cache=local:,remote:r
 ```
 
 ### `--cache-dir <path>`
 
-Default: `.turbo/cache`
+기본값: `.turbo/cache`
 
-Specify the filesystem cache directory.
+파일 시스템 캐시 디렉토리를 지정합니다.
 
 ```bash title="Terminal"
 turbo run build --cache-dir="./my-cache"
 ```
 
 <Callout type="warn">
-  Ensure the directory is in your `.gitignore` when changing it.
+  변경할 때 디렉토리가 `.gitignore`에 있는지 확인하세요.
 </Callout>
 
-The same behavior can also be set via the `TURBO_CACHE_DIR=example/path` system variable.
+동일한 동작은 `TURBO_CACHE_DIR=example/path` 시스템 변수를 통해서도 설정할 수 있습니다.
 
 ### `--concurrency <number | percentage>`
 
-Default: `10`
+기본값: `10`
 
-Set/limit the maximum concurrency for task execution. Must be an integer greater than or equal to `1` or a percentage value like `50%`.
+작업 실행의 최대 동시성을 설정/제한합니다. `1` 이상의 정수 또는 `50%`와 같은 백분율 값이어야 합니다.
 
-- Use `1` to force serial execution (one task at a time).
-- Use `100%` to use all available logical processors.
-- This option is ignored if the [`--parallel`](#--parallel) flag is also passed.
+- 직렬 실행(한 번에 하나의 작업)을 강제하려면 `1`을 사용합니다.
+- 사용 가능한 모든 논리 프로세서를 사용하려면 `100%`를 사용합니다.
+- [`--parallel`](#--parallel) 플래그도 전달되면 이 옵션은 무시됩니다.
 
 ```bash title="Terminal"
 turbo run build --concurrency=50%
@@ -126,16 +125,16 @@ turbo run test --concurrency=5
 
 ### `--continue[=<option>]`
 
-Default: `never`
+기본값: `never`
 
-Specify how `turbo` should handle current and pending tasks in the presence of an error (e.g. non-zero exit code from a task).
+오류가 발생할 때(예: 작업에서 0이 아닌 종료 코드) `turbo`가 현재 및 대기 중인 작업을 처리하는 방법을 지정합니다.
 
-- When `--continue=never` and an error occurs, `turbo` will cancel all tasks.
-- When `--continue=dependencies-successful` and an error occurs, `turbo` will cancel dependent tasks. Tasks whose dependencies have succeeded will continue to run.
-- When `--continue=always` and an error occurs, `turbo` will continue running all tasks, even those whose dependencies have failed.
-- When `--continue` is specified without a value, it will default to `always`.
+- `--continue=never`이고 오류가 발생하면 `turbo`는 모든 작업을 취소합니다.
+- `--continue=dependencies-successful`이고 오류가 발생하면 `turbo`는 종속 작업을 취소합니다. 종속성이 성공한 작업은 계속 실행됩니다.
+- `--continue=always`이고 오류가 발생하면 `turbo`는 종속성이 실패한 작업을 포함하여 모든 작업을 계속 실행합니다.
+- `--continue`가 값 없이 지정되면 기본값은 `always`입니다.
 
-In all cases, `turbo` will exit with the highest exit code value encountered during execution.
+모든 경우에 `turbo`는 실행 중 발생한 가장 높은 종료 코드 값으로 종료됩니다.
 
 ```bash title="Terminal"
 turbo run build --continue
@@ -143,9 +142,9 @@ turbo run build --continue
 
 ### `--cwd <path>`
 
-Default: Directory of root `turbo.json`
+기본값: 루트 `turbo.json`의 디렉토리
 
-Set the working directory of the command.
+명령의 작업 디렉토리를 설정합니다.
 
 ```bash title="Terminal"
 turbo run build --cwd=./somewhere/else/in/your/repo
@@ -153,173 +152,168 @@ turbo run build --cwd=./somewhere/else/in/your/repo
 
 ### `--dangerously-disable-package-manager-check`
 
-Turborepo uses your repository's lockfile to determine caching behavior, [Package Graphs](https://turborepo.com/docs/core-concepts/internal-packages), and more. Because of this, we use [the `packageManager` field](https://nodejs.org/api/packages.html#packagemanager) to help you stabilize your Turborepo.
+Turborepo는 저장소의 lockfile을 사용하여 캐싱 동작, [패키지 그래프](https://turborepo.com/docs/core-concepts/internal-packages) 등을 결정합니다. 이 때문에 Turborepo를 안정화하는 데 도움이 되도록 [`packageManager` 필드](https://nodejs.org/api/packages.html#packagemanager)를 사용합니다.
 
-To help with incremental migration or in situations where you cannot use the `packageManager` field, you may use `--dangerously-disable-package-manager-check` to opt out of this check and assume the risks of unstable lockfiles producing unpredictable behavior. When disabled, Turborepo will attempt a best-effort discovery of the intended package manager meant for the repository.
+점진적 마이그레이션을 돕거나 `packageManager` 필드를 사용할 수 없는 상황에서 `--dangerously-disable-package-manager-check`를 사용하여 이 검사를 선택 해제하고 불안정한 lockfile이 예측할 수 없는 동작을 생성할 위험을 감수할 수 있습니다. 비활성화되면 Turborepo는 저장소에 의도된 패키지 매니저를 최선의 노력으로 검색을 시도합니다.
 
 <Callout type="info">
-  You may also opt out of this check using [configuration in
-  `turbo.json`](/docs/reference/configuration#dangerouslydisablepacakgemanagercheck)
-  or the
+  더 광범위한 적용을 위해 [`turbo.json`의
+  설정](/docs/reference/configuration#dangerouslydisablepacakgemanagercheck)
+  또는
   [`TURBO_DANGEROUSLY_DISABLE_PACKAGE_MANAGER_CHECK`](/docs/reference/system-environment-variables)
-  environment variable for broader coverage.
+  환경 변수를 사용하여 이 검사를 선택 해제할 수도 있습니다.
 </Callout>
 
 ### `--dry / --dry-run`
 
-Instead of executing tasks, display details about the packages and tasks that would be run.
+작업을 실행하는 대신 실행될 패키지와 작업에 대한 세부 정보를 표시합니다.
 
-Specify `--dry=json` to get the output in JSON format.
+JSON 형식으로 출력을 얻으려면 `--dry=json`을 지정합니다.
 
-Task details include useful information like (list is non-exhaustive):
+작업 세부 정보에는 다음과 같은 유용한 정보가 포함됩니다(목록은 전체가 아님):
 
-| Field                        | Description                                                            |
-| ---------------------------- | ---------------------------------------------------------------------- |
-| `taskId`                     | ID for the task, in the format of `package-name#task-name`             |
-| `task`                       | The name of the task to be executed                                    |
-| `package`                    | The package in which to run the task                                   |
-| `hash`                       | The hash of the task (used for caching)                                |
-| `hashOfExternalDependencies` | The global hash                                                        |
-| `command`                    | The command used to run the task                                       |
-| `inputs`                     | List of file inputs considered for hashing                             |
-| `outputs`                    | List of file outputs that were cached                                  |
-| `dependencies`               | Tasks that must run **before** this task                               |
-| `dependents`                 | Tasks that must run **after** this task                                |
-| `environmentVariables`       | Lists of environment variables specified in `env` and `passThroughEnv` |
+| 필드                         | 설명                                              |
+| ---------------------------- | ------------------------------------------------- |
+| `taskId`                     | `package-name#task-name` 형식의 작업 ID           |
+| `task`                       | 실행할 작업의 이름                                |
+| `package`                    | 작업을 실행할 패키지                              |
+| `hash`                       | 작업의 해시(캐싱에 사용됨)                        |
+| `hashOfExternalDependencies` | 전역 해시                                         |
+| `command`                    | 작업을 실행하는 데 사용되는 명령                  |
+| `inputs`                     | 해싱을 위해 고려된 파일 입력 목록                 |
+| `outputs`                    | 캐시된 파일 출력 목록                             |
+| `dependencies`               | 이 작업 **이전에** 실행되어야 하는 작업           |
+| `dependents`                 | 이 작업 **이후에** 실행되어야 하는 작업           |
+| `environmentVariables`       | `env` 및 `passThroughEnv`에 지정된 환경 변수 목록 |
 
 ### `--env-mode <option>`
 
 `type: string`
 
-Controls the available environment variables in the task's runtime.
+작업의 런타임에서 사용 가능한 환경 변수를 제어합니다.
 
 <Callout type="good-to-know">
-  `PATH`, `SHELL`, and `SYSTEMROOT` are always available to the task.
+  `PATH`, `SHELL`, `SYSTEMROOT`는 항상 작업에서 사용할 수 있습니다.
 </Callout>
 
-| option                      | description                                                        |
-| --------------------------- | ------------------------------------------------------------------ |
-| [strict](#strict) (Default) | Only allow explicitly listed environment variables to be available |
-| [loose](#loose)             | Allow **all** environment variables to be available                |
+| 옵션                       | 설명                                               |
+| -------------------------- | -------------------------------------------------- |
+| [strict](#strict) (기본값) | 명시적으로 나열된 환경 변수만 사용 가능하도록 허용 |
+| [loose](#loose)            | **모든** 환경 변수를 사용 가능하도록 허용          |
 
 ```bash title="Terminal"
 turbo run build --env-mode=loose
 ```
 
-The same behavior can also be set via the `TURBO_ENV_MODE=strict` system variable.
+동일한 동작은 `TURBO_ENV_MODE=strict` 시스템 변수를 통해서도 설정할 수 있습니다.
 
 #### `strict`
 
-Only environment variables specified in the following keys are
-available to the task:
+다음 키에 지정된 환경 변수만 작업에서 사용할 수 있습니다:
 
 - [`env`](/docs/reference/configuration#env)
 - [`passThroughEnv`](/docs/reference/configuration#passthroughenv)
 - [`globalEnv`](/docs/reference/configuration#globalenv)
 - [`globalPassThroughEnv`](/docs/reference/configuration#globalpassthroughenv)
 
-If Strict Mode is specified or inferred, **all** tasks are run in `strict` mode,
-regardless of their configuration.
+엄격 모드가 지정되거나 추론되면 구성에 관계없이 **모든** 작업이 `strict` 모드에서 실행됩니다.
 
 #### `loose`
 
-All environment variables on the machine are made available to the task's runtime.
+머신의 모든 환경 변수가 작업의 런타임에서 사용 가능하게 됩니다.
 
 <Callout type="warn">
-  This can be dangerous when environment variables are not accounted for in
-  caching with the keys listed in `strict` above. You're much more likely to
-  restore a version of your package with wrong environment variables from cache
-  in `loose` mode.
+  위의 `strict`에 나열된 키로 캐싱에 환경 변수가 고려되지 않을 때 위험할 수
+  있습니다. `loose` 모드에서는 캐시에서 잘못된 환경 변수로 패키지 버전을 복원할
+  가능성이 훨씬 높습니다.
 </Callout>
 
 ### `--filter <string>`
 
-Specify targets to execute from your repository's graph. Multiple filters can be combined to select distinct sets of targets.
+저장소 그래프에서 실행할 대상을 지정합니다. 여러 필터를 결합하여 고유한 대상 집합을 선택할 수 있습니다.
 
-Filters can be combined to create combinations of packages, directories, and git commits.
+필터를 결합하여 패키지, 디렉토리, git 커밋의 조합을 만들 수 있습니다.
 
-| Target type | Description                                                                                                                | Example                             |
-| ----------- | -------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
-| Package     | Select a package by its name in `package.json`.                                                                            | `turbo run build --filter=ui`       |
-| Directory   | Specify directories to capture a list of packages to run tasks. **When used with other filters, must be wrapped in `{}`**. | `turbo run build --filter=./apps/*` |
-| Git commits | Using Git specifiers, specify packages with source control changes. **Must be wrapped in `[]`**.                           | `turbo run build --filter=[HEAD^1]` |
+| 대상 유형   | 설명                                                                                                                      | 예시                                |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| Package     | `package.json`의 이름으로 패키지를 선택합니다.                                                                            | `turbo run build --filter=ui`       |
+| Directory   | 작업을 실행할 패키지 목록을 캡처하기 위해 디렉토리를 지정합니다. **다른 필터와 함께 사용할 때는 `{}`로 래핑해야 합니다**. | `turbo run build --filter=./apps/*` |
+| Git commits | Git 지정자를 사용하여 소스 제어 변경 사항이 있는 패키지를 지정합니다. **`[]`로 래핑해야 합니다**.                         | `turbo run build --filter=[HEAD^1]` |
 
-<Callout type="good-to-know">`-F` is an alias for `--filter`.</Callout>
+<Callout type="good-to-know">`-F`는 `--filter`의 별칭입니다.</Callout>
 
-#### Microsyntaxes for filtering
+#### 필터링을 위한 마이크로 구문
 
-- `!`: Negate targets from the selection.
-- `...` using packages: Select all packages in the [Package Graph](/docs/core-concepts/package-and-task-graph#package-graph) relative to the target. Using `...` **before** the package name will select **dependents** of the target while using `...` **after** the package name will select **dependencies** of the target.
-- `...` using Git commits: Select a range using `[<from commit>]...[<to commit>]`.
-- `^`: Omit the target from the selection when using `...`.
+- `!`: 선택에서 대상을 제외합니다.
+- `...` 패키지 사용: 대상을 기준으로 [패키지 그래프](/docs/core-concepts/package-and-task-graph#package-graph)의 모든 패키지를 선택합니다. 패키지 이름 **앞에** `...`를 사용하면 대상의 **종속자**를 선택하고, 패키지 이름 **뒤에** `...`를 사용하면 대상의 **종속성**을 선택합니다.
+- `...` Git 커밋 사용: `[<from commit>]...[<to commit>]`를 사용하여 범위를 선택합니다.
+- `^`: `...`를 사용할 때 선택에서 대상을 생략합니다.
 
-For in-depth discussion and practical use cases of filtering, visit [the Running Tasks page](/docs/crafting-your-repository/running-tasks).
+필터링에 대한 심층적인 논의와 실용적인 사용 사례는 [작업 실행 페이지](/docs/crafting-your-repository/running-tasks)를 참조하세요.
 
-#### Using a task identifier
+#### 작업 식별자 사용
 
-You can also run a specific task for a specific package in the format of `package-name#task-name`.
+`package-name#task-name` 형식으로 특정 패키지에 대한 특정 작업을 실행할 수도 있습니다.
 
 ```bash title="Terminal"
 turbo run web#lint
 ```
 
 <Callout type="good-to-know">
-  This will also run the task's dependencies. To run a task without its
-  dependencies, use [the `--only` flag](#--only).
+  이것은 작업의 종속성도 실행합니다. 종속성 없이 작업을 실행하려면 [`--only`
+  플래그](#--only)를 사용하세요.
 </Callout>
 
-#### Advanced filtering examples
+#### 고급 필터링 예제
 
-You can combine multiple filters to further refine your targets. Multiple filters are combined as a union, with negated filters removing packages from the result of the union.
+여러 필터를 결합하여 대상을 더욱 세밀하게 조정할 수 있습니다. 여러 필터는 합집합으로 결합되며, 부정 필터는 합집합의 결과에서 패키지를 제거합니다.
 
 ```bash title="Terminal"
-# Any packages in `apps` subdirectories that have changed since the last commit
+# 마지막 커밋 이후 변경된 `apps` 하위 디렉토리의 모든 패키지
 turbo run build --filter={.apps/*}[HEAD^1]
 
-# Any packages in `apps` subdirectories except ./apps/admin
+# ./apps/admin을 제외한 `apps` 하위 디렉토리의 모든 패키지
 turbo run build --filter=./apps/* --filter=!./apps/admin
 
-# Run the build task for the docs and web packages
+# docs 및 web 패키지에 대한 build 작업 실행
 turbo run build --filter=docs --filter=web
 
-# Build everything that depends on changes in branch 'my-feature'
+# 'my-feature' 브랜치의 변경 사항에 의존하는 모든 것을 빌드
 turbo run build --filter=...[origin/my-feature]
 
-# Build everything that depends on changes between two Git SHAs
+# 두 Git SHA 사이의 변경 사항에 의존하는 모든 것을 빌드
 turbo run build --filter=[a1b2c3d...e4f5g6h]
 
-# Build '@acme/ui' if:
-# - It or any of its dependencies have changed since the previous commit
+# 다음과 같은 경우 '@acme/ui'를 빌드:
+# - 이전 커밋 이후 이 패키지 또는 그 종속성 중 하나가 변경된 경우
 turbo run build --filter=@acme/ui...[HEAD^1]
 
-# Test each package that is:
-# - In the '@acme' scope
-# - Or, in the 'packages' directory
-# - Or, changed since the previous commit
+# 다음 각 패키지를 테스트:
+# - '@acme' 스코프에 있는 패키지
+# - 또는 'packages' 디렉토리에 있는 패키지
+# - 또는 이전 커밋 이후 변경된 패키지
 turbo run test --filter=@acme/*{./packages/*}[HEAD^1]
 ```
 
 ### `--force`
 
-Ignore existing cached artifacts and re-execute all tasks.
+기존 캐시된 아티팩트를 무시하고 모든 작업을 다시 실행합니다.
 
-<Callout type="good-to-know">
-  `--force` will overwrite existing task caches.
-</Callout>
+<Callout type="good-to-know">`--force`는 기존 작업 캐시를 덮어씁니다.</Callout>
 
 ```bash title="Terminal"
 turbo run build --force
 ```
 
-The same behavior can also be set via [the `TURBO_FORCE` environment variable](/docs/reference/system-environment-variables).
+동일한 동작은 [`TURBO_FORCE` 환경 변수](/docs/reference/system-environment-variables)를 통해서도 설정할 수 있습니다.
 
 ### `--framework-inference`
 
-Default: `true`
+기본값: `true`
 
-Specify whether or not to do [Framework Inference](/docs/crafting-your-repository/using-environment-variables#framework-inference) for tasks.
+작업에 대해 [프레임워크 추론](/docs/crafting-your-repository/using-environment-variables#framework-inference)을 수행할지 여부를 지정합니다.
 
-When `false`, [automatic environment variable inclusion](/docs/crafting-your-repository/using-environment-variables#framework-inference) is disabled.
+`false`일 때 [자동 환경 변수 포함](/docs/crafting-your-repository/using-environment-variables#framework-inference)이 비활성화됩니다.
 
 ```bash title="Terminal"
 turbo run build --framework-inference=false
@@ -327,7 +321,7 @@ turbo run build --framework-inference=false
 
 ### `--global-deps <file glob>`
 
-Specify glob of global filesystem dependencies to be hashed. Useful for `.env` and files in the root directory that impact multiple packages.
+해시화할 전역 파일 시스템 종속성의 glob을 지정합니다. 여러 패키지에 영향을 미치는 `.env` 및 루트 디렉토리의 파일에 유용합니다.
 
 ```bash title="Terminal"
 turbo run build --global-deps=".env"
@@ -335,18 +329,18 @@ turbo run build --global-deps=".env.*" --global-deps=".eslintrc" --global-deps="
 ```
 
 <Callout type="info">
-  We recommend specifying file globs that you'd like to include your hashes in
-  [the `globalDependencies` key](/docs/reference/configuration#globaldeps) in
-  `turbo.json` to make sure they are always accounted for.
+  항상 고려되도록 하기 위해 `turbo.json`의 [`globalDependencies`
+  키](/docs/reference/configuration#globaldeps)에 해시에 포함하려는 파일 glob을
+  지정하는 것을 권장합니다.
 </Callout>
 
 ### `--graph <file name>`
 
-Default: `dot`
+기본값: `dot`
 
-This command can output a graph file: `svg`, `png`, `jpg`, `pdf`, `json`, `html`, `mermaid`, or `dot`.
+이 명령은 그래프 파일을 출력할 수 있습니다: `svg`, `png`, `jpg`, `pdf`, `json`, `html`, `mermaid` 또는 `dot`.
 
-If [Graphviz](https://graphviz.org/) is not installed, or no filename is provided, this command prints the dot graph to `stdout`.
+[Graphviz](https://graphviz.org/)가 설치되지 않았거나 파일 이름이 제공되지 않으면 이 명령은 dot 그래프를 `stdout`에 출력합니다.
 
 ```bash title="Terminal"
 turbo run build --graph
@@ -354,96 +348,95 @@ turbo run build test lint --graph=my-graph.svg
 ```
 
 <Callout type="info">
-  **Known Bug**: All possible task nodes will be added to the graph at the
-  moment, even if that script does not actually exist in a given package. This
-  has no impact on execution, but the graph may overstate the number of packages
-  and tasks involved.
+  **알려진 버그**: 현재 특정 패키지에 해당 스크립트가 실제로 존재하지 않더라도
+  모든 가능한 작업 노드가 그래프에 추가됩니다. 이는 실행에는 영향을 미치지
+  않지만 그래프가 관련된 패키지와 작업의 수를 과대평가할 수 있습니다.
 </Callout>
 
 ### `--log-order <option>`
 
-Default: `auto`
+기본값: `auto`
 
-Set the ordering for log output.
+로그 출력의 순서를 설정합니다.
 
-By default, `turbo` will use `grouped` logs in CI environments and `stream` logs everywhere else. This flag is not applicable when using [the terminal UI](https://turborepo.com/docs/reference/configuration#ui).
+기본적으로 `turbo`는 CI 환경에서 `grouped` 로그를, 다른 곳에서는 `stream` 로그를 사용합니다. 이 플래그는 [터미널 UI](https://turborepo.com/docs/reference/configuration#ui)를 사용할 때는 적용되지 않습니다.
 
 ```bash title="Terminal"
 turbo run build --log-order=stream
 ```
 
-| Option    | Description                                 |
-| --------- | ------------------------------------------- |
-| `stream`  | Show output as soon as it is available      |
-| `grouped` | Group output by task                        |
-| `auto`    | `turbo` decides based on its own heuristics |
+| 옵션      | 설명                                          |
+| --------- | --------------------------------------------- |
+| `stream`  | 사용 가능한 즉시 출력을 표시합니다            |
+| `grouped` | 작업별로 출력을 그룹화합니다                  |
+| `auto`    | `turbo`가 자체 휴리스틱을 기반으로 결정합니다 |
 
 ### `--log-prefix <option>`
 
-Default: `auto`
+기본값: `auto`
 
-Control the `<package>:<task>:` prefix for log lines produced when running tasks.
+작업 실행 시 생성되는 로그 라인의 `<package>:<task>:` 접두사를 제어합니다.
 
 ```bash title="Terminal"
 turbo run dev --log-prefix=none
 ```
 
-| Option | Description                                             |
-| ------ | ------------------------------------------------------- |
-| `task` | Force prepending the `<package>:<task>:` prefix to logs |
-| `none` | No prefixes                                             |
-| `auto` | `turbo` decides based on its own heuristics             |
+| 옵션   | 설명                                                  |
+| ------ | ----------------------------------------------------- |
+| `task` | 로그에 `<package>:<task>:` 접두사를 강제로 추가합니다 |
+| `none` | 접두사 없음                                           |
+| `auto` | `turbo`가 자체 휴리스틱을 기반으로 결정합니다         |
 
 ### `--no-cache`
 
-<Callout type="warn" title="Deprecated">
-  This flag is deprecated and will be removed in a future major release. Please
-  use the [`--cache`](#--cache-options) flag instead.
+<Callout type="warn" title="사용 중단됨">
+  이 플래그는 향후 주요 릴리스에서 제거될 예정입니다. 대신
+  [`--cache`](#--cache-options) 플래그를 사용하세요.
 </Callout>
 
-Default `false`
+기본값: `false`
 
-Do not cache results of the task.
+작업의 결과를 캐시하지 않습니다.
 
 ```bash title="Terminal"
 turbo run dev --no-cache
 ```
 
-### `--daemon` and `--no-daemon`
+### `--daemon` 및 `--no-daemon`
 
-`turbo` can run a background process to pre-calculate values used for determining work that needs to be done. This standalone process (daemon) is an optimization, and not required for proper functioning of `turbo`.
+`turbo`는 수행해야 할 작업을 결정하는 데 사용되는 값을 사전 계산하기 위해 백그라운드 프로세스를 실행할 수 있습니다. 이 독립 실행형 프로세스(daemon)는 최적화이며 `turbo`의 적절한 기능에는 필요하지 않습니다.
 
-The default daemon usage is set for your repository using [the `daemon` field in `turbo.json`](/docs/reference/configuration#daemon). Passing `--daemon` requires `turbo` to use the standalone process, while `--no-daemon` instructs `turbo` to avoid using or creating the standalone process.
+기본 daemon 사용은 [`turbo.json`의 `daemon` 필드](/docs/reference/configuration#daemon)를 사용하여 저장소에 대해 설정됩니다. `--daemon`을 전달하면 `turbo`가 독립 실행형 프로세스를 사용해야 하며, `--no-daemon`은 `turbo`가 독립 실행형 프로세스를 사용하거나 생성하지 않도록 지시합니다.
 
-The same behavior can also be set via the `TURBO_DAEMON=true` system variable.
+동일한 동작은 `TURBO_DAEMON=true` 시스템 변수를 통해서도 설정할 수 있습니다.
 
 ### `--output-logs <option>`
 
-Default: `full`
+기본값: `full`
 
-Set type of output logging, overriding [`outputLogs`](/docs/reference/configuration#outputlogs) if it's defined in `turbo.json`.
+출력 로깅 유형을 설정하며, `turbo.json`에 정의된 경우 [`outputLogs`](/docs/reference/configuration#outputlogs)를 재정의합니다.
 
 ```bash title="Terminal"
 turbo run build --output-logs=errors-only
 ```
 
-| Option        | Description                       |
-| ------------- | --------------------------------- |
-| `full`        | Displays all logs                 |
-| `hash-only`   | Only show the hashes of the tasks |
-| `new-only`    | Only show logs from cache misses  |
-| `errors-only` | Only show logs from task failures |
-| `none`        | Hides all task logs               |
+| 옵션          | 설명                          |
+| ------------- | ----------------------------- |
+| `full`        | 모든 로그를 표시합니다        |
+| `hash-only`   | 작업의 해시만 표시합니다      |
+| `new-only`    | 캐시 미스의 로그만 표시합니다 |
+| `errors-only` | 작업 실패의 로그만 표시합니다 |
+| `none`        | 모든 작업 로그를 숨깁니다     |
 
 ### `--only`
 
-Default: `false`
+기본값: `false`
 
-Restricts execution to include specified tasks only.
+실행을 지정된 작업만 포함하도록 제한합니다.
 
-#### Example
+#### 예시
 
-Given this `turbo.json`:
+다음 `turbo.json`이 주어졌을 때:
 
 ```json title="./turbo.json"
 {
@@ -463,15 +456,15 @@ Given this `turbo.json`:
 turbo run test --only
 ```
 
-The command will _only_ execute the `test` tasks in each package. It will not run `build`.
+이 명령은 각 패키지의 `test` 작업만 실행합니다. `build`는 실행하지 않습니다.
 
-Additionally, `--only` will only run tasks in specified packages, excluding dependencies. For example, `turbo run build --filter=web --only`, will **only** run the `build` script in the `web` package.
+또한 `--only`는 종속성을 제외하고 지정된 패키지의 작업만 실행합니다. 예를 들어, `turbo run build --filter=web --only`는 `web` 패키지의 `build` 스크립트만 실행합니다.
 
 ### `--parallel`
 
-Default: `false`
+기본값: `false`
 
-Run commands in parallel across packages, ignoring the task dependency graph.
+작업 종속성 그래프를 무시하고 패키지 간에 명령을 병렬로 실행합니다.
 
 ```bash title="Terminal"
 turbo run lint --parallel
@@ -479,38 +472,39 @@ turbo run dev --parallel
 ```
 
 <Callout type="info">
-  The `--parallel` flag is typically used for long-running "dev" or "watch"
-  tasks that don't exit. Starting in `turbo@1.7`, we recommend configuring these
-  tasks using [`persistent`](/docs/reference/configuration#persistent) instead.
+  `--parallel` 플래그는 일반적으로 종료되지 않는 장기 실행 "dev" 또는 "watch"
+  작업에 사용됩니다. `turbo@1.7`부터는 대신
+  [`persistent`](/docs/reference/configuration#persistent)를 사용하여 이러한
+  작업을 구성하는 것을 권장합니다.
 </Callout>
 
 ### `--preflight`
 
-Only applicable when Remote Caching is configured. Enables sending a preflight request before every cache artifact and analytics request. The follow-up upload and download will follow redirects.
+Remote Caching이 구성된 경우에만 적용됩니다. 모든 캐시 아티팩트 및 분석 요청 전에 preflight 요청 전송을 활성화합니다. 후속 업로드 및 다운로드는 리디렉션을 따릅니다.
 
 ```bash title="Terminal"
 turbo run build --preflight
 ```
 
-The same behavior can also be set via the `TURBO_PREFLIGHT=true` system variable.
+동일한 동작은 `TURBO_PREFLIGHT=true` 시스템 변수를 통해서도 설정할 수 있습니다.
 
 ### `--profile`
 
-Generates a trace of the run in Chrome Tracing format that you can use to analyze performance.
+성능 분석에 사용할 수 있는 Chrome Tracing 형식의 실행 추적을 생성합니다.
 
-You must provide a verbosity flag (`-v`, `-vv`, or `-vvv`) with `--profile` to produce a trace.
+추적을 생성하려면 `--profile`과 함께 자세한 정도 플래그(`-v`, `-vv` 또는 `-vvv`)를 제공해야 합니다.
 
 ```bash title="Terminal"
 turbo run build --profile=profile.json -vvv
 ```
 
-Profiles can be viewed in a tool like [Perfetto](https://ui.perfetto.dev/).
+프로필은 [Perfetto](https://ui.perfetto.dev/)와 같은 도구에서 볼 수 있습니다.
 
 ### `--remote-cache-timeout`
 
-Default: `30`
+기본값: `30`
 
-Set the timeout for Remote Cache operations in seconds.
+Remote Cache 작업의 타임아웃을 초 단위로 설정합니다.
 
 ```bash title="Terminal"
 turbo run build --remote-cache-timeout=60
@@ -518,14 +512,14 @@ turbo run build --remote-cache-timeout=60
 
 ### `--remote-only`
 
-<Callout type="warn" title="Deprecated">
-  This flag is deprecated and will be removed in a future major release. Please
-  use the [`--cache`](#--cache-options) flag instead.
+<Callout type="warn" title="사용 중단됨">
+  이 플래그는 향후 주요 릴리스에서 제거될 예정입니다. 대신
+  [`--cache`](#--cache-options) 플래그를 사용하세요.
 </Callout>
 
-Default: `false`
+기본값: `false`
 
-Ignore the local filesystem cache for all tasks, using Remote Cache for reading and caching task outputs.
+모든 작업에 대해 로컬 파일 시스템 캐시를 무시하고 Remote Cache를 사용하여 작업 출력을 읽고 캐싱합니다.
 
 ```bash title="Terminal"
 turbo run build --remote-only
@@ -533,70 +527,69 @@ turbo run build --remote-only
 
 ### `--summarize`
 
-Generates a JSON file in `.turbo/runs` containing metadata about the run, including:
+다음을 포함하여 실행에 대한 메타데이터가 포함된 JSON 파일을 `.turbo/runs`에 생성합니다:
 
-- Affected packages
-- Executed tasks (including their timings and hashes)
-- All the files included in the cached artifact
+- 영향을 받은 패키지
+- 실행된 작업(타이밍 및 해시 포함)
+- 캐시된 아티팩트에 포함된 모든 파일
 
 ```bash title="Terminal"
 turbo run build --summarize
 ```
 
-This flag can be helpful for debugging to determine things like:
+이 플래그는 다음과 같은 항목을 확인하기 위한 디버깅에 유용할 수 있습니다:
 
-- How `turbo` interpreted your glob syntax for `inputs` and `outputs`
-- What inputs changed between two task runs to produce a cache miss
-- How task timings changed over time
+- `turbo`가 `inputs` 및 `outputs`에 대한 glob 구문을 해석한 방법
+- 캐시 미스를 발생시키기 위해 두 작업 실행 사이에 변경된 입력
+- 시간이 지남에 따라 작업 타이밍이 어떻게 변경되었는지
 
-<Callout type="info" title="Summaries viewer">
-  While there is not a Turborepo-native Run Summaries UI viewer, we encourage
-  you to use the community-built
-  [https://turbo.nullvoxpopuli.com](https://turbo.nullvoxpopuli.com) if you
-  would like to view your Run Summaries as a web view.
+<Callout type="info" title="요약 뷰어">
+  Turborepo 네이티브 실행 요약 UI 뷰어는 없지만, 실행 요약을 웹 뷰로 보려면
+  커뮤니티에서 만든
+  [https://turbo.nullvoxpopuli.com](https://turbo.nullvoxpopuli.com)을 사용하는
+  것을 권장합니다.
 </Callout>
 
 ### `--token`
 
-A bearer token for Remote Caching. Useful for running in non-interactive shells in combination with the `--team` flag.
+Remote Caching을 위한 bearer 토큰입니다. `--team` 플래그와 함께 비대화형 셸에서 실행할 때 유용합니다.
 
 ```bash title="Terminal"
 turbo run build --team=my-team --token=xxxxxxxxxxxxxxxxx
 ```
 
-This value can also be set using [the `TURBO_TOKEN` system variable](/docs/reference/system-environment-variables). If both are present, the flag value will override the system variable.
+이 값은 [`TURBO_TOKEN` 시스템 변수](/docs/reference/system-environment-variables)를 사용하여 설정할 수도 있습니다. 둘 다 있는 경우 플래그 값이 시스템 변수를 재정의합니다.
 
 <Callout type="good-to-know">
-  If you are using [Vercel Remote
-  Cache](https://vercel.com/docs/monorepos/remote-caching) and building your
-  project on Vercel, you do not need to use this flag. This value will be
-  automatically set for you.
+  [Vercel Remote Cache](https://vercel.com/docs/monorepos/remote-caching)를
+  사용하고 Vercel에서 프로젝트를 빌드하는 경우 이 플래그를 사용할 필요가
+  없습니다. 이 값은 자동으로 설정됩니다.
 </Callout>
 
 ### `--team`
 
-The slug of the Remote Cache team. Useful for running in non-interactive shells in combination with the `--token` flag.
+Remote Cache 팀의 슬러그입니다. `--token` 플래그와 함께 비대화형 셸에서 실행할 때 유용합니다.
 
 ```bash title="Terminal"
 turbo run build --team=my-team
 turbo run build --team=my-team --token=xxxxxxxxxxxxxxxxx
 ```
 
-This value can also be set using [the `TURBO_TEAM` system variable](/docs/reference/system-environment-variables). If both are present, the flag value will override the system variable.
+이 값은 [`TURBO_TEAM` 시스템 변수](/docs/reference/system-environment-variables)를 사용하여 설정할 수도 있습니다. 둘 다 있는 경우 플래그 값이 시스템 변수를 재정의합니다.
 
 ### `--ui`
 
-Specify the UI to use for output. Accepts `stream` or `tui`.
+출력에 사용할 UI를 지정합니다. `stream` 또는 `tui`를 허용합니다.
 
 ### `--verbosity`
 
-To specify log level, use `--verbosity=<num>` or `-v, -vv, -vvv`.
+로그 레벨을 지정하려면 `--verbosity=<num>` 또는 `-v, -vv, -vvv`를 사용합니다.
 
-| Level | Flag value      | Shorthand |
-| ----- | --------------- | --------- |
-| Info  | `--verbosity=1` | `-v`      |
-| Debug | `--verbosity=2` | `-vv`     |
-| Trace | `--verbosity=3` | `-vvv`    |
+| 레벨  | 플래그 값       | 단축형 |
+| ----- | --------------- | ------ |
+| Info  | `--verbosity=1` | `-v`   |
+| Debug | `--verbosity=2` | `-vv`  |
+| Trace | `--verbosity=3` | `-vvv` |
 
 ```bash title="Terminal"
 turbo run build --verbosity=2

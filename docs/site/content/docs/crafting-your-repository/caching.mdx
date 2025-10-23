@@ -1,40 +1,40 @@
 ---
-title: Caching
-description: Learn about caching in Turborepo.
+title: 캐싱
+description: Turborepo의 캐싱에 대해 알아봅니다.
 ---
 
 import { Step, Steps } from '#components/steps';
 import { PackageManagerTabs, Tab } from '#components/tabs';
 import { Callout } from '#components/callout';
 
-Turborepo uses caching to speed up builds, ensuring you **never do the same work twice**. When your task is cacheable, Turborepo will restore the results of your task from cache using a fingerprint from the first time the task ran.
+Turborepo는 캐싱을 사용하여 빌드 속도를 높이고, **동일한 작업을 두 번 수행하지 않도록** 보장합니다. 작업이 캐시 가능한 경우, Turborepo는 작업이 처음 실행되었을 때의 지문을 사용하여 캐시에서 작업 결과를 복원합니다.
 
 ![12 tasks are being ran in 3 packages, resulting in a ">>> FULL TURBO" cache hit. The total time it takes to restore these tasks from cache is 80 milliseconds.](/images/docs/why-turborepo-solution.png)
 
-Turborepo's caching results in significant time savings when working locally - and is even more powerful when [Remote Caching](/docs/core-concepts/remote-caching) is enabled, sharing a cache among your entire team and CI.
+Turborepo의 캐싱은 로컬에서 작업할 때 상당한 시간을 절약해주며, [Remote Caching](/docs/core-concepts/remote-caching)을 활성화하면 전체 팀과 CI에서 캐시를 공유하여 훨씬 더 강력해집니다.
 
-On this page, you'll learn:
+이 페이지에서는 다음을 배웁니다:
 
-- [How to hit your first Turborepo cache](#hit-your-first-turborepo-cache)
-- [How to enable Remote Caching](/docs/core-concepts/remote-caching)
-- [What Turborepo uses for the inputs and outputs to a hash](/docs/crafting-your-repository/caching#task-inputs)
-- [How to troubleshoot caching issues](#troubleshooting)
+- [첫 번째 Turborepo 캐시 히트를 달성하는 방법](#hit-your-first-turborepo-cache)
+- [Remote Caching을 활성화하는 방법](/docs/core-concepts/remote-caching)
+- [Turborepo가 해시의 입력 및 출력으로 사용하는 것](/docs/crafting-your-repository/caching#task-inputs)
+- [캐싱 문제를 해결하는 방법](#troubleshooting)
 
 <Callout type="good-to-know">
-  Turborepo assumes that your tasks are **deterministic**. If a task is able to
-  produce different outputs given the set of inputs that Turborepo is aware of,
-  caching may not work as expected.
+  Turborepo는 작업이 **결정적**이라고 가정합니다. 작업이 Turborepo가 인식하는
+  입력 세트가 주어졌을 때 다른 출력을 생성할 수 있다면, 캐싱이 예상대로 작동하지
+  않을 수 있습니다.
 </Callout>
 
-## Hit your first Turborepo cache
+## 첫 번째 Turborepo 캐시 히트
 
-You can try out Turborepo's caching behavior in three steps:
+세 단계로 Turborepo의 캐싱 동작을 시도해볼 수 있습니다:
 
 <Steps>
 <Step>
-### Create a new Turborepo project
+### 새 Turborepo 프로젝트 생성
 
-Use `npx create-turbo@latest` and follow the prompts to create a new Turborepo.
+`npx create-turbo@latest`를 사용하고 프롬프트를 따라 새 Turborepo를 생성합니다.
 
 ```bash title="Terminal"
 npx create-turbo@latest
@@ -42,11 +42,11 @@ npx create-turbo@latest
 
 </Step>
 <Step>
-### Run a build for the first time
+### 첫 번째 빌드 실행
 
-If you have [`turbo` installed globally](/docs/getting-started/installation#global-installation), run `turbo build` in your repository.
+[`turbo`를 전역으로 설치](/docs/getting-started/installation#global-installation)한 경우 저장소에서 `turbo build`를 실행합니다.
 
-Alternatively, you can run the `build` script in `package.json` using your package manager.
+또는 패키지 관리자를 사용하여 `package.json`의 `build` 스크립트를 실행할 수 있습니다.
 
 <PackageManagerTabs>
 
@@ -81,15 +81,15 @@ bun run build
 </Tab>
 </PackageManagerTabs>
 
-This will result in a cache miss, since you've never ran `turbo` before with this [set of inputs](/docs/crafting-your-repository/caching#task-inputs) in this repository. The inputs are turned into a hash to check for in your local filesystem cache or in [the Remote Cache](/docs/core-concepts/remote-caching).
+이 결과로 캐시 미스가 발생합니다. 이 저장소에서 이 [입력 세트](/docs/crafting-your-repository/caching#task-inputs)로 `turbo`를 실행한 적이 없기 때문입니다. 입력은 로컬 파일 시스템 캐시 또는 [Remote Cache](/docs/core-concepts/remote-caching)에서 확인할 해시로 변환됩니다.
 
 </Step>
 
 <Step>
 
-### Hit the cache
+### 캐시 히트
 
-Run `turbo build` again. You will see a message like this:
+`turbo build`를 다시 실행합니다. 다음과 같은 메시지가 표시됩니다:
 
 ![A terminal window showing two tasks that have been ran through `turbo`. They successfully complete in 116 milliseconds.](/images/docs/full-turbo.png)
 
@@ -97,129 +97,128 @@ Run `turbo build` again. You will see a message like this:
 
 </Steps>
 
-Because the inputs' fingerprint is already in the cache, there's no reason to rebuild your applications from zero again. You can restore the results of the previous build from cache, saving resources and time.
+입력의 지문이 이미 캐시에 있기 때문에 애플리케이션을 다시 빌드할 이유가 없습니다. 이전 빌드의 결과를 캐시에서 복원하여 리소스와 시간을 절약할 수 있습니다.
 
 ## Remote Caching
 
-Turborepo stores the results of tasks in the `.turbo/cache` directory on your machine. However, you can make your entire organization even faster by sharing this cache with your teammates and CI.
+Turborepo는 작업 결과를 머신의 `.turbo/cache` 디렉토리에 저장합니다. 그러나 이 캐시를 팀원 및 CI와 공유하여 전체 조직의 속도를 더욱 높일 수 있습니다.
 
-To learn more about Remote Caching and its benefits, visit the [Remote Caching page](/docs/core-concepts/remote-caching).
+Remote Caching과 그 이점에 대해 자세히 알아보려면 [Remote Caching 페이지](/docs/core-concepts/remote-caching)를 방문하세요.
 
-### Enabling Remote Cache
+### Remote Cache 활성화
 
-First, authenticate with your Remote Cache provider:
+먼저 Remote Cache 제공자로 인증합니다:
 
 ```bash title="Terminal"
 npx turbo login
 ```
 
-Then, link the repository on your machine to Remote Cache:
+그런 다음 머신의 저장소를 Remote Cache에 연결합니다:
 
 ```bash title="Terminal"
 npx turbo link
 ```
 
-Now, when you run a task, Turborepo will automatically send the outputs of the task to Remote Cache. If you run the same task on a different machine that is also authenticated to your Remote Cache, it will hit cache the first time it runs the task.
+이제 작업을 실행하면 Turborepo가 자동으로 작업의 출력을 Remote Cache로 전송합니다. Remote Cache에 인증된 다른 머신에서 동일한 작업을 실행하면 처음 작업을 실행할 때 캐시를 히트합니다.
 
-For information on how to connect your CI machines to Remote Cache, visit [the Constructing CI guide](/docs/crafting-your-repository/constructing-ci#enabling-remote-caching).
+CI 머신을 Remote Cache에 연결하는 방법에 대한 정보는 [CI 구성 가이드](/docs/crafting-your-repository/constructing-ci#enabling-remote-caching)를 방문하세요.
 
 <Callout type="info">
-  By default, Turborepo uses [Vercel Remote
-  Cache](https://vercel.com/docs/monorepos/remote-caching) with zero
-  configuration. If you'd like to use a different Remote Cache, visit the
-  [Remote Caching API
-  documentation](/docs/core-concepts/remote-caching#self-hosting)
+  기본적으로 Turborepo는 제로 구성으로 [Vercel Remote
+  Cache](https://vercel.com/docs/monorepos/remote-caching)를 사용합니다. 다른
+  Remote Cache를 사용하려면 [Remote Caching API
+  문서](/docs/core-concepts/remote-caching#self-hosting)를 방문하세요.
 </Callout>
 
-## What gets cached?
+## 무엇이 캐시되나요?
 
-Turborepo caches two types of outputs: Task outputs and Logs.
+Turborepo는 두 가지 유형의 출력을 캐시합니다: 작업 출력과 로그입니다.
 
-### Task outputs
+### 작업 출력
 
-Turborepo caches the file outputs of a task that are defined in [the `outputs` key](/docs/reference/configuration#outputs) of `turbo.json`. When there's a cache hit, Turborepo will restore the files from the cache.
+Turborepo는 `turbo.json`의 [`outputs` 키](/docs/reference/configuration#outputs)에 정의된 작업의 파일 출력을 캐시합니다. 캐시 히트가 발생하면 Turborepo는 캐시에서 파일을 복원합니다.
 
-The `outputs` key is optional, see [the API reference](/docs/reference/configuration#outputs) for how Turborepo behaves in this case.
+`outputs` 키는 선택 사항입니다. 이 경우 Turborepo가 어떻게 동작하는지는 [API 참조](/docs/reference/configuration#outputs)를 참조하세요.
 
-<Callout type="warn" title="Providing file outputs">
-If you do not declare file outputs for a task, Turborepo will not cache them. This might be okay for some tasks (like linters) - but many tasks produce files that you will want to be cached.
+<Callout type="warn" title="파일 출력 제공">
+작업에 대한 파일 출력을 선언하지 않으면 Turborepo는 해당 출력을 캐시하지 않습니다. 일부 작업(예: linter)에는 괜찮을 수 있지만, 많은 작업은 캐시하고 싶은 파일을 생성합니다.
 
-If you're running into errors with files not being available when you hit cache, make sure that you have defined the outputs for your task.
+캐시를 히트할 때 파일을 사용할 수 없다는 오류가 발생하는 경우 작업에 대한 출력을 정의했는지 확인하세요.
 
 </Callout>
 
-### Logs
+### 로그
 
-Turborepo always captures the terminal outputs of your tasks, restoring those logs to your terminal from the first time that the task ran.
+Turborepo는 항상 작업의 터미널 출력을 캡처하여 작업이 처음 실행되었을 때의 로그를 터미널에 복원합니다.
 
-You can configure the verbosity of the replayed logs using [the `--output-logs` flag](/docs/reference/run#--output-logs-option) or [`outputLogs` configuration option](/docs/reference/configuration#outputlogs).
+재생된 로그의 세부 수준은 [`--output-logs` 플래그](/docs/reference/run#--output-logs-option) 또는 [`outputLogs` 구성 옵션](/docs/reference/configuration#outputlogs)을 사용하여 구성할 수 있습니다.
 
-## Task inputs
+## 작업 입력
 
-Inputs are hashed by Turborepo, creating a "fingerprint" for the task run. When "fingerprints" match, running the task will hit the cache.
+입력은 Turborepo에 의해 해시되어 작업 실행에 대한 "지문"을 생성합니다. "지문"이 일치하면 작업 실행이 캐시를 히트합니다.
 
-Under the hood, Turborepo creates two hashes: a global hash and a task hash. If either of the hashes change, the task will miss cache.
+내부적으로 Turborepo는 전역 해시와 작업 해시의 두 가지 해시를 생성합니다. 해시 중 하나라도 변경되면 작업이 캐시를 미스합니다.
 
-### Global hash inputs
+### 전역 해시 입력
 
-| Input                                                                                  | Example                                                                                                                                                    |
-| -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Resolved task definition from root `turbo.json`<br /> and package `turbo.json`         | Changing [`outputs`](/docs/reference/configuration#outputs) in either root `turbo.json` or [Package Configuration](/docs/reference/package-configurations) |
-| Lockfile changes that affect the Workspace root                                        | Updating dependencies in root `package.json` will cause **all** tasks to miss cache                                                                        |
-| [`globalDependencies`](/docs/reference/configuration#globaldependencies) file contents | Changing `./.env` when it is listed in `globalDependencies` will cause **all** tasks to miss cache                                                         |
-| Values of variables listed in [`globalEnv`](/docs/reference/configuration#globalenv)   | Changing the value of `GITHUB_TOKEN` when it is listed in `globalEnv`                                                                                      |
-| Flag values that affect task runtime                                                   | Using behavior-changing flags like `--cache-dir`, `--framework-inference`, or `--env-mode`                                                                 |
-| Arbitrary passthrough arguments                                                        | `turbo build -- --arg=value` will miss cache when compared to either `turbo build` or `turbo build -- --arg=diff`                                                      |
+| 입력                                                                               | 예시                                                                                                                                     |
+| ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| 루트 `turbo.json` 및 패키지 `turbo.json`의<br /> 해결된 작업 정의                  | 루트 `turbo.json` 또는 [패키지 구성](/docs/reference/package-configurations)에서 [`outputs`](/docs/reference/configuration#outputs) 변경 |
+| Workspace 루트에 영향을 미치는 Lockfile 변경                                       | 루트 `package.json`의 종속성 업데이트는 **모든** 작업이 캐시를 미스하게 함                                                               |
+| [`globalDependencies`](/docs/reference/configuration#globaldependencies) 파일 내용 | `globalDependencies`에 나열된 `./.env` 변경은 **모든** 작업이 캐시를 미스하게 함                                                         |
+| [`globalEnv`](/docs/reference/configuration#globalenv)에 나열된 변수의 값          | `globalEnv`에 나열된 `GITHUB_TOKEN` 값 변경                                                                                              |
+| 작업 런타임에 영향을 미치는 플래그 값                                              | `--cache-dir`, `--framework-inference` 또는 `--env-mode`와 같은 동작 변경 플래그 사용                                                    |
+| 임의 패스스루 인수                                                                 | `turbo build -- --arg=value`는 `turbo build` 또는 `turbo build -- --arg=diff`와 비교하여 캐시를 미스함                                   |
 
-### Package hash inputs
+### 패키지 해시 입력
 
-| Input                                                                   | Example                                                 |
-| ----------------------------------------------------------------------- | ------------------------------------------------------- |
-| [Package Configuration](/docs/reference/package-configurations) changes | Changing a package's `turbo.json`                       |
-| Lockfile changes that affect the package                                | Updating dependencies in a package's `package.json`     |
-| Package's `package.json` changes                                        | Updating the `name` field in a package's `package.json` |
-| File changes in source control                                          | Writing new code in `src/index.ts`                      |
+| 입력                                                       | 예시                                             |
+| ---------------------------------------------------------- | ------------------------------------------------ |
+| [패키지 구성](/docs/reference/package-configurations) 변경 | 패키지의 `turbo.json` 변경                       |
+| 패키지에 영향을 미치는 Lockfile 변경                       | 패키지의 `package.json`에서 종속성 업데이트      |
+| 패키지의 `package.json` 변경                               | 패키지의 `package.json`에서 `name` 필드 업데이트 |
+| 소스 제어의 파일 변경                                      | `src/index.ts`에 새 코드 작성                    |
 
-## Troubleshooting
+## 문제 해결
 
-### Using dry runs
+### Dry run 사용
 
-Turborepo has a [`--dry` flag](/docs/reference/run#--dry----dry-run) that can be used to see what would happen if you ran a task without actually running it. This can be useful for debugging caching issues when you're not sure which tasks you're running.
+Turborepo에는 실제로 실행하지 않고 작업을 실행하면 어떤 일이 발생하는지 확인할 수 있는 [`--dry` 플래그](/docs/reference/run#--dry----dry-run)가 있습니다. 이는 어떤 작업을 실행하고 있는지 확실하지 않을 때 캐싱 문제를 디버깅하는 데 유용할 수 있습니다.
 
-For more details, visit the [`--dry` API reference](/docs/reference/run#--dry----dry-run).
+자세한 내용은 [`--dry` API 참조](/docs/reference/run#--dry----dry-run)를 방문하세요.
 
-### Using Run Summaries
+### Run Summary 사용
 
-Turborepo has a [`--summarize` flag](/docs/reference/run#--summarize) that can be used to get an overview of all of a task's inputs, outputs, and more. Comparing two summaries will show why two task's hashes are different. This can be useful for:
+Turborepo에는 작업의 모든 입력, 출력 등에 대한 개요를 얻는 데 사용할 수 있는 [`--summarize` 플래그](/docs/reference/run#--summarize)가 있습니다. 두 요약을 비교하면 두 작업의 해시가 다른 이유를 알 수 있습니다. 이는 다음과 같은 경우에 유용할 수 있습니다:
 
-- Debugging inputs: There are many inputs to a task in Turborepo. If a task is missing cache when you expect it to hit, you can use a Run Summary to check which inputs are different that you weren't expecting.
-- Debugging outputs: If cache hits aren't restoring the files you're expecting, a Run Summary can help you understand what outputs are being restored from cache.
+- 입력 디버깅: Turborepo의 작업에는 많은 입력이 있습니다. 작업이 캐시를 히트할 것으로 예상했는데 미스하는 경우 Run Summary를 사용하여 예상하지 못한 입력이 다른지 확인할 수 있습니다.
+- 출력 디버깅: 캐시 히트가 예상한 파일을 복원하지 않는 경우 Run Summary는 캐시에서 복원되는 출력을 이해하는 데 도움이 될 수 있습니다.
 
-<Callout type="info" title="Summaries viewer">
-  While there is not a Turborepo-native Run Summaries UI viewer, we encourage
-  you to use the community-built
-  [https://turbo.nullvoxpopuli.com](https://turbo.nullvoxpopuli.com) if you
-  would like to view your Run Summaries as a web view.
+<Callout type="info" title="Summary 뷰어">
+  Turborepo 네이티브 Run Summary UI 뷰어는 없지만, Run Summary를 웹 뷰로 보고
+  싶다면 커뮤니티에서 만든
+  [https://turbo.nullvoxpopuli.com](https://turbo.nullvoxpopuli.com)을 사용하는
+  것을 권장합니다.
 </Callout>
 
-### Turning off caching
+### 캐싱 끄기
 
-Sometimes, you may not want to write the output of tasks to the cache. This can be set permanently for a task using [`"cache": false`](/docs/reference/configuration#cache) or for a whole run using [ the `--cache <options>` flag](/docs/reference/run#--no-cache).
+때때로 작업의 출력을 캐시에 쓰지 않을 수 있습니다. 이는 [`"cache": false`](/docs/reference/configuration#cache)를 사용하여 작업에 대해 영구적으로 설정하거나 [the `--cache <options>` 플래그](/docs/reference/run#--no-cache)를 사용하여 전체 실행에 대해 설정할 수 있습니다.
 
-### Overwriting a cache
+### 캐시 덮어쓰기
 
-If you want to force `turbo` to re-execute a task that has been cached, use [the `--force` flag](/docs/reference/run#--force). Note that this disables **reading** the cache, **not writing**.
+캐시된 작업을 강제로 다시 실행하려면 [`--force` 플래그](/docs/reference/run#--force)를 사용합니다. 이는 캐시 **읽기**를 비활성화하며 **쓰기**는 비활성화하지 않습니다.
 
-### Caching a task is slower than executing the task
+### 작업 캐싱이 작업 실행보다 느림
 
-It's possible to create scenarios where caching ends up being slower than not caching. These cases are rare, but a few examples include:
+캐싱이 캐싱하지 않는 것보다 느린 시나리오를 만드는 것이 가능합니다. 이러한 경우는 드물지만 몇 가지 예는 다음과 같습니다:
 
-- **Tasks that execute extremely fast**: If a task executes faster than a network round-trip to the [Remote Cache](/docs/core-concepts/remote-caching), you should consider not caching the task.
-- **Tasks whose output assets are enormous**: It's possible to create an artifact that is so big that the time to upload or download it exceeds the time to regenerate it, like a complete Docker Container. In these cases, you should consider not caching the task.
-- **Scripts that have their own caching**: Some tasks have their own internal caching behavior. In these cases, configuration can quickly become complicated to make Turborepo's cache and the application cache work together.
+- **매우 빠르게 실행되는 작업**: 작업이 [Remote Cache](/docs/core-concepts/remote-caching)로의 네트워크 왕복보다 빠르게 실행되는 경우 작업을 캐시하지 않는 것을 고려해야 합니다.
+- **출력 자산이 엄청나게 큰 작업**: 업로드 또는 다운로드하는 데 걸리는 시간이 재생성하는 데 걸리는 시간을 초과하는 것처럼 완전한 Docker 컨테이너와 같이 너무 큰 아티팩트를 만드는 것이 가능합니다. 이러한 경우 작업을 캐시하지 않는 것을 고려해야 합니다.
+- **자체 캐싱이 있는 스크립트**: 일부 작업에는 자체 내부 캐싱 동작이 있습니다. 이러한 경우 Turborepo의 캐시와 애플리케이션 캐시가 함께 작동하도록 구성이 빠르게 복잡해질 수 있습니다.
 
-While these situations are rare, be sure to test the behavior of your projects to determine if disabling caching in specific places provides a performance benefit.
+이러한 상황은 드물지만 특정 위치에서 캐싱을 비활성화하는 것이 성능 이점을 제공하는지 확인하기 위해 프로젝트의 동작을 테스트해야 합니다.
 
-## Next steps
+## 다음 단계
 
-Now that you've seen how Turborepo's caching makes your repository faster, let's take a look at how to develop applications and libraries in your Turborepo.
+이제 Turborepo의 캐싱이 저장소를 어떻게 더 빠르게 만드는지 보았으므로 Turborepo에서 애플리케이션과 라이브러리를 개발하는 방법을 살펴보겠습니다.

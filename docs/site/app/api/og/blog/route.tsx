@@ -2,7 +2,8 @@ import React from "react";
 import { ImageResponse } from "next/og";
 import type { NextApiRequest } from "next/index";
 
-export const runtime = "edge";
+// Removed edge runtime to avoid 1MB size limit on Vercel free plan
+// This will use Node.js runtime instead which has a higher size limit
 
 function _arrayBufferToBase64(buffer: ArrayBuffer): string {
   let binary = "";

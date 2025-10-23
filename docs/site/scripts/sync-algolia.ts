@@ -12,7 +12,10 @@ if (!process.env.NEXT_PUBLIC_ALGOLIA_INDEX) {
 // you can get this key from the `turbo-site` project on Vercel
 // if you are a part of the Vercel team.
 if (!process.env.ALGOLIA_API_KEY) {
-  throw new Error("No ALGOLIA_API_KEY provided.");
+  console.log(
+    "No ALGOLIA_API_KEY provided. Skipping Algolia sync (not required for Korean docs site)."
+  );
+  process.exit(0);
 }
 
 const ALGOLIA_INDEX_NAME = process.env.NEXT_PUBLIC_ALGOLIA_INDEX ?? "_docs_dev";
@@ -27,7 +30,10 @@ const indexes = (
 );
 
 if (!process.env.ALGOLIA_APP_ID) {
-  throw new Error("No ALGOLIA_APP_ID found.");
+  console.log(
+    "No ALGOLIA_APP_ID found. Skipping Algolia sync (not required for Korean docs site)."
+  );
+  process.exit(0);
 }
 
 const algoliaClient = algosearch(

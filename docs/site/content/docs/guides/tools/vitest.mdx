@@ -104,7 +104,7 @@ CI에서 테스트 스위트를 실행하면 결과를 기록하고 완료 시 �
 }
 ```
 
-And, inside the root `turbo.json`:
+그리고 루트 `turbo.json` 내부에:
 
 ```json title="./turbo.json"
 {
@@ -120,7 +120,7 @@ And, inside the root `turbo.json`:
 }
 ```
 
-You can now run your tasks using [global `turbo`](/docs/getting-started/installation#global-installation) as `turbo run test:watch` or from a script in your root `package.json`:
+이제 [global `turbo`](/docs/getting-started/installation#global-installation)를 사용하여 `turbo run test:watch`로 작업을 실행하거나 루트 `package.json`의 스크립트에서 실행할 수 있습니다:
 
 <Tabs items={["Global turbo", "./package.json"]}>
 <Tab value="Global turbo">
@@ -148,24 +148,25 @@ turbo run test:watch
 
 </Tabs>
 
-#### Creating merged coverage reports
+#### 병합된 커버리지 보고서 생성
 
-[Vitest's Projects feature](#using-vitests-projects-feature) creates an out-of-the-box coverage report that merges all of your packages' tests coverage reports. Following the Turborepo strategy, though, you'll have to merge the coverage reports yourself.
+[Vitest의 Projects 기능](#using-vitests-projects-feature)은 모든 패키지의 테스트 커버리지 보고서를 병합하는 즉시 사용 가능한 커버리지 보고서를 생성합니다. 하지만 Turborepo 전략을 따르는 경우 커버리지 보고서를 직접 병합해야 합니다.
 
 <Callout type="info">
-  The [`with-vitest`
-  example](https://github.com/vercel/turborepo/tree/main/examples/with-vitest)
-  shows a complete example that you may adapt for your needs. You can get
-  started with it quickly using `npx create-turbo@latest --example with-vitest`.
+  [`with-vitest`
+  예제](https://github.com/vercel/turborepo/tree/main/examples/with-vitest)는
+  여러분의 요구에 맞게 적용할 수 있는 완전한 예제를 보여줍니다. `npx
+  create-turbo@latest --example with-vitest`를 사용하여 빠르게 시작할 수
+  있습니다.
 </Callout>
 
-To do this, you'll follow a few general steps:
+이를 수행하려면 다음과 같은 일반적인 단계를 따릅니다:
 
-1. Run `turbo run test` to create the coverage reports.
-2. Merge the coverage reports with [`nyc merge`](https://github.com/istanbuljs/nyc?tab=readme-ov-file#what-about-nyc-merge).
-3. Create a report using `nyc report`.
+1. `turbo run test`를 실행하여 커버리지 보고서를 생성합니다.
+2. [`nyc merge`](https://github.com/istanbuljs/nyc?tab=readme-ov-file#what-about-nyc-merge)로 커버리지 보고서를 병합합니다.
+3. `nyc report`를 사용하여 보고서를 생성합니다.
 
-Turborepo tasks to accomplish will look like:
+이를 수행할 Turborepo 작업은 다음과 같습니다:
 
 ```json title="./turbo.json"
 {
@@ -187,22 +188,23 @@ Turborepo tasks to accomplish will look like:
 }
 ```
 
-With this in place, run `turbo test && turbo report` to create a merged coverage report.
+이를 설정한 후 `turbo test && turbo report`를 실행하여 병합된 커버리지 보고서를 생성합니다.
 
 <Callout type="info">
-  The [`with-vitest`
-  example](https://github.com/vercel/turborepo/tree/main/examples/with-vitest)
-  shows a complete example that you may adapt for your needs. You can get
-  started with it quickly using `npx create-turbo@latest --example with-vitest`.
+  [`with-vitest`
+  예제](https://github.com/vercel/turborepo/tree/main/examples/with-vitest)는
+  여러분의 요구에 맞게 적용할 수 있는 완전한 예제를 보여줍니다. `npx
+  create-turbo@latest --example with-vitest`를 사용하여 빠르게 시작할 수
+  있습니다.
 </Callout>
 
-### Using Vitest's Projects feature
+### Vitest의 Projects 기능 사용
 
-The Vitest Projects feature doesn't follow the same model as a [package manager Workspace](/docs/crafting-your-repository/structuring-a-repository). Instead, it uses a root script that then reaches out into each package in the repository to handle the tests in that respective package.
+Vitest Projects 기능은 [패키지 관리자 Workspace](/docs/crafting-your-repository/structuring-a-repository)와 동일한 모델을 따르지 않습니다. 대신 각 패키지의 테스트를 처리하기 위해 저장소의 각 패키지에 도달하는 루트 스크립트를 사용합니다.
 
-In this model, there aren't package boundaries, from a modern JavaScript ecosystem perspective. This means you can't rely on Turborepo's caching, since Turborepo leans on those package boundaries.
+이 모델에서는 현대 JavaScript 생태계 관점에서 패키지 경계가 없습니다. 이는 Turborepo가 이러한 패키지 경계에 의존하기 때문에 Turborepo의 캐싱을 신뢰할 수 없다는 것을 의미합니다.
 
-Because of this, you'll need to use [Root Tasks](/docs/crafting-your-repository/configuring-tasks#registering-root-tasks) if you want to run the tests using Turborepo. Once you've configured [a Vitest Projects setup](https://vitest.dev/guide/workspace), create the Root Tasks for Turborepo:
+이 때문에 Turborepo를 사용하여 테스트를 실행하려면 [Root Tasks](/docs/crafting-your-repository/configuring-tasks#registering-root-tasks)를 사용해야 합니다. [Vitest Projects 설정](https://vitest.dev/guide/workspace)을 구성한 후 Turborepo용 Root Tasks를 만듭니다:
 
 ```json title="./turbo.json"
 {
@@ -218,13 +220,13 @@ Because of this, you'll need to use [Root Tasks](/docs/crafting-your-repository/
 }
 ```
 
-**Notably, the file inputs for a Root Task include all packages by default, so any change in any package will result in a cache miss.** While this does make for a simplified configuration to create merged coverage reports, you'll be missing out on opportunities to cache repeated work.
+**특히 Root Task의 파일 입력에는 기본적으로 모든 패키지가 포함되므로 어떤 패키지에서든 변경이 발생하면 캐시 미스가 발생합니다.** 이는 병합된 커버리지 보고서를 생성하기 위한 간단한 구성을 만들지만, 반복되는 작업을 캐시할 수 있는 기회를 놓치게 됩니다.
 
-### Using a hybrid approach
+### 하이브리드 접근 방식 사용
 
-You can combine the benefits of both approaches by implementing a hybrid solution. This approach unifies local development using Vitest's Projects feature while preserving Turborepo's caching in CI. This comes at the tradeoff of slightly more configuration and a mixed task running model in the repository.
+하이브리드 솔루션을 구현하여 두 접근 방식의 이점을 결합할 수 있습니다. 이 접근 방식은 Vitest의 Projects 기능을 사용하여 로컬 개발을 통합하면서 CI에서 Turborepo의 캐싱을 보존합니다. 이는 약간 더 많은 구성과 저장소에서 혼합된 작업 실행 모델이라는 트레이드오프를 수반합니다.
 
-First, create a shared configuration package since individual projects can't extend the root config when using projects. Create a new package for your shared Vitest configuration:
+먼저 projects를 사용할 때 개별 프로젝트가 루트 구성을 확장할 수 없으므로 공유 구성 패키지를 만듭니다. 공유 Vitest 구성을 위한 새 패키지를 만듭니다:
 
 ```json title="./packages/vitest-config/package.json"
 {
@@ -269,7 +271,7 @@ export const sharedConfig = {
 };
 ```
 
-Then, create your root Vitest configuration using projects:
+그런 다음 projects를 사용하여 루트 Vitest 구성을 만듭니다:
 
 ```ts title="./vitest.config.ts"
 import { defineConfig } from 'vitest/config';
@@ -290,7 +292,7 @@ export default defineConfig({
 });
 ```
 
-In this setup, your packages maintain their individual Vitest configurations that import the shared config. First, install the shared config package:
+이 설정에서 패키지는 공유 구성을 가져오는 개별 Vitest 구성을 유지합니다. 먼저 공유 구성 패키지를 설치합니다:
 
 ```json title="./packages/ui/package.json"
 {
@@ -305,7 +307,7 @@ In this setup, your packages maintain their individual Vitest configurations tha
 }
 ```
 
-Then create the Vitest configuration:
+그런 다음 Vitest 구성을 만듭니다:
 
 ```ts title="./packages/ui/vitest.config.ts"
 import { defineConfig } from 'vitest/config';
@@ -320,7 +322,7 @@ export default defineConfig({
 });
 ```
 
-Make sure to update your `turbo.json` to include the new configuration package in the dependency graph:
+`turbo.json`을 업데이트하여 종속성 그래프에 새 구성 패키지를 포함해야 합니다:
 
 ```json title="./turbo.json"
 {
@@ -340,7 +342,7 @@ Make sure to update your `turbo.json` to include the new configuration package i
 }
 ```
 
-While your root `package.json` includes scripts for running tests globally:
+루트 `package.json`은 전역적으로 테스트를 실행하기 위한 스크립트를 포함합니다:
 
 ```json title="./package.json"
 {
@@ -351,4 +353,4 @@ While your root `package.json` includes scripts for running tests globally:
 }
 ```
 
-This configuration allows developers to run `pnpm test:projects` or `pnpm test:projects:watch` at the root for a seamless local development experience using Vitest projects, while CI continues to use `turbo run test` to leverage package-level caching. **You'll still need to handle merged coverage reports manually as described in the previous section**.
+이 구성을 통해 개발자는 Vitest projects를 사용하여 원활한 로컬 개발 경험을 위해 루트에서 `pnpm test:projects` 또는 `pnpm test:projects:watch`를 실행할 수 있으며, CI는 패키지 수준 캐싱을 활용하기 위해 계속 `turbo run test`를 사용합니다. **이전 섹션에서 설명한 대로 병합된 커버리지 보고서를 여전히 수동으로 처리해야 합니다**.

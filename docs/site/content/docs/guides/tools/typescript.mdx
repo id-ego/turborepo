@@ -179,7 +179,7 @@ bunx create-turbo@latest
 }
 ```
 
-Then, set up the entrypoints for your package in `package.json` so that other packages can use the compiled code:
+그런 다음, 다른 패키지가 컴파일된 코드를 사용할 수 있도록 `package.json`에 패키지의 진입점을 설정합니다:
 
 ```json title="./packages/ui/package.json"
 {
@@ -192,23 +192,23 @@ Then, set up the entrypoints for your package in `package.json` so that other pa
 }
 ```
 
-Setting up `exports` this way has several advantages:
+이런 방식으로 `exports`를 설정하면 여러 장점이 있습니다:
 
-- Using the `types` field allows `tsserver` to use the code in `src` as the source of truth for your code's types. Your editor will always be up-to-date with the latest interfaces from your code.
-- You can quickly add new entrypoints to your package without creating [dangerous barrel files](https://vercel.com/blog/how-we-optimized-package-imports-in-next-js#what's-the-problem-with-barrel-files).
-- You'll receive auto-importing suggestions for your imports across package boundaries in your editor.
+- `types` 필드를 사용하면 `tsserver`가 `src`의 코드를 코드 타입의 신뢰할 수 있는 소스로 사용할 수 있습니다. 편집기는 항상 코드의 최신 인터페이스를 최신 상태로 유지합니다.
+- [위험한 배럴 파일](https://vercel.com/blog/how-we-optimized-package-imports-in-next-js#what's-the-problem-with-barrel-files)을 만들지 않고도 패키지에 새 진입점을 빠르게 추가할 수 있습니다.
+- 편집기에서 패키지 경계를 넘어서는 import에 대한 자동 가져오기 제안을 받을 수 있습니다.
 
 <Callout type="warn">
-  If you're publishing the package, you cannot use references to source code in
-  `types` since only the compiled code will be published to npm. You'll need to
-  generate and reference declaration files and source maps.
+  패키지를 게시하는 경우, 컴파일된 코드만 npm에 게시되므로 `types`에서 소스
+  코드에 대한 참조를 사용할 수 없습니다. 선언 파일과 소스 맵을 생성하고 참조해야
+  합니다.
 </Callout>
 
-## Linting your codebase
+## 코드베이스 린팅
 
-To use TypeScript as a linter, you can check the types across your workspace **fast** using Turborepo's caching and parallelization.
+TypeScript를 린터로 사용하려면 Turborepo의 캐싱과 병렬화를 사용하여 워크스페이스 전체의 타입을 **빠르게** 검사할 수 있습니다.
 
-First, add a `check-types` script to any package that you want to check the types for:
+먼저, 타입을 검사하려는 패키지에 `check-types` 스크립트를 추가합니다:
 
 ```json title="./apps/web/package.json"
 {
@@ -218,7 +218,7 @@ First, add a `check-types` script to any package that you want to check the type
 }
 ```
 
-Then, create a `check-types` task in `turbo.json`. From the [Configuring tasks guide](/docs/crafting-your-repository/configuring-tasks#dependent-tasks-that-can-be-run-in-parallel), we can make the task run in parallel while respecting source code changes from other packages using a [Transit Node](/docs/core-concepts/package-and-task-graph#transit-nodes):
+그런 다음, `turbo.json`에 `check-types` 작업을 생성합니다. [작업 구성 가이드](/docs/crafting-your-repository/configuring-tasks#dependent-tasks-that-can-be-run-in-parallel)에 따라 [Transit Node](/docs/core-concepts/package-and-task-graph#transit-nodes)를 사용하여 다른 패키지의 소스 코드 변경 사항을 준수하면서 작업을 병렬로 실행할 수 있습니다:
 
 ```json title="./turbo.json"
 {
@@ -233,25 +233,25 @@ Then, create a `check-types` task in `turbo.json`. From the [Configuring tasks g
 }
 ```
 
-Then, run your task using `turbo check-types`.
+그런 다음, `turbo check-types`를 사용하여 작업을 실행합니다.
 
-## Best practices
+## 모범 사례
 
-### Use `tsc` to compile your packages
+### 패키지 컴파일에 `tsc` 사용
 
-For [Internal Packages](/docs/core-concepts/internal-packages), we recommend that you use `tsc` to compile your TypeScript libraries whenever possible. While you can use a bundler, it's not necessary and adds extra complexity to your build process. Additionally, bundling a library can mangle the code before it makes it to your applications' bundlers, causing hard to debug issues.
+[Internal Packages](/docs/core-concepts/internal-packages)의 경우, 가능한 한 TypeScript 라이브러리를 컴파일할 때 `tsc`를 사용하는 것을 권장합니다. 번들러를 사용할 수는 있지만 필수는 아니며 빌드 프로세스에 추가적인 복잡성을 더합니다. 또한, 라이브러리를 번들링하면 애플리케이션의 번들러에 도달하기 전에 코드가 변형될 수 있어 디버깅하기 어려운 문제가 발생할 수 있습니다.
 
-### Enable go-to-definition across package boundaries
+### 패키지 경계를 넘어 정의로 이동 활성화
 
-"Go-to-definition" is an editor feature for quickly navigating to the original declaration or definition of a symbol (like a variable or function) with a click or hotkey. Once TypeScript is configured correctly, you can navigate across [Internal Packages](/docs/core-concepts/internal-packages) with ease.
+"정의로 이동"은 클릭이나 단축키로 심볼(변수나 함수 등)의 원래 선언이나 정의로 빠르게 이동할 수 있는 편집기 기능입니다. TypeScript가 올바르게 구성되면 [Internal Packages](/docs/core-concepts/internal-packages) 간에 쉽게 이동할 수 있습니다.
 
-#### Just-in-Time Packages
+#### Just-in-Time 패키지
 
-Exports from [Just-in-Time Packages](/docs/core-concepts/internal-packages#just-in-time-packages) will automatically bring you to the original TypeScript source code. Go-to-definition will work as expected.
+[Just-in-Time 패키지](/docs/core-concepts/internal-packages#just-in-time-packages)에서 내보낸 항목은 자동으로 원본 TypeScript 소스 코드로 이동합니다. 정의로 이동 기능이 예상대로 작동합니다.
 
-#### Compiled Packages
+#### 컴파일된 패키지
 
-Exports from [Compiled Packages](/docs/core-concepts/internal-packages#compiled-packages) require the use of [`declaration`](https://www.typescriptlang.org/tsconfig/#declaration) and [`declarationMap`](https://www.typescriptlang.org/tsconfig/#declarationMap) configurations for go-to-definition to work. After you've enabled these two configurations for the package, compile the package with `tsc`, and open the output directory to find declaration files and source maps.
+[컴파일된 패키지](/docs/core-concepts/internal-packages#compiled-packages)에서 내보낸 항목의 정의로 이동 기능이 작동하려면 [`declaration`](https://www.typescriptlang.org/tsconfig/#declaration) 및 [`declarationMap`](https://www.typescriptlang.org/tsconfig/#declarationMap) 구성을 사용해야 합니다. 패키지에 이 두 구성을 활성화한 후 `tsc`로 패키지를 컴파일하고 출력 디렉터리를 열면 선언 파일과 소스 맵을 찾을 수 있습니다.
 
 <Files>
   <Folder defaultOpen name="packages">
@@ -265,15 +265,15 @@ Exports from [Compiled Packages](/docs/core-concepts/internal-packages#compiled-
   </Folder>
 </Files>
 
-With these two files in place, your editor will now navigate to the original source code.
+이 두 파일이 준비되면 편집기가 원본 소스 코드로 이동합니다.
 
-### Use Node.js subpath imports instead of TypeScript compiler `paths`
+### TypeScript 컴파일러 `paths` 대신 Node.js 서브패스 가져오기 사용
 
-It's possible to create absolute imports in your packages using [the TypeScript compiler's `paths` option](https://www.typescriptlang.org/tsconfig#paths), but these paths can cause failed compilation when using [Just-in-Time Packages](https://turborepo.com/docs/core-concepts/internal-packages#just-in-time-packages). [As of TypeScript 5.4](https://devblogs.microsoft.com/typescript/announcing-typescript-5-4/#auto-import-support-for-subpath-imports), you can use [Node.js subpath imports](https://nodejs.org/api/packages.html#imports) instead for a more robust solution.
+[TypeScript 컴파일러의 `paths` 옵션](https://www.typescriptlang.org/tsconfig#paths)을 사용하여 패키지에서 절대 가져오기를 만들 수 있지만, 이러한 경로는 [Just-in-Time 패키지](https://turborepo.com/docs/core-concepts/internal-packages#just-in-time-packages)를 사용할 때 컴파일 실패를 일으킬 수 있습니다. [TypeScript 5.4부터](https://devblogs.microsoft.com/typescript/announcing-typescript-5-4/#auto-import-support-for-subpath-imports) 더 견고한 솔루션을 위해 [Node.js 서브패스 가져오기](https://nodejs.org/api/packages.html#imports)를 대신 사용할 수 있습니다.
 
-#### Just-in-Time Packages
+#### Just-in-Time 패키지
 
-In [Just-in-Time packages](https://turborepo.com/docs/core-concepts/internal-packages#just-in-time-packages), `imports` must target the source code in the package, since build outputs like `dist` won't be created.
+[Just-in-Time 패키지](https://turborepo.com/docs/core-concepts/internal-packages#just-in-time-packages)에서는 `dist`와 같은 빌드 출력이 생성되지 않으므로 `imports`가 패키지의 소스 코드를 대상으로 해야 합니다.
 
 <Tabs storageKey="ts-imports-jit" items={["package.json", "Source code"]}>
   <Tab value="package.json">
@@ -299,9 +299,9 @@ export const Button = () => {
 
 </Tabs>
 
-#### Compiled Packages
+#### 컴파일된 패키지
 
-In [Compiled packages](https://turborepo.com/docs/core-concepts/internal-packages#compiled-packages), `imports` target the built outputs for the package.
+[컴파일된 패키지](https://turborepo.com/docs/core-concepts/internal-packages#compiled-packages)에서 `imports`는 패키지의 빌드된 출력을 대상으로 합니다.
 
 <Tabs storageKey="ts-imports-compiled" items={["package.json", "Source code"]}>
   <Tab value="package.json">
@@ -328,22 +328,22 @@ export const Button = () => {
 
 </Tabs>
 
-### You likely don't need a `tsconfig.json` file in the root of your project
+### 프로젝트 루트에 `tsconfig.json` 파일이 필요하지 않을 가능성이 높습니다
 
-As mentioned in the [Structuring your repository guide](/docs/crafting-your-repository/structuring-a-repository#anatomy-of-a-package), you want to treat each package in your tooling as its own unit. This means each package should have its own `tsconfig.json` to use instead of referencing a `tsconfig.json` in the root of your project. Following this practice will make it easier for Turborepo to cache your type checking tasks, simplifying your configuration.
+[저장소 구조화 가이드](/docs/crafting-your-repository/structuring-a-repository#anatomy-of-a-package)에서 언급했듯이, 도구의 각 패키지를 자체 단위로 취급하려고 합니다. 이는 각 패키지가 프로젝트 루트의 `tsconfig.json`을 참조하는 대신 사용할 자체 `tsconfig.json`을 가져야 한다는 것을 의미합니다. 이 방법을 따르면 Turborepo가 타입 검사 작업을 캐시하기가 더 쉬워지고 구성이 단순해집니다.
 
-The only case in which you may want to have a `tsconfig.json` in the Workspace root is to set configuration for TypeScript files that are not in packages. For example, if you have a script written with TypeScript that you need to run from the root, you may need a `tsconfig.json` for that file.
+Workspace 루트에 `tsconfig.json`을 두고자 할 수 있는 유일한 경우는 패키지에 없는 TypeScript 파일에 대한 구성을 설정하는 것입니다. 예를 들어, 루트에서 실행해야 하는 TypeScript로 작성된 스크립트가 있는 경우 해당 파일에 대한 `tsconfig.json`이 필요할 수 있습니다.
 
-However, this practice is also discouraged since any changes in the Workspace root will cause all tasks to miss cache. Instead, move those scripts to a different directory in the repository.
+그러나 Workspace 루트의 변경 사항은 모든 작업이 캐시를 놓치게 하므로 이 방법도 권장되지 않습니다. 대신 해당 스크립트를 저장소의 다른 디렉터리로 이동하세요.
 
-### You likely don't need TypeScript Project References
+### TypeScript 프로젝트 참조가 필요하지 않을 가능성이 높습니다
 
-We don't recommend using TypeScript Project References as they introduce both another point of configuration as well as another caching layer to your workspace. Both of these can cause problems in your repository with little benefit, so we suggest avoiding them when using Turborepo.
+TypeScript 프로젝트 참조는 워크스페이스에 또 다른 구성 지점과 캐싱 계층을 추가하므로 사용을 권장하지 않습니다. 이 두 가지는 이점이 거의 없으면서 저장소에 문제를 일으킬 수 있으므로 Turborepo를 사용할 때는 피하는 것이 좋습니다.
 
-## Limitations
+## 제한 사항
 
-### Your editor won't use a package's TypeScript version
+### 편집기가 패키지의 TypeScript 버전을 사용하지 않습니다
 
-`tsserver` is not able to use different TypeScript versions for different packages in your code editor. Instead, it will discover a specific version and use that everywhere.
+`tsserver`는 코드 편집기에서 다른 패키지에 대해 서로 다른 TypeScript 버전을 사용할 수 없습니다. 대신 특정 버전을 발견하여 모든 곳에서 사용합니다.
 
-This can result in differences between the linting errors that show in your editor and when you run `tsc` scripts to check types. If this is an issue for you, consider [keeping the TypeScript dependency on the same version](/docs/crafting-your-repository/managing-dependencies#keeping-dependencies-on-the-same-version).
+이로 인해 편집기에 표시되는 린팅 오류와 타입을 검사하기 위해 `tsc` 스크립트를 실행할 때의 오류가 다를 수 있습니다. 이것이 문제가 되는 경우 [TypeScript 종속성을 동일한 버전으로 유지](/docs/crafting-your-repository/managing-dependencies#keeping-dependencies-on-the-same-version)하는 것을 고려하세요.

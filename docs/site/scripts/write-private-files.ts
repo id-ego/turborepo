@@ -34,7 +34,11 @@ async function modifyFiles(): Promise<void> {
 
         const envVarContent = process.env[fileConfig.envVarKey];
         if (!envVarContent) {
-          throw new Error(`No process.env.${fileConfig.envVarKey} provided.`);
+          // For Korean docs site, we don't need analytics, so just skip if env var is missing
+          console.log(
+            `Skipping ${fileConfig.path}: ${fileConfig.envVarKey} not provided (not required for Korean docs site).`
+          );
+          return;
         }
 
         // Step 2: Write new contents to the file
